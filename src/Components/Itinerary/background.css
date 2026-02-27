@@ -1,0 +1,31 @@
+.iridescence-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0; 
+  overflow: hidden;
+  
+  /* Falls back to pure black if both WebGL and Image fail */
+  background-color: #000000; 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  pointer-events: none;
+}
+
+.iridescence-container.fade-in {
+  opacity: 1;
+}
+
+/* Let index.css handle the .global-background-canvas styling to prevent conflicts */
+
+/* Add a very subtle dark vignette to help clock readability */
+.iridescence-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+}
