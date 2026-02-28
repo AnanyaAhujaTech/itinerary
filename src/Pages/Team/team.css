@@ -96,3 +96,24 @@
   object-fit: contain;
   transition: filter 0.3s ease;
 }
+
+/* 📱 MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .team-heading-container {
+    height: 100px;
+    padding-top: 60px;
+  }
+  .team-heading-image {
+    height: 80px;
+  }
+  .team-sidebar-container {
+    bottom: 120px; 
+    right: 1rem;
+    transform: scale(0.8);
+    transform-origin: right bottom;
+  }
+  .team-podium-container {
+    width: 110px;
+    right: 10px;
+  }
+}

@@ -55,7 +55,6 @@ const SHAPES = {
 
 const TEAM_STRUCTURE = [
   { id: 'pres-vp', label: 'President & Vice President', count: 2, clipPath: SHAPES.HEART, visualLevel: 1 },              
-  // 🟢 Changed Core's clipPath to SHAPES.OVAL
   { id: 'core', label: 'Core', count: 2, clipPath: SHAPES.OVAL, visualLevel: 2 },              
   { id: 'website', label: 'Website', count: 2, clipPath: SHAPES.RECTANGLE, visualLevel: 3 },
   { id: 'events', label: 'Event Management', count: 6, clipPath: SHAPES.OVAL, visualLevel: 4 },
@@ -93,10 +92,20 @@ export default function TeamPage({ navHeight }) {
   const [activeSection, setActiveSection] = useState(TEAMS[0].id);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
+  // 📱 Mobile Responsiveness Hook
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+  );
+  
   const sectionRefs = useRef({});
   const hoverTimeoutRef = useRef(null); 
 
   useEffect(() => {
+    // Resize Listener for Mobile detection
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+
+    // Scroll Observer
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -105,21 +114,22 @@ export default function TeamPage({ navHeight }) {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 } // Slightly reduced threshold to handle taller mobile sections
     );
 
     Object.values(sectionRefs.current).forEach((el) => {
       if (el) observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      observer.disconnect();
+    };
   }, []);
 
   const handleSidebarClick = (id) => {
     const el = sectionRefs.current[id];
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleMouseEnter = () => {
@@ -133,7 +143,6 @@ export default function TeamPage({ navHeight }) {
     }, 200); 
   };
 
-  // Helper to hide podium ONLY on the absolute top section
   const isPresVpSection = activeSection === 'pres-vp';
 
   return (
@@ -155,7 +164,6 @@ export default function TeamPage({ navHeight }) {
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
       >
-        {/* Filter out the 'pres-vp' section from the sidebar navigation entirely */}
         {TEAMS.filter(team => team.id !== 'pres-vp').map((team, index, filteredTeams) => {
           const reverseIndex = filteredTeams.length - 1 - index;
           const isActive = activeSection === team.id;
@@ -184,7 +192,6 @@ export default function TeamPage({ navHeight }) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
-            // Toggles visibility based ONLY on the pres-vp section
             transform: isPresVpSection ? 'translateY(150%)' : 'translateY(0%)',
             opacity: isPresVpSection ? 0 : 1,
             pointerEvents: isPresVpSection ? 'none' : 'auto',
@@ -194,18 +201,26 @@ export default function TeamPage({ navHeight }) {
           src={getAsset('podium.png')} 
           alt="Menu" 
           className="team-podium-image"
-          style={{
-            filter: isSidebarOpen ? 'brightness(1.2) drop-shadow(0 0 15px gold)' : 'none'
-          }} 
+          style={{ filter: isSidebarOpen ? 'brightness(1.2) drop-shadow(0 0 15px gold)' : 'none' }} 
         />
       </div>
 
       <div className="team-scroll-container">
         {TEAMS.map((team) => {
-          const isGrid = team.members.length >= 5 || team.id === 'sponsorship';
-          const itemWidth = isGrid 
-            ? (team.id === 'sponsorship' ? '40%' : '30%') 
-            : `${100 / team.members.length}%`;
+          const isGridDesktop = team.members.length >= 5 || team.id === 'sponsorship';
+          
+          // 📱 Dynamic sizing logic: force wrap on mobile, use percentages for fit
+          let itemWidth;
+          if (isMobile) {
+            itemWidth = team.members.length === 1 ? '80%' : '45%';
+          } else {
+            itemWidth = isGridDesktop 
+              ? (team.id === 'sponsorship' ? '40%' : '30%') 
+              : `${100 / team.members.length}%`;
+          }
+
+          // Mobile forces the "Grid" styling (smaller card heights so they fit)
+          const treatAsGrid = isGridDesktop || isMobile;
 
           return (
             <section
@@ -214,19 +229,24 @@ export default function TeamPage({ navHeight }) {
               ref={(el) => (sectionRefs.current[team.id] = el)}
               className="team-section-container"
               style={{
-                flexWrap: isGrid ? 'wrap' : 'nowrap',
-                gap: isGrid ? STYLE_CONFIG.gridGap : '0',
-                paddingLeft: isGrid ? '10%' : '0', 
-                paddingRight: isGrid ? '10%' : '0',
+                flexWrap: treatAsGrid ? 'wrap' : 'nowrap',
+                gap: STYLE_CONFIG.gridGap,
+                paddingLeft: treatAsGrid ? '5%' : '0', 
+                paddingRight: treatAsGrid ? '5%' : '0',
+                // 📱 On mobile, sections grow with wrapped cards instead of rigidly matching 100vh
+                height: isMobile ? 'auto' : '100%',
+                minHeight: '100%',
+                paddingTop: isMobile ? '80px' : '0',
+                paddingBottom: isMobile ? '80px' : '0',
               }}
             >
               {team.members.map((member, index) => (
                 <MemberCard
                   key={member.id}
                   member={member}
-                  isGrid={isGrid}
+                  isGrid={treatAsGrid}
                   cardWidth={itemWidth}
-                  delay={index * 0.15} 
+                  delay={index * (isMobile ? 0.05 : 0.15)} // Faster animations on phone
                   glowColor={LEVEL_COLORS[member.level] || '255, 255, 255'}
                   config={STYLE_CONFIG}
                   getAsset={getAsset}
