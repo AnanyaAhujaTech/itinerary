@@ -87,7 +87,7 @@ export default function EventTable({ onReturnToClock, navHeight = "80px" }) {
 
               return (
                 <div key={index} className="event-row" style={rowStyle}>
-                  {/* The new Wipe Animation Overlay */}
+                  {/* The Wipe Animation Overlay */}
                   <div 
                     className="row-bg-overlay" 
                     style={{ backgroundImage: `url(${item.bgImage})` }} 
