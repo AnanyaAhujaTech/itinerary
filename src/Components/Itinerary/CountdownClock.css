@@ -120,8 +120,8 @@
   .clock-content-group {
     position: absolute;
     top: 85px; 
-    /* 🟢 INCREASED BOTTOM CLEARANCE: Mathematically forces the group to stop above the button */
-    bottom: 110px; 
+    /* 🟢 Increased to 140px to guarantee safe padding above the View Itinerary button */
+    bottom: 140px; 
     left: 0;
     right: 0;
     transform: none; 
@@ -141,7 +141,7 @@
   }
 
   .clock-wrapper {
-    /* 🟢 THE MAGIC FIX: Uses min() so it shrinks on short screens rather than overflowing */
+    /* Uses min() so it shrinks on short screens rather than overflowing */
     width: min(80vw, 40vh);
     height: min(80vw, 40vh);
     max-width: 380px;
@@ -169,7 +169,7 @@
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(184, 115, 51, 0.4);
     border-radius: 12px;
-    padding: 12px 10px; /* Kept very compact */
+    padding: 12px 10px; 
     min-width: 60px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px rgba(184, 115, 51, 0.15);
   }
