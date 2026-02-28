@@ -1,3 +1,5 @@
+/* src/Pages/Itinerary/itinerary.css */
+
 .itinerary-page-container {
   position: relative;
   width: 100vw;
@@ -14,6 +16,7 @@
   align-items: center;
   transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   background: transparent;
+  z-index: 10;
 }
 
 .view-hidden {
@@ -34,7 +37,8 @@
   right: 30px;
   z-index: 100;
   padding: 12px 24px;
-  background: rgba(0, 0, 0, 0.5);
+  /* Small polish: Make button background a bit more opaque for better legibility against the new darker, intense background */
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   border: 1px solid #e6daad;
   color: #e6daad;

@@ -1,10 +1,12 @@
-.iridescence-container {
+/* src/Components/Itinerary/background.css */
+
+.darkveil-container {
   position: fixed;
   inset: 0;
   z-index: 0; 
   overflow: hidden;
   
-  /* Falls back to pure black if both WebGL and Image fail */
+  /* Black fallback floor */
   background-color: #000000; 
   background-size: cover;
   background-position: center;
@@ -15,17 +17,28 @@
   pointer-events: none;
 }
 
-.iridescence-container.fade-in {
+.darkveil-container.fade-in {
   opacity: 1;
 }
 
-/* Let index.css handle the .global-background-canvas styling to prevent conflicts */
+.darkveil-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1; 
+  opacity: 0.85; /* Slight opacity reduction so it isn't too overpowering */
+  pointer-events: none;
+  display: block;
+}
 
-/* Add a very subtle dark vignette to help clock readability */
-.iridescence-container::after {
+/* Deep shadow vignette overlay to frame the clock perfectly */
+.darkveil-container::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.6) 100%);
+  background: radial-gradient(circle, transparent 35%, rgba(0,0,0,0.95) 100%);
   pointer-events: none;
+  z-index: 2;
 }

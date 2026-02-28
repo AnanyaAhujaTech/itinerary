@@ -16,7 +16,7 @@ import {
   getCurrentSecond, 
   getInitialRotation,
   TICK_SETTINGS 
-} from "./timeConfig";
+} from "./timeConfig"; // Ensure this path points correctly to your timeConfig.js
 
 export default function CountdownClock() {
   const containerRef = useRef(null);
@@ -40,8 +40,8 @@ export default function CountdownClock() {
 
     // 3. Ticker Loop
     const tick = () => {
-      // Progress Hand (Logic based on your markers)
-      const mainRotation = getClockRotation("Taking Shape", "The Moment You've Waited For...");
+      // Progress Hand (Logic updated to your new markers)
+      const mainRotation = getClockRotation("A Distant Moment", "The Moment You've Waited For...");
       if (mainHandRef.current) gsap.set(mainHandRef.current, { rotation: mainRotation });
 
       // Ticking Hand

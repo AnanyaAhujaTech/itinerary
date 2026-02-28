@@ -3,7 +3,9 @@ import Background from '../../Components/Itinerary/background';
 import CountdownClock from '../../Components/Itinerary/CountdownClock';
 import EventTable from '../../Components/Itinerary/table';
 import './Itinerary.css';
+import Navbar from '../../Components/Navbar/Navbar';
 
+// MUST use JavaScript import for Vite to bundle the asset correctly in production
 import fallbackBgImage from '../../assets/velvet.png'; 
 
 export default function ItineraryPage() {
@@ -11,12 +13,20 @@ export default function ItineraryPage() {
 
   return (
     <div className="itinerary-page-container">
-      {/* Fallback hierarchy: WebGL -> velvet.png -> Black Background */}
+      {/* Dark Veil props configured for a deep purple/magenta look. 
+        Adjust hueShift (0-360) to change the primary color!
+      */}
       <Background 
-        color={[0.4, 0.1, 0.7]} 
-        speed={0.5} 
+        hueShift={346} 
+        noiseIntensity={0}
+        scanlineIntensity={0}
+        speed={0.7}
+        scanlineFrequency={1.4}
+        warpAmount={0}
         fallbackImage={fallbackBgImage} 
       />
+
+      <Navbar />
 
       <div className={`view-wrapper ${currentView === 'clock' ? 'view-visible' : 'view-hidden'}`}>
         <CountdownClock />

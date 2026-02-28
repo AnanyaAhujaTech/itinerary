@@ -8,8 +8,11 @@
 // These are treated as Local Time by the browser. 
 // If you need strict UTC, append 'Z' to the string (e.g., "...00Z").
 
-export const PREFEST_START = new Date("2026-02-14T03:45:00");
-export const FEST_START = new Date("2026-02-24T11:00:00");
+// Updated to March 1st, 2026 at 12:00 AM
+export const PREFEST_START = new Date("2026-03-01T00:00:00");
+
+// Updated to March 18th, 2026 at 11:00 AM
+export const FEST_START = new Date("2026-03-18T11:00:00");
 
 // ==========================================
 // ⚙️ ANIMATION SETTINGS
@@ -29,9 +32,9 @@ export const TICK_SETTINGS = {
 // 0 is usually 12 o'clock, 90 is 3 o'clock, etc.
 const RING_SEGMENTS = {
   "The Moment You've Waited For...": 0,    // End point
-  "A Distant Moment": 45,
+  "A Distant Moment": 45,                  // New Start point
   "Beyond The Horizon": 90,
-  "Taking Shape": 135,                     // Start point
+  "Taking Shape": 135,                     
   "Prefest: The Journey Begins...": 180,
   "On The Way": 225,
   "Almost There": 270,
@@ -46,10 +49,10 @@ export function getClockRotation(startSegmentText, endSegmentText) {
   const now = new Date();
   
   // 1. Get the angles for the start and end markers
-  const startAngle = RING_SEGMENTS[startSegmentText] ?? 135; 
+  const startAngle = RING_SEGMENTS[startSegmentText] ?? 45; // Defaulting fallback to 45
   let endAngle = RING_SEGMENTS[endSegmentText] ?? 0;
 
-  // 2. Handle wrap-around (e.g., starting at 270 and ending at 45)
+  // 2. Handle wrap-around (e.g., starting at 45 and ending at 0/360)
   if (endAngle < startAngle) {
     endAngle += 360;
   }
@@ -64,7 +67,7 @@ export function getClockRotation(startSegmentText, endSegmentText) {
 
   // 4. Normalize progress between 0.0 and 1.0
   let progress = elapsed / totalDuration;
-  progress = Math.min(Math.max(progress, 0), 1); // Clamp values
+  progress = Math.min(Math.max(progress, 0), 1); // Clamp values so it doesn't spin past the end
 
   // 5. Map progress to the rotation range
   const totalRotationSpan = endAngle - startAngle;

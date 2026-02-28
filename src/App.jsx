@@ -1,14 +1,21 @@
 import React from 'react';
-import ItineraryPage from './Pages/Itinerary/Itinerary.jsx';
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ItineraryPage from './Pages/Itinerary/Itinerary';
+import TeamPage from './Pages/Team/team';
 // Global CSS for reset and viewport
 import './index.css';
 
 function App() {
   return (
-    <div className="App">
-      <ItineraryPage />
-    </div>
+    // The basename ensures routing works perfectly with your Vite base config
+    <BrowserRouter basename="/itinerary">
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<ItineraryPage />} />
+          <Route path="/team" element={<TeamPage />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

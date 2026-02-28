@@ -1,0 +1,64 @@
+/* src/Components/Navbar/Navbar.css */
+
+.global-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* Matches your navHeight prop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Stays above everything */
+  
+  /* A soft dark gradient that fades out, giving depth to the top edge */
+  background: linear-gradient(to bottom, rgba(5, 5, 5, 0.8) 0%, rgba(5, 5, 5, 0) 100%);
+  
+  /* Crucial: Lets you click the background/clock through the invisible parts of the nav */
+  pointer-events: none; 
+}
+
+.navbar-pill {
+  display: flex;
+  gap: 30px;
+  padding: 10px 30px;
+  
+  /* Deep purple/black tint matching your Table and Team pages */
+  background: rgba(15, 5, 20, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* Antique gold border */
+  border: 1px solid rgba(184, 115, 51, 0.4);
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(184, 115, 51, 0.15);
+  
+  /* Re-enable clicks just for the pill itself */
+  pointer-events: auto; 
+}
+
+.nav-link {
+  color: #eaddcf; /* Soft warm off-white */
+  text-decoration: none;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 8px 16px;
+  border-radius: 30px;
+}
+
+.nav-link:hover {
+  color: #d4af37; /* Metallic Gold */
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.nav-link.active {
+  color: #b87333; /* Copper */
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(184, 115, 51, 0.6);
+  background: rgba(184, 115, 51, 0.15);
+  border: 1px solid rgba(184, 115, 51, 0.3);
+}
