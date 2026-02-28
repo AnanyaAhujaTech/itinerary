@@ -37,7 +37,7 @@
   justify-content: center;
   height: 100%;
   width: 100%;
-  gap: 5%;
+  gap: 0%; 
   padding: 10px;
   box-sizing: border-box;
   pointer-events: none;
@@ -45,7 +45,7 @@
 
 .member-frame-assembly {
   position: relative;
-  height: 78%;
+  height: 90%;
   width: auto;
   max-width: 100%;
   aspect-ratio: 3/4;
@@ -80,14 +80,15 @@
 }
 
 .member-plate-container {
-  width: 90%;
+  width: 85%;
   height: auto;
-  max-height: 20%;
-  max-width: 350px;
+  max-height: 17%;
+  max-width: 250px;
   z-index: 5;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: -5px; 
 }
 
 .member-plate-image {

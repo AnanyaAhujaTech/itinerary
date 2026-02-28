@@ -54,7 +54,9 @@ const SHAPES = {
 };
 
 const TEAM_STRUCTURE = [
-  { id: 'core', label: 'Core Team', count: 4, clipPath: SHAPES.HEART, visualLevel: 1 },              
+  { id: 'pres-vp', label: 'President & Vice President', count: 2, clipPath: SHAPES.HEART, visualLevel: 1 },              
+  // 🟢 Changed Core's clipPath to SHAPES.OVAL
+  { id: 'core', label: 'Core', count: 2, clipPath: SHAPES.OVAL, visualLevel: 2 },              
   { id: 'website', label: 'Website', count: 2, clipPath: SHAPES.RECTANGLE, visualLevel: 3 },
   { id: 'events', label: 'Event Management', count: 6, clipPath: SHAPES.OVAL, visualLevel: 4 },
   { id: 'pr', label: 'PR & Security', count: 5, clipPath: SHAPES.RECTANGLE, visualLevel: 5 },
@@ -131,6 +133,9 @@ export default function TeamPage({ navHeight }) {
     }, 200); 
   };
 
+  // Helper to hide podium ONLY on the absolute top section
+  const isPresVpSection = activeSection === 'pres-vp';
+
   return (
     <div className="team-page-wrapper">
       <Background imagePath={getAsset('background.png')} />
@@ -150,8 +155,9 @@ export default function TeamPage({ navHeight }) {
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
       >
-        {TEAMS.map((team, index) => {
-          const reverseIndex = TEAMS.length - 1 - index;
+        {/* Filter out the 'pres-vp' section from the sidebar navigation entirely */}
+        {TEAMS.filter(team => team.id !== 'pres-vp').map((team, index, filteredTeams) => {
+          const reverseIndex = filteredTeams.length - 1 - index;
           const isActive = activeSection === team.id;
           return (
             <button
@@ -178,9 +184,10 @@ export default function TeamPage({ navHeight }) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
-            transform: activeSection === 'core' ? 'translateY(150%)' : 'translateY(0%)',
-            opacity: activeSection === 'core' ? 0 : 1,
-            pointerEvents: activeSection === 'core' ? 'none' : 'auto',
+            // Toggles visibility based ONLY on the pres-vp section
+            transform: isPresVpSection ? 'translateY(150%)' : 'translateY(0%)',
+            opacity: isPresVpSection ? 0 : 1,
+            pointerEvents: isPresVpSection ? 'none' : 'auto',
         }}
       >
         <img 
