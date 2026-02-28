@@ -8,10 +8,7 @@
 // These are treated as Local Time by the browser. 
 // If you need strict UTC, append 'Z' to the string (e.g., "...00Z").
 
-// Updated to March 1st, 2026 at 12:00 AM
 export const PREFEST_START = new Date("2026-03-01T00:00:00");
-
-// Updated to March 18th, 2026 at 11:00 AM
 export const FEST_START = new Date("2026-03-18T11:00:00");
 
 // ==========================================
@@ -19,20 +16,18 @@ export const FEST_START = new Date("2026-03-18T11:00:00");
 // ==========================================
 
 export const TICK_SETTINGS = {
-  DURATION: 0.4,       // Duration of the minute hand tick animation
-  ELASTICITY: 1.2,     // Bounciness of the minute hand
-  DEGREES_PER_TICK: 6, // 6 degrees per second (standard clock movement)
+  DURATION: 0.4,       
+  ELASTICITY: 1.2,     
+  DEGREES_PER_TICK: 6, 
 };
 
 // ==========================================
 // 📐 ANGLE MAPPING
 // ==========================================
 
-// Maps the text on your ring image to specific degrees (0-360)
-// 0 is usually 12 o'clock, 90 is 3 o'clock, etc.
 const RING_SEGMENTS = {
-  "The Moment You've Waited For...": 0,    // End point
-  "A Distant Moment": 45,                  // New Start point
+  "The Moment You've Waited For...": 0,    
+  "A Distant Moment": 45,                  
   "Beyond The Horizon": 90,
   "Taking Shape": 135,                     
   "Prefest: The Journey Begins...": 180,
@@ -48,16 +43,13 @@ const RING_SEGMENTS = {
 export function getClockRotation(startSegmentText, endSegmentText) {
   const now = new Date();
   
-  // 1. Get the angles for the start and end markers
-  const startAngle = RING_SEGMENTS[startSegmentText] ?? 45; // Defaulting fallback to 45
+  const startAngle = RING_SEGMENTS[startSegmentText] ?? 45; 
   let endAngle = RING_SEGMENTS[endSegmentText] ?? 0;
 
-  // 2. Handle wrap-around (e.g., starting at 45 and ending at 0/360)
   if (endAngle < startAngle) {
     endAngle += 360;
   }
 
-  // 3. Calculate Time Progress
   const tStart = PREFEST_START.getTime();
   const tEnd = FEST_START.getTime();
   const tNow = now.getTime();
@@ -65,28 +57,36 @@ export function getClockRotation(startSegmentText, endSegmentText) {
   const totalDuration = tEnd - tStart;
   const elapsed = tNow - tStart;
 
-  // 4. Normalize progress between 0.0 and 1.0
   let progress = elapsed / totalDuration;
-  progress = Math.min(Math.max(progress, 0), 1); // Clamp values so it doesn't spin past the end
+  progress = Math.min(Math.max(progress, 0), 1); 
 
-  // 5. Map progress to the rotation range
   const totalRotationSpan = endAngle - startAngle;
   
   return startAngle + (progress * totalRotationSpan);
 }
 
-/**
- * Returns the current Second (0-59).
- * Used to trigger the 'tick' animation.
- */
 export function getCurrentSecond() {
   return new Date().getSeconds();
 }
 
-/**
- * Calculates the initial visual rotation for the 'Minute/Second Hand'
- * so it starts at the correct position immediately.
- */
 export function getInitialRotation() {
   return new Date().getSeconds() * TICK_SETTINGS.DEGREES_PER_TICK;
+}
+
+// 🟢 NEW: Helper for the Digital Mobile Clock
+export function getTimeRemaining() {
+  const total = FEST_START.getTime() - new Date().getTime();
+  if (total <= 0) return { days: '00', hours: '00', minutes: '00', seconds: '00' };
+
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(total / (1000 * 60 * 60 * 24));
+
+  return {
+    days: String(days).padStart(2, '0'),
+    hours: String(hours).padStart(2, '0'),
+    minutes: String(minutes).padStart(2, '0'),
+    seconds: String(seconds).padStart(2, '0')
+  };
 }

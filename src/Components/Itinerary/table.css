@@ -134,10 +134,10 @@
   border: 1px solid var(--border-color);
   background: linear-gradient(145deg, rgba(20, 10, 25, 0.8) 0%, rgba(10, 5, 15, 0.9) 100%);
   overflow: hidden;
-  cursor: default; /* Optional: indicates hoverability without suggesting it's a link */
+  cursor: default; 
 }
 
-/* THE WIPE ANIMATION OVERLAY */
+/* THE WIPE ANIMATION OVERLAY - CENTER OUTWARD */
 .row-bg-overlay {
   position: absolute;
   inset: 0;
@@ -145,27 +145,22 @@
   background-position: center;
   z-index: 1;
   pointer-events: none;
-  
-  /* ADJUSTED HERE: Dropped from 0.5 to 0.25 for higher transparency */
   opacity: 0.15; 
   
-  /* Create two mask "doors" that meet in the middle */
-  -webkit-mask-image: 
-    linear-gradient(to right, black, black), 
-    linear-gradient(to left, black, black);
-  mask-image: 
-    linear-gradient(to right, black, black), 
-    linear-gradient(to left, black, black);
+  /* Single solid block mask */
+  -webkit-mask-image: linear-gradient(black, black);
+  mask-image: linear-gradient(black, black);
   
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   
-  /* Start with 0 width at the far left and far right */
-  -webkit-mask-size: 0% 100%, 0% 100%;
-  mask-size: 0% 100%, 0% 100%;
+  /* Anchored directly in the center */
+  -webkit-mask-position: center center;
+  mask-position: center center;
   
-  -webkit-mask-position: left center, right center;
-  mask-position: left center, right center;
+  /* Start with 0 width, 100% height */
+  -webkit-mask-size: 0% 100%;
+  mask-size: 0% 100%;
   
   /* Smooth wipe transition */
   transition: -webkit-mask-size 0.6s cubic-bezier(0.65, 0, 0.35, 1), 
@@ -175,32 +170,30 @@
 .event-row:hover {
   transform: scale(1.01);
   box-shadow: 0 0 20px var(--glow-color), inset 0 0 15px var(--glow-color);
-  /* The gradient becomes slightly more transparent on hover to let the image show better */
   background: radial-gradient(circle at center, rgba(10,5,15,0.7) 0%, rgba(20,10,25,0.85) 100%);
 }
 
 .event-row:hover .row-bg-overlay {
-  /* Both curtains meet at 50% */
-  -webkit-mask-size: 50.5% 100%, 50.5% 100%; 
-  mask-size: 50.5% 100%, 50.5% 100%;
+  /* Expands the mask to full width, revealing from center to edges */
+  -webkit-mask-size: 100% 100%; 
+  mask-size: 100% 100%;
 }
 
 .noise-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 2; /* Moved above the background image */
+  z-index: 2; 
   opacity: 0.15;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 .cell-content {
   position: relative;
-  z-index: 3; /* Top level so text is never obscured */
+  z-index: 3; 
   padding-left: 10px;
   font-size: 1.1rem;
   letter-spacing: 0.5px;
-  /* Thick text shadow to guarantee contrast over any revealed image */
   text-shadow: 0px 2px 4px rgba(0,0,0,1), 0px 0px 10px rgba(0,0,0,0.8);
 }
 

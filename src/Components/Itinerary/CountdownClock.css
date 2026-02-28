@@ -1,15 +1,10 @@
 :root {
-  /* --- POSITIONING & GLOBALS --- */
   --clock-vertical-offset: 30px;
   --clock-global-size: clamp(300px, 72vmin, 650px);
   --clock-glow-filter: drop-shadow(0px 0px 15px rgba(184, 115, 51, 0.7));
-
-  /* --- HEADING / LOGO --- */
   --heading-width: clamp(250px, 15vmin, 600px);
   --heading-margin-bottom: 60px;
   --heading-glow-color: rgba(255, 176, 50, 0.7);
-
-  /* --- SCALING --- */
   --frame-scale: 114%;
   --ring-scale: 72%;
   --segment-scale: 65%;
@@ -35,7 +30,7 @@
   align-items: center;
   transform: translateY(var(--clock-vertical-offset));
   position: relative;
-  opacity: 0; /* Handled by GSAP entry */
+  opacity: 0; 
 }
 
 /* --- HEADING --- */
@@ -67,7 +62,7 @@
   display: block;
 }
 
-/* --- CLOCK LAYERS --- */
+/* --- RADIAL CLOCK LAYERS --- */
 .clock-wrapper {
   position: relative;
   display: flex;
@@ -107,12 +102,69 @@
   width: auto;
 }
 
-/* Specific Layer Sizes */
 .layer-segments { width: var(--segment-scale); height: var(--segment-scale); z-index: 1; }
 .layer-ring     { width: var(--ring-scale); height: var(--ring-scale); z-index: 2; filter: var(--clock-glow-filter); }
 .layer-frame    { width: var(--frame-scale); height: var(--frame-scale); z-index: 3; filter: var(--clock-glow-filter); }
 .layer-gears    { width: var(--gear-size); height: var(--gear-size); z-index: 6; }
 
-/* Hand Lengths */
 .main-hand   { height: 16%; z-index: 4; }
 .minute-hand { height: 22%; z-index: 5; opacity: 0.9; filter: brightness(1.1); }
+
+/* --- 🟢 DIGITAL CLOCK (Hidden by default) --- */
+.digital-clock-wrapper {
+  display: none;
+}
+
+/* --- 📱 MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+  .clock-wrapper {
+    display: none; /* Hide Radial Clock */
+  }
+  
+  .digital-clock-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: -20px;
+  }
+
+  .digital-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .digital-number {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 2.8rem;
+    font-weight: normal;
+    color: #e6daad;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5), 0px 4px 8px rgba(0,0,0,0.8);
+    line-height: 1;
+  }
+
+  .digital-colon {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 2.5rem;
+    color: #b87333;
+    line-height: 1;
+    margin-top: -20px; /* Offset to align perfectly with numbers */
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  .digital-label {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: rgba(230, 218, 173, 0.6);
+  }
+
+  /* Optional breathing effect for the colons */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+}

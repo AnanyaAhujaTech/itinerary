@@ -37,7 +37,6 @@
   right: 30px;
   z-index: 100;
   padding: 12px 24px;
-  /* Small polish: Make button background a bit more opaque for better legibility against the new darker, intense background */
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   border: 1px solid #e6daad;
@@ -52,4 +51,19 @@
 .itinerary-toggle-btn:hover {
   background: #e6daad;
   color: #000;
+}
+
+/* 🟢 MOBILE RESPONSIVENESS: Centers the button front & center */
+@media (max-width: 768px) {
+  .itinerary-toggle-btn {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 40px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+  }
+  .itinerary-toggle-btn:hover {
+    transform: translateX(50%) scale(1.02); /* Preserve centering on hover */
+  }
 }
