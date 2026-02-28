@@ -98,3 +98,11 @@
   display: block;
   filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
 }
+
+/* 🟢 STRICT MOBILE SNAPPING: Forces the scroll to lock onto ONE card at a time */
+@media (max-width: 768px) {
+  .member-card-outer {
+    scroll-snap-align: start; 
+    scroll-snap-stop: always; 
+  }
+}

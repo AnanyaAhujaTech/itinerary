@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Background from '../../Components/Team/background';
-import MemberCard from '../../Components/Team/Team';
+import MemberCard from '../../Components/Team/team';
 import Navbar from '../../Components/Navbar/Navbar';
 import './Team.css';
 
@@ -30,9 +30,6 @@ const LEVEL_COLORS = {
   9: '0, 128, 0',      
 };
 
-// ==========================================
-// 🖼️ ASSET LOADER (Production / Vite Ready)
-// ==========================================
 const preloadedAssets = import.meta.glob('../../assets/*.{png,jpg,jpeg,svg}', { 
   eager: true, 
   import: 'default' 
@@ -92,7 +89,6 @@ export default function TeamPage({ navHeight }) {
   const [activeSection, setActiveSection] = useState(TEAMS[0].id);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  // 📱 Mobile Responsiveness Hook
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' ? window.innerWidth <= 768 : false
   );
@@ -100,6 +96,7 @@ export default function TeamPage({ navHeight }) {
   const sectionRefs = useRef({});
   const hoverTimeoutRef = useRef(null); 
 
+  // 1. Viewport Resize & Scroll Observer
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
@@ -112,7 +109,8 @@ export default function TeamPage({ navHeight }) {
           }
         });
       },
-      { threshold: 0.3 } 
+      // Safely detects which section occupies the direct center of the screen
+      { rootMargin: "-40% 0px -40% 0px", threshold: 0 } 
     );
 
     Object.values(sectionRefs.current).forEach((el) => {
@@ -125,9 +123,20 @@ export default function TeamPage({ navHeight }) {
     };
   }, []);
 
+  // 2. 🟢 AUTO-SCROLL RIBBON LOGIC
+  // Whenever the active section changes, perfectly center the pill in the ribbon natively!
+  useEffect(() => {
+    if (isMobile) {
+      const activePill = document.getElementById(`pill-${activeSection}`);
+      if (activePill) {
+        activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }
+  }, [activeSection, isMobile]);
+
   const handleSidebarClick = (id) => {
     const el = sectionRefs.current[id];
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleMouseEnter = () => {
@@ -156,11 +165,26 @@ export default function TeamPage({ navHeight }) {
         />
       </div>
 
+      {/* HORIZONTAL SWIPE MENU (MOBILE ONLY) */}
+      <nav className="team-mobile-nav" id="mobile-nav-ribbon">
+        {TEAMS.map((team) => (
+          <button
+            key={team.id}
+            id={`pill-${team.id}`}
+            onClick={() => handleSidebarClick(team.id)}
+            className={`mobile-nav-pill ${activeSection === team.id ? 'active' : ''}`}
+          >
+            {team.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* DESKTOP SIDEBAR */}
       <nav 
         className="team-sidebar-container"
         style={{ 
           pointerEvents: isSidebarOpen ? 'auto' : 'none',
-          opacity: isSidebarOpen ? 1 : 0 // 🟢 Fades the entire glass panel out when closed
+          opacity: isSidebarOpen ? 1 : 0 
         }}
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
@@ -178,7 +202,7 @@ export default function TeamPage({ navHeight }) {
                 transform: isSidebarOpen ? 'translateY(0)' : 'translateY(20px)',
                 transitionDelay: `${reverseIndex * 50}ms`,
                 borderRight: isActive ? '3px solid #e6daad' : '3px solid transparent',
-                textShadow: isActive ? '0 0 10px #e6daad)' : 'none',
+                textShadow: isActive ? '0 0 10px #e6daad' : 'none',
                 color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
               }}
             >
@@ -188,6 +212,7 @@ export default function TeamPage({ navHeight }) {
         })}
       </nav>
 
+      {/* DESKTOP PODIUM */}
       <div 
         className="team-podium-container"
         onMouseEnter={handleMouseEnter}
@@ -212,14 +237,14 @@ export default function TeamPage({ navHeight }) {
           
           let itemWidth;
           if (isMobile) {
-            itemWidth = team.members.length === 1 ? '80%' : '45%';
+            itemWidth = '100%'; // Strict 1-column on mobile
           } else {
             itemWidth = isGridDesktop 
               ? (team.id === 'sponsorship' ? '40%' : '30%') 
               : `${100 / team.members.length}%`;
           }
 
-          const treatAsGrid = isGridDesktop || isMobile;
+          const treatAsGrid = isGridDesktop;
 
           return (
             <section
@@ -229,13 +254,7 @@ export default function TeamPage({ navHeight }) {
               className="team-section-container"
               style={{
                 flexWrap: treatAsGrid ? 'wrap' : 'nowrap',
-                gap: STYLE_CONFIG.gridGap,
-                paddingLeft: treatAsGrid ? '5%' : '0', 
-                paddingRight: treatAsGrid ? '5%' : '0',
-                height: isMobile ? 'auto' : '100%',
-                minHeight: '100%',
-                paddingTop: isMobile ? '80px' : '0',
-                paddingBottom: isMobile ? '80px' : '0',
+                gap: STYLE_CONFIG.gridGap, 
               }}
             >
               {team.members.map((member, index) => (
@@ -248,6 +267,7 @@ export default function TeamPage({ navHeight }) {
                   glowColor={LEVEL_COLORS[member.level] || '255, 255, 255'}
                   config={STYLE_CONFIG}
                   getAsset={getAsset}
+                  isMobile={isMobile} 
                 />
               ))}
             </section>

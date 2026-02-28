@@ -71,7 +71,6 @@
   border: 1px solid rgba(184, 115, 51, 0.3);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(184, 115, 51, 0.1);
   
-  /* 🟢 Ensures the glass box fades in and out gracefully */
   transition: all 0.4s ease;
 }
 
@@ -109,23 +108,122 @@
   transition: filter 0.3s ease;
 }
 
-/* 📱 MOBILE RESPONSIVENESS */
+.team-mobile-nav {
+  display: none;
+}
+
+
+/* ==========================================
+   📱 THE MASTER MOBILE FIX 
+   ========================================== */
 @media (max-width: 768px) {
-  .team-heading-container {
-    height: 100px;
-    padding-top: 60px;
-  }
-  .team-heading-image {
-    height: 80px;
-  }
-  .team-sidebar-container {
-    bottom: 120px; 
-    right: 1rem;
-    transform: scale(0.8);
-    transform-origin: right bottom;
-  }
+  
+  .team-sidebar-container, 
   .team-podium-container {
-    width: 110px;
-    right: 10px;
+    display: none !important;
+  }
+
+  /* 🟢 1. Header takes up exactly 150px of physical space */
+  .team-heading-container {
+    height: 150px; 
+    padding-top: 80px; /* Clears fixed navbar perfectly */
+    padding-bottom: 10px;
+    align-items: flex-end; 
+  }
+  
+  .team-heading-image {
+    height: 55px; 
+  }
+
+  /* 🟢 2. The Ribbon takes up exactly 65px */
+  .team-mobile-nav {
+    display: flex;
+    height: 65px; 
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding: 0; /* Remove internal padding, rely on pseudo-elements */
+    align-items: center; /* Center pills vertically */
+    
+    background: rgba(15, 5, 20, 0.85); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(184, 115, 51, 0.2);
+    border-bottom: 1px solid rgba(184, 115, 51, 0.2);
+    flex-shrink: 0;
+    z-index: 80;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+  }
+  
+  .team-mobile-nav::-webkit-scrollbar { 
+    display: none; 
+  }
+
+  /* 🟢 THE FIX FOR CUT OFF PILLS: Invisible bumpers on the far left and right */
+  .team-mobile-nav::before,
+  .team-mobile-nav::after {
+    content: '';
+    flex: 0 0 20px; /* Guarantees 20px of un-squishable space at the edges */
+  }
+
+  .mobile-nav-pill {
+    scroll-snap-align: center;
+    white-space: nowrap;
+    background: transparent;
+    border: 1px solid rgba(184, 115, 51, 0.4);
+    border-radius: 20px;
+    padding: 8px 16px;
+    color: rgba(234, 221, 207, 0.7);
+    font-family: "Times New Roman", Times, serif;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-nav-pill.active {
+    background: rgba(184, 115, 51, 0.2);
+    color: #e6daad;
+    border-color: #e6daad;
+    box-shadow: 0 0 12px rgba(184, 115, 51, 0.5);
+    font-weight: bold;
+  }
+
+  /* 🟢 3. The Scroll Container behaves strictly */
+  .team-scroll-container {
+    scroll-snap-type: y mandatory;
+  }
+
+  .team-section-container {
+    scroll-snap-align: none;
+    flex-direction: column !important; 
+    height: auto !important;
+    gap: 0 !important; 
+    padding: 0 !important;
+  }
+
+  /* 🟢 4. THE FIX FOR CLUBBED CARDS */
+  /* Mathematical height: 100dvh minus 150px (heading) minus 65px (ribbon) = 215px */
+  .member-card-outer {
+    height: calc(100dvh - 215px) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    width: 100vw !important;
+    padding: 15px 25px !important; 
+    margin: 0 !important;
+    
+    /* Forces the scroll view to perfectly lock onto the top of this specific card */
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important; 
+  }
+
+  .member-card-visual {
+    transform: none !important; 
+    width: 100% !important;
+    max-width: 400px !important;
+    height: 100% !important;
+    border-radius: 20px !important; /* Premium rounded edges for the mobile card */
   }
 }

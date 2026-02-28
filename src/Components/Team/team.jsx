@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Team.css';
+import './team.css';
 
-export default function MemberCard({ member, isGrid, cardWidth, delay, config, glowColor, getAsset }) {
+export default function MemberCard({ member, isGrid, cardWidth, delay, config, glowColor, getAsset, isMobile }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   
@@ -23,7 +23,7 @@ export default function MemberCard({ member, isGrid, cardWidth, delay, config, g
   }, []);
 
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (isMobile || !cardRef.current) return;
     const { left, top, width, height } = cardRef.current.getBoundingClientRect();
     const x = (e.clientX - left - width / 2) / 20; 
     const y = -(e.clientY - top - height / 2) / 20;
@@ -31,6 +31,7 @@ export default function MemberCard({ member, isGrid, cardWidth, delay, config, g
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     setIsHovered(false);
     setRotate({ x: 0, y: 0 }); 
   };
@@ -39,7 +40,7 @@ export default function MemberCard({ member, isGrid, cardWidth, delay, config, g
     <div
       ref={cardRef}
       className="member-card-outer"
-      style={{
+      style={!isMobile ? {
         width: cardWidth, 
         height: isGrid ? config.gridCardHeight : '100%',
         maxWidth: isGrid ? 'none' : config.cardMaxWidth,
@@ -48,19 +49,24 @@ export default function MemberCard({ member, isGrid, cardWidth, delay, config, g
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
         transition: `opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s`,
+      } : {
+        /* Mobile handles animation via CSS to prevent conflicts with !important rules */
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+        transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`,
       }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => !isMobile && setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
     >
       <div 
         className="member-card-visual"
         style={{
-          transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(${isHovered ? 1.02 : 1})`,
-          boxShadow: isHovered 
-            ? `0 20px 50px rgba(${glowColor}, 0.6), 0 0 20px rgba(${glowColor}, 0.4)` 
+          transform: isMobile ? 'none' : `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(${isHovered ? 1.02 : 1})`,
+          boxShadow: (isHovered || isMobile)
+            ? `0 20px 50px rgba(${glowColor}, 0.5), 0 0 20px rgba(${glowColor}, 0.3)` 
             : `0 10px 20px rgba(0,0,0,0.3), 0 0 10px rgba(${glowColor}, 0.2)`,       
-          border: isHovered ? `1px solid rgba(${glowColor}, 0.3)` : '1px solid transparent',
+          border: (isHovered || isMobile) ? `1px solid rgba(${glowColor}, 0.3)` : '1px solid transparent',
         }}
       >
         <div
@@ -82,7 +88,7 @@ export default function MemberCard({ member, isGrid, cardWidth, delay, config, g
                 src={getAsset(member.photo)}
                 alt={`Member ${member.id}`}
                 className="member-photo"
-                style={{ transform: isHovered ? 'scale(1.1)' : 'scale(1)' }}
+                style={{ transform: (isHovered && !isMobile) ? 'scale(1.1)' : 'scale(1)' }}
               />
             </div>
             <img src={getAsset(member.frame)} alt="Frame" className="member-frame-image" />
