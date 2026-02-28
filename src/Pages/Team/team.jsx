@@ -39,7 +39,7 @@ const getAsset = (name) => {
   const path = `../../assets/${name}`;
   if (!preloadedAssets[path]) {
     console.warn(`Asset not found: ${name}`);
-    return ''; 
+    return null; // Keeps console clean if image is missing
   }
   return preloadedAssets[path];
 };
@@ -96,7 +96,7 @@ export default function TeamPage({ navHeight }) {
   const sectionRefs = useRef({});
   const hoverTimeoutRef = useRef(null); 
 
-  // 1. Viewport Resize & Scroll Observer
+  // 1. Observer to detect active section
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
@@ -109,7 +109,7 @@ export default function TeamPage({ navHeight }) {
           }
         });
       },
-      // Safely detects which section occupies the direct center of the screen
+      // Safely detects exactly what is in the vertical center of the screen
       { rootMargin: "-40% 0px -40% 0px", threshold: 0 } 
     );
 
@@ -123,8 +123,7 @@ export default function TeamPage({ navHeight }) {
     };
   }, []);
 
-  // 2. 🟢 AUTO-SCROLL RIBBON LOGIC
-  // Whenever the active section changes, perfectly center the pill in the ribbon natively!
+  // 2. 🟢 AUTO-SCROLL RIBBON LOGIC (Flawless JS execution, replacing buggy CSS snap)
   useEffect(() => {
     if (isMobile) {
       const activePill = document.getElementById(`pill-${activeSection}`);
@@ -134,8 +133,10 @@ export default function TeamPage({ navHeight }) {
     }
   }, [activeSection, isMobile]);
 
+  // 3. Scroll to Section
   const handleSidebarClick = (id) => {
     const el = sectionRefs.current[id];
+    // Block: 'start' guarantees the top of the section perfectly hits the top of the scroll container
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -165,7 +166,7 @@ export default function TeamPage({ navHeight }) {
         />
       </div>
 
-      {/* HORIZONTAL SWIPE MENU (MOBILE ONLY) */}
+      {/* 🟢 HORIZONTAL SWIPE MENU (MOBILE ONLY) */}
       <nav className="team-mobile-nav" id="mobile-nav-ribbon">
         {TEAMS.map((team) => (
           <button
@@ -235,16 +236,11 @@ export default function TeamPage({ navHeight }) {
         {TEAMS.map((team) => {
           const isGridDesktop = team.members.length >= 5 || team.id === 'sponsorship';
           
-          let itemWidth;
-          if (isMobile) {
-            itemWidth = '100%'; // Strict 1-column on mobile
-          } else {
-            itemWidth = isGridDesktop 
-              ? (team.id === 'sponsorship' ? '40%' : '30%') 
-              : `${100 / team.members.length}%`;
-          }
+          let itemWidth = isGridDesktop 
+            ? (team.id === 'sponsorship' ? '40%' : '30%') 
+            : `${100 / team.members.length}%`;
 
-          const treatAsGrid = isGridDesktop;
+          if (isMobile) itemWidth = '100%'; 
 
           return (
             <section
@@ -253,7 +249,7 @@ export default function TeamPage({ navHeight }) {
               ref={(el) => (sectionRefs.current[team.id] = el)}
               className="team-section-container"
               style={{
-                flexWrap: treatAsGrid ? 'wrap' : 'nowrap',
+                flexWrap: isMobile ? 'nowrap' : (isGridDesktop ? 'wrap' : 'nowrap'),
                 gap: STYLE_CONFIG.gridGap, 
               }}
             >
@@ -261,7 +257,7 @@ export default function TeamPage({ navHeight }) {
                 <MemberCard
                   key={member.id}
                   member={member}
-                  isGrid={treatAsGrid}
+                  isGrid={isGridDesktop}
                   cardWidth={itemWidth}
                   delay={index * (isMobile ? 0.05 : 0.15)} 
                   glowColor={LEVEL_COLORS[member.level] || '255, 255, 255'}

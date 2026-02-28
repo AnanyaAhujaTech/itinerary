@@ -50,10 +50,9 @@ export default function MemberCard({ member, isGrid, cardWidth, delay, config, g
         transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
         transition: `opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s`,
       } : {
-        /* Mobile handles animation via CSS to prevent conflicts with !important rules */
+        /* 🟢 Mobile strictly manages only opacity so scroll-snap doesn't jitter */
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-        transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`,
+        transition: `opacity 0.6s ease`,
       }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => !isMobile && setIsHovered(true)}
@@ -84,12 +83,16 @@ export default function MemberCard({ member, isGrid, cardWidth, delay, config, g
               WebkitClipPath: member.clipPath,
               borderRadius: config.photoRadius
             }}>
-              <img
-                src={getAsset(member.photo)}
-                alt={`Member ${member.id}`}
-                className="member-photo"
-                style={{ transform: (isHovered && !isMobile) ? 'scale(1.1)' : 'scale(1)' }}
-              />
+              {getAsset(member.photo) ? (
+                <img
+                  src={getAsset(member.photo)}
+                  alt={`Member ${member.id}`}
+                  className="member-photo"
+                  style={{ transform: (isHovered && !isMobile) ? 'scale(1.1)' : 'scale(1)' }}
+                />
+              ) : (
+                <div style={{ width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)' }} />
+              )}
             </div>
             <img src={getAsset(member.frame)} alt="Frame" className="member-frame-image" />
           </div>

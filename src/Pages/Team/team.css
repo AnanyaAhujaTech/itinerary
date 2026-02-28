@@ -2,6 +2,8 @@
   position: relative;
   width: 100vw;
   height: 100vh;
+  /* 🟢 Switch to dynamic viewport height so the mobile URL bar doesn't break the layout */
+  height: 100dvh; 
   overflow: hidden;
   background-color: #050505;
   display: flex;
@@ -112,7 +114,6 @@
   display: none;
 }
 
-
 /* ==========================================
    📱 THE MASTER MOBILE FIX 
    ========================================== */
@@ -123,10 +124,10 @@
     display: none !important;
   }
 
-  /* 🟢 1. Header takes up exactly 150px of physical space */
+  /* 🟢 Fixed Exact Heights to compute perfect scroll bounds */
   .team-heading-container {
-    height: 150px; 
-    padding-top: 80px; /* Clears fixed navbar perfectly */
+    height: 145px !important; 
+    padding-top: 80px; 
     padding-bottom: 10px;
     align-items: flex-end; 
   }
@@ -135,16 +136,17 @@
     height: 55px; 
   }
 
-  /* 🟢 2. The Ribbon takes up exactly 65px */
+  /* 🟢 THE HORIZONTAL RIBBON */
   .team-mobile-nav {
     display: flex;
-    height: 65px; 
+    height: 65px !important; /* Fixed mathematical height */
     width: 100%;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    /* Removed scroll snap entirely—JS handles the centering flawlessly now! */
+    scroll-snap-type: none; 
     gap: 12px;
-    padding: 0; /* Remove internal padding, rely on pseudo-elements */
-    align-items: center; /* Center pills vertically */
+    padding: 0 20px; /* Standard safe padding */
+    align-items: center; 
     
     background: rgba(15, 5, 20, 0.85); 
     backdrop-filter: blur(10px);
@@ -161,15 +163,8 @@
     display: none; 
   }
 
-  /* 🟢 THE FIX FOR CUT OFF PILLS: Invisible bumpers on the far left and right */
-  .team-mobile-nav::before,
-  .team-mobile-nav::after {
-    content: '';
-    flex: 0 0 20px; /* Guarantees 20px of un-squishable space at the edges */
-  }
-
   .mobile-nav-pill {
-    scroll-snap-align: center;
+    flex-shrink: 0; /* Prevents text from ever squishing */
     white-space: nowrap;
     background: transparent;
     border: 1px solid rgba(184, 115, 51, 0.4);
@@ -183,6 +178,11 @@
     transition: all 0.3s ease;
   }
 
+  /* 🟢 FIXES THE RIGHT EDGE CUTOFF */
+  .mobile-nav-pill:last-child {
+    margin-right: 20px; 
+  }
+
   .mobile-nav-pill.active {
     background: rgba(184, 115, 51, 0.2);
     color: #e6daad;
@@ -191,9 +191,13 @@
     font-weight: bold;
   }
 
-  /* 🟢 3. The Scroll Container behaves strictly */
+  /* 🟢 THE SCROLL CONTAINER */
   .team-scroll-container {
     scroll-snap-type: y mandatory;
+    /* CRUCIAL FIX: Removed the buggy scroll-padding-top. The nav lives outside this container, so it automatically starts at 0 */
+    scroll-padding-top: 0px; 
+    /* Occupies the exact remaining height (100dvh - 145px heading - 65px ribbon = 210px) */
+    height: calc(100dvh - 210px) !important;
   }
 
   .team-section-container {
@@ -204,17 +208,19 @@
     padding: 0 !important;
   }
 
-  /* 🟢 4. THE FIX FOR CLUBBED CARDS */
-  /* Mathematical height: 100dvh minus 150px (heading) minus 65px (ribbon) = 215px */
+  /* 🟢 THE FIX FOR CLUBBED & CUT-OFF CARDS */
   .member-card-outer {
-    height: calc(100dvh - 215px) !important;
-    min-height: 0 !important;
+    /* 1 Card = Exactly 1 Viewport Window */
+    height: calc(100dvh - 210px) !important;
+    min-height: 450px !important; 
     max-height: none !important;
     width: 100vw !important;
-    padding: 15px 25px !important; 
+    
+    /* Heavy bottom padding ensures the nameplate never touches the URL bar */
+    padding: 20px 8% 50px 8% !important; 
     margin: 0 !important;
     
-    /* Forces the scroll view to perfectly lock onto the top of this specific card */
+    /* Forces the view to mathematically lock onto this single card */
     scroll-snap-align: start !important;
     scroll-snap-stop: always !important; 
   }
@@ -224,6 +230,6 @@
     width: 100% !important;
     max-width: 400px !important;
     height: 100% !important;
-    border-radius: 20px !important; /* Premium rounded edges for the mobile card */
+    border-radius: 20px !important; 
   }
 }
