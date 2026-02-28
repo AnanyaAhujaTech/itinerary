@@ -15,7 +15,7 @@ import {
   getClockRotation, 
   getCurrentSecond, 
   getInitialRotation,
-  getTimeRemaining, // 🟢 Added new import
+  getTimeRemaining, 
   TICK_SETTINGS 
 } from "./timeConfig"; 
 
@@ -27,7 +27,7 @@ export default function CountdownClock() {
   const gearRef = useRef(null);
   const segmentsRef = useRef(null);
 
-  // 🟢 Digital Clock Refs
+  // Digital Clock Refs
   const daysRef = useRef(null);
   const hoursRef = useRef(null);
   const minsRef = useRef(null);
@@ -37,7 +37,7 @@ export default function CountdownClock() {
   const visualRotation = useRef(getInitialRotation());
 
   useEffect(() => {
-    // Initialize digital clock immediately to prevent empty text
+    // Initialize digital clock immediately
     const initTime = getTimeRemaining();
     if (daysRef.current) daysRef.current.innerText = initTime.days;
     if (hoursRef.current) hoursRef.current.innerText = initTime.hours;
@@ -69,7 +69,7 @@ export default function CountdownClock() {
           overwrite: true,
         });
 
-        // 3. 🟢 Digital: Update text (Fast DOM mutation bypassing React state!)
+        // 3. Digital: Update text safely
         const remaining = getTimeRemaining();
         if (daysRef.current) daysRef.current.innerText = remaining.days;
         if (hoursRef.current) hoursRef.current.innerText = remaining.hours;
@@ -104,20 +104,17 @@ export default function CountdownClock() {
             <span className="digital-number" ref={daysRef}>00</span>
             <span className="digital-label">DAYS</span>
           </div>
-          <span className="digital-colon">:</span>
           <div className="digital-segment">
             <span className="digital-number" ref={hoursRef}>00</span>
-            <span className="digital-label">HRS</span>
+            <span className="digital-label">HOURS</span>
           </div>
-          <span className="digital-colon">:</span>
           <div className="digital-segment">
             <span className="digital-number" ref={minsRef}>00</span>
-            <span className="digital-label">MINS</span>
+            <span className="digital-label">MINUTES</span>
           </div>
-          <span className="digital-colon">:</span>
           <div className="digital-segment">
             <span className="digital-number" ref={secsRef}>00</span>
-            <span className="digital-label">SECS</span>
+            <span className="digital-label">SECONDS</span>
           </div>
         </div>
 

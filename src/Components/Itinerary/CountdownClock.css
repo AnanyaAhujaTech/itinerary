@@ -110,61 +110,63 @@
 .main-hand   { height: 16%; z-index: 4; }
 .minute-hand { height: 22%; z-index: 5; opacity: 0.9; filter: brightness(1.1); }
 
-/* --- 🟢 DIGITAL CLOCK (Hidden by default) --- */
+/* --- DIGITAL CLOCK (Hidden by default on Desktop) --- */
 .digital-clock-wrapper {
   display: none;
 }
 
-/* --- 📱 MOBILE RESPONSIVENESS --- */
+/* --- 📱 MOBILE RESPONSIVENESS (The Luxury Fix) --- */
 @media (max-width: 768px) {
   .clock-wrapper {
     display: none; /* Hide Radial Clock */
   }
   
+  .heading-container {
+    margin-bottom: 30px; /* Bring the clock a bit closer to the heading */
+  }
+  
+  /* Create a 2x2 Grid of Glass Cards */
   .digital-clock-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    margin-top: -20px;
+    width: 85%;
+    max-width: 400px;
+    margin-top: 10px;
   }
 
+  /* The Frosted Glass Card */
   .digital-segment {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    background: rgba(15, 5, 20, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(184, 115, 51, 0.4);
+    border-radius: 16px;
+    padding: 25px 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(184, 115, 51, 0.15);
   }
 
+  /* Big, bold, glowing numbers */
   .digital-number {
     font-family: "Times New Roman", Times, serif;
-    font-size: 2.8rem;
-    font-weight: normal;
+    font-size: 3.5rem;
+    font-weight: bold;
     color: #e6daad;
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5), 0px 4px 8px rgba(0,0,0,0.8);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6), 0px 4px 10px rgba(0,0,0,0.8);
     line-height: 1;
+    margin-bottom: 5px;
   }
 
-  .digital-colon {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 2.5rem;
-    color: #b87333;
-    line-height: 1;
-    margin-top: -20px; /* Offset to align perfectly with numbers */
-    animation: pulse 1.5s infinite ease-in-out;
-  }
-
+  /* Elegant, spaced-out labels */
   .digital-label {
     font-family: "Times New Roman", Times, serif;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    color: rgba(230, 218, 173, 0.6);
-  }
-
-  /* Optional breathing effect for the colons */
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: rgba(230, 218, 173, 0.8);
+    text-transform: uppercase;
   }
 }
