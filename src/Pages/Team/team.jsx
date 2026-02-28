@@ -101,11 +101,9 @@ export default function TeamPage({ navHeight }) {
   const hoverTimeoutRef = useRef(null); 
 
   useEffect(() => {
-    // Resize Listener for Mobile detection
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
 
-    // Scroll Observer
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -114,7 +112,7 @@ export default function TeamPage({ navHeight }) {
           }
         });
       },
-      { threshold: 0.3 } // Slightly reduced threshold to handle taller mobile sections
+      { threshold: 0.3 } 
     );
 
     Object.values(sectionRefs.current).forEach((el) => {
@@ -160,7 +158,10 @@ export default function TeamPage({ navHeight }) {
 
       <nav 
         className="team-sidebar-container"
-        style={{ pointerEvents: isSidebarOpen ? 'auto' : 'none' }}
+        style={{ 
+          pointerEvents: isSidebarOpen ? 'auto' : 'none',
+          opacity: isSidebarOpen ? 1 : 0 // 🟢 Fades the entire glass panel out when closed
+        }}
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
       >
@@ -176,8 +177,8 @@ export default function TeamPage({ navHeight }) {
                 opacity: isSidebarOpen ? 1 : 0,
                 transform: isSidebarOpen ? 'translateY(0)' : 'translateY(20px)',
                 transitionDelay: `${reverseIndex * 50}ms`,
-                borderRight: isActive ? '3px solid #79bcff' : '3px solid transparent',
-                textShadow: isActive ? '0 0 10px rgba(121, 188, 255, 0.8)' : 'none',
+                borderRight: isActive ? '3px solid #e6daad' : '3px solid transparent',
+                textShadow: isActive ? '0 0 10px #e6daad)' : 'none',
                 color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
               }}
             >
@@ -209,7 +210,6 @@ export default function TeamPage({ navHeight }) {
         {TEAMS.map((team) => {
           const isGridDesktop = team.members.length >= 5 || team.id === 'sponsorship';
           
-          // 📱 Dynamic sizing logic: force wrap on mobile, use percentages for fit
           let itemWidth;
           if (isMobile) {
             itemWidth = team.members.length === 1 ? '80%' : '45%';
@@ -219,7 +219,6 @@ export default function TeamPage({ navHeight }) {
               : `${100 / team.members.length}%`;
           }
 
-          // Mobile forces the "Grid" styling (smaller card heights so they fit)
           const treatAsGrid = isGridDesktop || isMobile;
 
           return (
@@ -233,7 +232,6 @@ export default function TeamPage({ navHeight }) {
                 gap: STYLE_CONFIG.gridGap,
                 paddingLeft: treatAsGrid ? '5%' : '0', 
                 paddingRight: treatAsGrid ? '5%' : '0',
-                // 📱 On mobile, sections grow with wrapped cards instead of rigidly matching 100vh
                 height: isMobile ? 'auto' : '100%',
                 minHeight: '100%',
                 paddingTop: isMobile ? '80px' : '0',
@@ -246,7 +244,7 @@ export default function TeamPage({ navHeight }) {
                   member={member}
                   isGrid={treatAsGrid}
                   cardWidth={itemWidth}
-                  delay={index * (isMobile ? 0.05 : 0.15)} // Faster animations on phone
+                  delay={index * (isMobile ? 0.05 : 0.15)} 
                   glowColor={LEVEL_COLORS[member.level] || '255, 255, 255'}
                   config={STYLE_CONFIG}
                   getAsset={getAsset}
