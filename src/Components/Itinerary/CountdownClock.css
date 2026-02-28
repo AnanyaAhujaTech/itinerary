@@ -118,16 +118,16 @@
 /* --- 📱 MOBILE RESPONSIVENESS: The Master Layout --- */
 @media (max-width: 768px) {
   .clock-content-group {
-    /* Bind the group strictly between the navbar and bottom button to prevent overlap */
     position: absolute;
     top: 85px; 
-    bottom: 100px;
+    /* 🟢 INCREASED BOTTOM CLEARANCE: Mathematically forces the group to stop above the button */
+    bottom: 110px; 
     left: 0;
     right: 0;
     transform: none; 
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly; /* Magically spaces everything evenly */
+    justify-content: space-evenly; 
     align-items: center;
   }
 
@@ -136,17 +136,17 @@
   }
   
   .heading-img {
-    width: 60vw; /* Slightly smaller to save space */
+    width: 60vw; 
     max-width: 220px;
   }
 
   .clock-wrapper {
-    /* Enlarge the clock slightly to be the hero element */
-    width: 85vw;
-    height: 85vw;
+    /* 🟢 THE MAGIC FIX: Uses min() so it shrinks on short screens rather than overflowing */
+    width: min(80vw, 40vh);
+    height: min(80vw, 40vh);
     max-width: 380px;
     max-height: 380px;
-    margin: -15px 0; /* Tightens the visual gap */
+    margin: 0; 
   }
   
   /* Horizontal line of mini frosted cards */
@@ -169,7 +169,7 @@
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(184, 115, 51, 0.4);
     border-radius: 12px;
-    padding: 10px 12px;
+    padding: 12px 10px; /* Kept very compact */
     min-width: 60px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px rgba(184, 115, 51, 0.15);
   }
