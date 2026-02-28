@@ -53,17 +53,19 @@
   color: #000;
 }
 
-/* 🟢 MOBILE RESPONSIVENESS: Centers the button front & center */
+/* 🟢 MOBILE RESPONSIVENESS: Flawless button centering */
 @media (max-width: 768px) {
   .itinerary-toggle-btn {
     right: 50%;
     transform: translateX(50%);
-    bottom: 40px;
+    bottom: 30px;
     width: 80%;
     max-width: 300px;
     text-align: center;
+    /* Extra padding for easier thumb tapping */
+    padding: 16px 24px; 
   }
   .itinerary-toggle-btn:hover {
-    transform: translateX(50%) scale(1.02); /* Preserve centering on hover */
+    transform: translateX(50%) scale(1.02); 
   }
 }

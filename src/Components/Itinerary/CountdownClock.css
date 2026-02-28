@@ -1,10 +1,15 @@
 :root {
+  /* --- POSITIONING & GLOBALS --- */
   --clock-vertical-offset: 30px;
   --clock-global-size: clamp(300px, 72vmin, 650px);
   --clock-glow-filter: drop-shadow(0px 0px 15px rgba(184, 115, 51, 0.7));
+
+  /* --- HEADING / LOGO --- */
   --heading-width: clamp(250px, 15vmin, 600px);
   --heading-margin-bottom: 60px;
   --heading-glow-color: rgba(255, 176, 50, 0.7);
+
+  /* --- SCALING --- */
   --frame-scale: 114%;
   --ring-scale: 72%;
   --segment-scale: 65%;
@@ -13,8 +18,7 @@
 
 .clock-overlay-container {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
@@ -28,8 +32,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   transform: translateY(var(--clock-vertical-offset));
   position: relative;
+  width: 100%;
   opacity: 0; 
 }
 
@@ -62,7 +68,7 @@
   display: block;
 }
 
-/* --- RADIAL CLOCK LAYERS --- */
+/* --- CLOCK LAYERS --- */
 .clock-wrapper {
   position: relative;
   display: flex;
@@ -102,71 +108,35 @@
   width: auto;
 }
 
+/* Specific Layer Sizes */
 .layer-segments { width: var(--segment-scale); height: var(--segment-scale); z-index: 1; }
 .layer-ring     { width: var(--ring-scale); height: var(--ring-scale); z-index: 2; filter: var(--clock-glow-filter); }
 .layer-frame    { width: var(--frame-scale); height: var(--frame-scale); z-index: 3; filter: var(--clock-glow-filter); }
 .layer-gears    { width: var(--gear-size); height: var(--gear-size); z-index: 6; }
 
+/* Hand Lengths */
 .main-hand   { height: 16%; z-index: 4; }
 .minute-hand { height: 22%; z-index: 5; opacity: 0.9; filter: brightness(1.1); }
 
-/* --- DIGITAL CLOCK (Hidden by default on Desktop) --- */
-.digital-clock-wrapper {
-  display: none;
-}
 
-/* --- 📱 MOBILE RESPONSIVENESS (The Luxury Fix) --- */
+/* --- 📱 MOBILE STRICT CENTERING & SCALING --- */
 @media (max-width: 768px) {
-  .clock-wrapper {
-    display: none; /* Hide Radial Clock */
+  .clock-content-group {
+    /* Reduce vertical offset so it centers better between navbar and bottom button */
+    transform: translateY(0px); 
   }
-  
+
   .heading-container {
-    margin-bottom: 30px; /* Bring the clock a bit closer to the heading */
+    margin-bottom: 30px; 
   }
   
-  /* Create a 2x2 Grid of Glass Cards */
-  .digital-clock-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    width: 85%;
-    max-width: 400px;
-    margin-top: 10px;
+  .heading-img {
+    width: 75vw; /* Keeps heading beautifully proportioned on small screens */
   }
 
-  /* The Frosted Glass Card */
-  .digital-segment {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(15, 5, 20, 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(184, 115, 51, 0.4);
-    border-radius: 16px;
-    padding: 25px 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(184, 115, 51, 0.15);
-  }
-
-  /* Big, bold, glowing numbers */
-  .digital-number {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 3.5rem;
-    font-weight: bold;
-    color: #e6daad;
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6), 0px 4px 10px rgba(0,0,0,0.8);
-    line-height: 1;
-    margin-bottom: 5px;
-  }
-
-  /* Elegant, spaced-out labels */
-  .digital-label {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    color: rgba(230, 218, 173, 0.8);
-    text-transform: uppercase;
+  .clock-wrapper {
+    /* Constrain the clock slightly more on small screens so it doesn't bleed */
+    width: clamp(250px, 85vw, 400px);
+    height: clamp(250px, 85vw, 400px);
   }
 }
