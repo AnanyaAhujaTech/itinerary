@@ -4,10 +4,6 @@
 // 📅 TIME CONFIGURATION
 // ==========================================
 
-// Note: formats are YYYY-MM-DDTHH:mm:ss
-// These are treated as Local Time by the browser. 
-// If you need strict UTC, append 'Z' to the string (e.g., "...00Z").
-
 export const PREFEST_START = new Date("2026-03-01T00:00:00");
 export const FEST_START = new Date("2026-03-18T11:00:00");
 
@@ -73,7 +69,6 @@ export function getInitialRotation() {
   return new Date().getSeconds() * TICK_SETTINGS.DEGREES_PER_TICK;
 }
 
-// 🟢 NEW: Helper for the Digital Mobile Clock
 export function getTimeRemaining() {
   const total = FEST_START.getTime() - new Date().getTime();
   if (total <= 0) return { days: '00', hours: '00', minutes: '00', seconds: '00' };

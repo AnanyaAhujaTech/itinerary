@@ -62,7 +62,6 @@
     width: 80%;
     max-width: 300px;
     text-align: center;
-    /* Extra padding for easier thumb tapping */
     padding: 16px 24px; 
   }
   .itinerary-toggle-btn:hover {
