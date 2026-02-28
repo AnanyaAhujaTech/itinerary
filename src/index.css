@@ -21,16 +21,3 @@ html, body {
   /* Make sure the main React root is transparent */
   background: transparent !important;
 }
-
-/* Clean this up. Styling for global canvas belongs with its component.
-   COMMENT OUT or REMOVE this. */
-/* .global-background-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  display: block;
-} */

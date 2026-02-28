@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ItineraryPage from './Pages/Itinerary/Itinerary';
-import TeamPage from './Pages/Team/team';
+import TeamPage from './Pages/Team/Team';
 // Global CSS for reset and viewport
 import './index.css';
 

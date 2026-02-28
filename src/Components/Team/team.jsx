@@ -1,224 +1,97 @@
-// src/Pages/Team/team.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import Background from '../../Components/Team/background';
-import MemberCard from '../../Components/Team/team';
-import './team.css';
-import Navbar from '../../Components/Navbar/Navbar';
+import './Team.css';
 
-// ==========================================
-// 🛠️ CONFIGURATION & DATA
-// ==========================================
-
-const STYLE_CONFIG = {
-  cardMaxWidth: '350px',      
-  cardMaxHeight: '65vh',      
-  gridCardHeight: '35vh',     
-  gridGap: '20px',            
-  cardPadding: '15px',        
-  embroideryOpacity: 0.9,     
-  photoRadius: '0px',         
-};
-
-const LEVEL_COLORS = {
-  1: '255, 215, 0',    
-  2: '192, 192, 192',  
-  3: '64, 224, 208',   
-  4: '255, 0, 0',      
-  5: '0, 0, 255',      
-  6: '128, 0, 128',    
-  7: '0, 0, 255',      
-  8: '128, 0, 128',    
-  9: '0, 128, 0',      
-};
-
-// Asset helper optimized for Vite
-const getAsset = (name) => {
-  return new URL(`../../assets/${name}`, import.meta.url).href;
-};
-
-const SHAPES = {
-  HEART: 'polygon(50% 15%, 65% 5%, 85% 5%, 100% 30%, 85% 65%, 50% 95%, 15% 65%, 0% 30%, 15% 5%, 35% 5%)',
-  RECTANGLE: 'inset(2% 2% 2% 2%)',
-  OVAL: 'ellipse(50% 50% at 50% 50%)', 
-};
-
-const TEAM_STRUCTURE = [
-  { id: 'core', label: 'Core Team', count: 4, clipPath: SHAPES.HEART, visualLevel: 1 },              
-  { id: 'website', label: 'Website', count: 2, clipPath: SHAPES.RECTANGLE, visualLevel: 3 },
-  { id: 'events', label: 'Event Management', count: 6, clipPath: SHAPES.OVAL, visualLevel: 4 },
-  { id: 'pr', label: 'PR & Security', count: 5, clipPath: SHAPES.RECTANGLE, visualLevel: 5 },
-  { id: 'creative', label: 'Creative', count: 2, clipPath: SHAPES.RECTANGLE, visualLevel: 6 },
-  { id: 'hr', label: 'HR & Logistics', count: 6, clipPath: SHAPES.OVAL, visualLevel: 7 },
-  { id: 'sponsorship', label: 'Sponsorship', count: 4, clipPath: SHAPES.RECTANGLE, visualLevel: 8 },
-  { id: 'socials', label: 'Social Media', count: 2, clipPath: SHAPES.RECTANGLE, visualLevel: 9 },
-];
-
-let globalMemberCounter = 1;
-
-const TEAMS = TEAM_STRUCTURE.map((team) => {
-  const levelNumber = team.visualLevel;
-  const members = Array.from({ length: team.count }).map(() => {
-    const memberId = globalMemberCounter++;
-    return {
-      id: memberId,
-      level: levelNumber, 
-      embroidery: `embroidery${levelNumber}.png`, 
-      frame: `frame${levelNumber}.png`,
-      clipPath: team.clipPath, 
-      photo: `member${memberId}.jpg`, 
-      plate: `plate${memberId}.png`,
-    };
-  });
-  return { ...team, levelNumber, members };
-});
-
-// ==========================================
-// 🚀 MAIN PAGE COMPONENT
-// ==========================================
-
-export default function TeamPage({ navHeight }) {
-  const [activeSection, setActiveSection] = useState(TEAMS[0].id);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+export default function MemberCard({ member, isGrid, cardWidth, delay, config, glowColor, getAsset }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   
-  const sectionRefs = useRef({});
-  const hoverTimeoutRef = useRef(null); 
+  const [rotate, setRotate] = useState({ x: 0, y: 0 });
+  const cardRef = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
       },
-      { threshold: 0.5 }
+      { threshold: 0.1 }
     );
-
-    Object.values(sectionRefs.current).forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
+    if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const handleSidebarClick = (id) => {
-    const el = sectionRefs.current[id];
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleMouseEnter = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setIsSidebarOpen(true);
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - left - width / 2) / 20; 
+    const y = -(e.clientY - top - height / 2) / 20;
+    setRotate({ x: y, y: x });
   };
 
   const handleMouseLeave = () => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setIsSidebarOpen(false);
-    }, 200); 
+    setIsHovered(false);
+    setRotate({ x: 0, y: 0 }); 
   };
 
   return (
-    <div className="team-page-wrapper">
-      <Background imagePath={getAsset('background.png')} />
-      
-      {/* Navbar added here so it actually renders on the Team Page */}
-      <Navbar />
-
-      <div className="team-heading-container">
-        <img 
-          src={getAsset('teamheading.png')} 
-          alt="Team Heading" 
-          className="team-heading-image" 
-        />
-      </div>
-
-      <nav 
-        className="team-sidebar-container"
-        style={{ pointerEvents: isSidebarOpen ? 'auto' : 'none' }}
-        onMouseEnter={handleMouseEnter} 
-        onMouseLeave={handleMouseLeave}
-      >
-        {TEAMS.map((team, index) => {
-          const reverseIndex = TEAMS.length - 1 - index;
-          const isActive = activeSection === team.id;
-          return (
-            <button
-              key={team.id}
-              onClick={() => handleSidebarClick(team.id)}
-              className="team-sidebar-item"
-              style={{
-                opacity: isSidebarOpen ? 1 : 0,
-                transform: isSidebarOpen ? 'translateY(0)' : 'translateY(20px)',
-                transitionDelay: `${reverseIndex * 50}ms`,
-                borderRight: isActive ? '3px solid #79bcff' : '3px solid transparent',
-                textShadow: isActive ? '0 0 10px rgba(121, 188, 255, 0.8)' : 'none',
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
-              }}
-            >
-              {team.label}
-            </button>
-          );
-        })}
-      </nav>
-
+    <div
+      ref={cardRef}
+      className="member-card-outer"
+      style={{
+        width: cardWidth, 
+        height: isGrid ? config.gridCardHeight : '100%',
+        maxWidth: isGrid ? 'none' : config.cardMaxWidth,
+        maxHeight: isGrid ? 'none' : config.cardMaxHeight,
+        padding: isGrid ? '0' : `0 ${config.cardPadding}`,
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
+        transition: `opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s`,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+    >
       <div 
-        className="team-podium-container"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        className="member-card-visual"
         style={{
-            transform: activeSection === 'core' ? 'translateY(150%)' : 'translateY(0%)',
-            opacity: activeSection === 'core' ? 0 : 1,
-            pointerEvents: activeSection === 'core' ? 'none' : 'auto',
+          transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(${isHovered ? 1.02 : 1})`,
+          boxShadow: isHovered 
+            ? `0 20px 50px rgba(${glowColor}, 0.6), 0 0 20px rgba(${glowColor}, 0.4)` 
+            : `0 10px 20px rgba(0,0,0,0.3), 0 0 10px rgba(${glowColor}, 0.2)`,       
+          border: isHovered ? `1px solid rgba(${glowColor}, 0.3)` : '1px solid transparent',
         }}
       >
-        <img 
-          src={getAsset('podium.png')} 
-          alt="Menu" 
-          className="team-podium-image"
+        <div
+          className="member-card-layer"
           style={{
-            filter: isSidebarOpen ? 'brightness(1.2) drop-shadow(0 0 15px gold)' : 'none'
-          }} 
+            opacity: config.embroideryOpacity, 
+            backgroundImage: `url(${getAsset(member.embroidery)})`,
+          }}
         />
-      </div>
 
-      <div className="team-scroll-container">
-        {TEAMS.map((team) => {
-          const isGrid = team.members.length >= 5 || team.id === 'sponsorship';
-          const itemWidth = isGrid 
-            ? (team.id === 'sponsorship' ? '40%' : '30%') 
-            : `${100 / team.members.length}%`;
+        <div className="member-content-wrapper">
+          <div className="member-frame-assembly">
+            <div className="member-photo-container" style={{
+              clipPath: member.clipPath, 
+              WebkitClipPath: member.clipPath,
+              borderRadius: config.photoRadius
+            }}>
+              <img
+                src={getAsset(member.photo)}
+                alt={`Member ${member.id}`}
+                className="member-photo"
+                style={{ transform: isHovered ? 'scale(1.1)' : 'scale(1)' }}
+              />
+            </div>
+            <img src={getAsset(member.frame)} alt="Frame" className="member-frame-image" />
+          </div>
 
-          return (
-            <section
-              key={team.id}
-              id={team.id}
-              ref={(el) => (sectionRefs.current[team.id] = el)}
-              className="team-section-container"
-              style={{
-                flexWrap: isGrid ? 'wrap' : 'nowrap',
-                gap: isGrid ? STYLE_CONFIG.gridGap : '0',
-                paddingLeft: isGrid ? '10%' : '0', 
-                paddingRight: isGrid ? '10%' : '0',
-              }}
-            >
-              {team.members.map((member, index) => (
-                <MemberCard
-                  key={member.id}
-                  member={member}
-                  isGrid={isGrid}
-                  cardWidth={itemWidth}
-                  delay={index * 0.15} 
-                  glowColor={LEVEL_COLORS[member.level] || '255, 255, 255'}
-                  config={STYLE_CONFIG}
-                  getAsset={getAsset}
-                />
-              ))}
-            </section>
-          );
-        })}
+          <div className="member-plate-container">
+            <img src={getAsset(member.plate)} alt="Info Plate" className="member-plate-image" />
+          </div>
+        </div>
       </div>
     </div>
   );

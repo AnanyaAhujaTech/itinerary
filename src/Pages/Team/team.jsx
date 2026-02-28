@@ -1,9 +1,8 @@
-// src/Pages/Team/team.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import Background from '../../Components/Team/background';
-import MemberCard from '../../Components/Team/team';
-import './team.css';
+import MemberCard from '../../Components/Team/Team';
 import Navbar from '../../Components/Navbar/Navbar';
+import './Team.css';
 
 // ==========================================
 // 🛠️ CONFIGURATION & DATA
@@ -32,10 +31,8 @@ const LEVEL_COLORS = {
 };
 
 // ==========================================
-// 🖼️ ASSET LOADER (Vite Optimized)
+// 🖼️ ASSET LOADER (Production / Vite Ready)
 // ==========================================
-
-// Tell Vite to proactively map all images in the assets folder
 const preloadedAssets = import.meta.glob('../../assets/*.{png,jpg,jpeg,svg}', { 
   eager: true, 
   import: 'default' 
@@ -137,7 +134,6 @@ export default function TeamPage({ navHeight }) {
   return (
     <div className="team-page-wrapper">
       <Background imagePath={getAsset('background.png')} />
-      
       <Navbar />
 
       <div className="team-heading-container">

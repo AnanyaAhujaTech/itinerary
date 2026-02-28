@@ -1,4 +1,3 @@
-// src/Components/Team/background.jsx
 import React from 'react';
 import './background.css';
 
