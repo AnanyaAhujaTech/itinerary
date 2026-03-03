@@ -4,7 +4,10 @@ import './Navbar.css';
 
 export default function Navbar() {
   const location = useLocation();
-  // Check if the current path includes 'team'
+  
+  // Exact match for home, partial match for others
+  const isHome = location.pathname === '/';
+  const isItinerary = location.pathname.includes('schedule');
   const isTeam = location.pathname.includes('team');
 
   return (
@@ -12,7 +15,13 @@ export default function Navbar() {
       <div className="navbar-pill">
         <Link 
           to="/" 
-          className={`nav-link ${!isTeam ? 'active' : ''}`}
+          className={`nav-link ${isHome ? 'active' : ''}`}
+        >
+          Home
+        </Link>
+        <Link 
+          to="/schedule" 
+          className={`nav-link ${isItinerary ? 'active' : ''}`}
         >
           Itinerary
         </Link>

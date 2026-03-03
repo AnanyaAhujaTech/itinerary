@@ -17,18 +17,18 @@ import bibhatsaImg from "../../assets/bibhatsarow.png";
 
 // Updated with the background images mapped to each event
 const scheduleData = [
-  { type: "header", label: "Day - 1" },
-  { event: "Ms. and Mr. Taarangana", venue: "Main Stage", time: "11:00 am - 1:00 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: hasyaImg },
-  { event: "Rangmanch", venue: "Auditorium", time: "11:00 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: karunaImg },
-  { event: "Aaghaaz", venue: "Badminton Court", time: "11:00 am - 3:00 pm", borderColor: "#e6daad", glowColor: "rgba(218, 165, 32, 0.4)", bgImage: bibhatsaImg },
-  { event: "Antra", venue: "Main Stage", time: "1:00 pm - 3:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: adbhutaImg },
-  { event: "Rap Battle", venue: "Auditorium", time: "1:30 pm - 3:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: raudraImg },
-  
-  { type: "header", label: "Day - 2" },
-  { event: "Aalap", venue: "Auditorium", time: "11:00 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: shantaImg },
+  { type: "header", label: "18 March" },
   { event: "Lilac Dreams", venue: "Main Stage", time: "11:00 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(218, 165, 32, 0.4)", bgImage: shringaraImg },
+  { event: "Rangmanch", venue: "Auditorium", time: "11:00 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: karunaImg },
+  { event: "Aaghaaz", venue: "Kaveri Ground", time: "11:00 am - 6:00 pm", borderColor: "#e6daad", glowColor: "rgba(218, 165, 32, 0.4)", bgImage: bibhatsaImg },
+  { event: "Antra", venue: "Main Stage", time: "1:30 pm - 3:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: adbhutaImg },
+  { event: "Slam Poetry", venue: "Auditorium", time: "1:30 pm - 3:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: bhayanakaImg },
+  
+  { type: "header", label: "19 March" },
+  { event: "Ms. and Mr. Taarangana", venue: "Main Stage", time: "11:00 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: hasyaImg },
+  { event: "Aalap", venue: "Auditorium", time: "11:00 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: shantaImg },
   { event: "Urban Thump", venue: "Main Stage", time: "1:30 pm - 4:00 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: veeraImg },
-  { event: "Slam Poetry", venue: "Auditorium", time: "3:30 pm - 5:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: bhayanakaImg },
+  { event: "Rap Battle", venue: "Auditorium", time: "1:30 pm - 4:00 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: raudraImg },
 ];
 
 export default function EventTable({ onReturnToClock, navHeight = "80px" }) {
