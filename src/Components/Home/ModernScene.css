@@ -32,6 +32,19 @@
   flex-direction: column;
 }
 
+.lasers-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2; /* Behind singers */
+  pointer-events: none;
+  opacity: 0.6; /* Base visibility */
+  transition: opacity 0.5s ease;
+}
+
+.lasers-active .lasers-layer {
+  opacity: 1; /* Intensify on hover */
+}
+
 /* --- Base Stage Background --- */
 .modern-stage-bg {
   position: absolute;
@@ -69,7 +82,7 @@
   font-family: 'Cinzel', serif;
   font-weight: 700;
   font-size: clamp(0.9rem, 1.5vw, 1.4rem);
-  letter-spacing: 0.4em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   background: linear-gradient(to right, #c552ff, #ffffff, #d487fa);
   background-size: 200% auto;
