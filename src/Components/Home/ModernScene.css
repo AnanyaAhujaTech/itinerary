@@ -1,0 +1,264 @@
+/* --- Configuration Variables for Easy Adjustment --- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&family=Cinzel:wght@400;700&display=swap');
+
+:root {
+  --stage-floor-height: 15%;
+  --singer-base-height: 55vh;
+  --audience-height: 35%;
+  --logo-spacing: 55%;
+
+  /* GROUP CONTROL: Adjust this to scale everyone at once */
+  --group-scale: 1;
+  --group-gap: 0.01vw;
+  --group-max-width: 1200px;
+  --singer-hitbox-width: 250px; 
+
+  /* INDIVIDUAL NUDGES: Now relative to the group center */
+  --s1-scale: 0.9; --s1-nudge-y: 10vh; --s1-nudge-x: 0;
+  --s2-scale: 0.84; --s2-nudge-y: 10vh; --s2-nudge-x: 0;
+  --s3-scale: 0.96;  --s3-nudge-y: 10vh; --s3-nudge-x: 0;
+  --s4-scale: 0.8;  --s4-nudge-y: 10vh; --s4-nudge-x: 0;
+  --s5-scale: 0.95; --s5-nudge-y: 10vh; --s5-nudge-x: 0;
+}
+
+.modern-scene-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Base Stage Background --- */
+.modern-stage-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* --- Responsive Text & Logo Layers --- */
+.text-layer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1000px;
+  padding: 4vh 2vw 10vh;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  backdrop-filter: blur(25px);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
+}
+
+.taarangana-heading { width: 60%; max-width: 400px; height: auto; }
+.etherea-heading { width: 100%; max-width: 220px; height: auto; }
+
+.fest-subtitle {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: clamp(0.9rem, 1.5vw, 1.4rem);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #c552ff, #ffffff, #d487fa);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+  text-shadow: 0 0 20px rgba(3, 233, 249, 0.2);
+  z-index: 4;
+}
+
+@keyframes shine { to { background-position: 200% center; } }
+
+.logo-layer {
+  position: absolute;
+  top: 4%;
+  width: 100%;
+  padding: 0 5%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center; 
+  gap: var(--logo-spacing); 
+  z-index: 5;
+  pointer-events: none;
+}
+
+.taarangana-logo, .igdtuw-logo { height: 8vh; max-height: 80px; width: auto; flex-shrink: 0; }
+
+/* --- COLLECTIVE SINGERS LAYER --- */
+.singers-layer {
+  position: absolute;
+  bottom: var(--stage-floor-height); 
+  left: 0;
+  right: 0;
+  margin: 0 auto;             /* Centers the bounded box on the stage */
+  width: 90%;                 /* Takes up 90% of screen width... */
+  max-width: var(--group-max-width); /* ...but never exceeds this value */
+  
+  height: auto;
+  z-index: 3;
+  display: flex;
+  justify-content: center;    /* Keeps them centered within the max-width */
+  align-items: flex-end;
+  pointer-events: none;
+  
+  /* Resizes the entire group collectively */
+  transform: scale(var(--group-scale));
+  transform-origin: bottom center;
+  gap: var(--group-gap);
+}
+
+.singer-wrapper {
+  position: relative;
+  flex: 0 1 auto;             /* Allows them to shrink but not grow past their size */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  transform: translate(var(--nudge-x), var(--nudge-y)) scale(var(--indiv-scale));
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Individual Singer Assignments */
+.singer-1 { --indiv-scale: var(--s1-scale); --nudge-x: var(--s1-nudge-x); --nudge-y: var(--s1-nudge-y); }
+.singer-2 { --indiv-scale: var(--s2-scale); --nudge-x: var(--s2-nudge-x); --nudge-y: var(--s2-nudge-y); }
+.singer-3 { --indiv-scale: var(--s3-scale); --nudge-x: var(--s3-nudge-x); --nudge-y: var(--s3-nudge-y); }
+.singer-4 { --indiv-scale: var(--s4-scale); --nudge-x: var(--s4-nudge-x); --nudge-y: var(--s4-nudge-y); }
+.singer-5 { --indiv-scale: var(--s5-scale); --nudge-x: var(--s5-nudge-x); --nudge-y: var(--s5-nudge-y); }
+
+.singer-image {
+  position: relative;
+  width: auto;
+  height: var(--singer-base-height);
+  max-width: 15vw;            /* Prevents overcrowding on ultrawide monitors */
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.5));
+  z-index: 2;
+  transition: filter 0.3s ease;
+}
+
+.singer-constant-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, transparent 70%);
+  filter: blur(30px);
+  z-index: -1;
+}
+
+/* --- Refined Hover & Info --- */
+.singer-wrapper:hover .singer-image { filter: drop-shadow(0 0 40px var(--hover-color)); }
+
+.singer-info {
+  position: absolute;
+  bottom: 95%;
+  left: 50%;
+  transform: translateX(-50%) translateY(15px);
+  padding: 1rem 1.5rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 20;
+}
+
+.singer-info-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 15px var(--hover-color);
+}
+
+.singer-info-year {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.3rem, 1.5vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+}
+
+.singer-wrapper:hover .singer-info { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+
+.question-mark {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 5.5rem;
+  color: var(--hover-color, #facc15);
+  text-shadow: 0 0 15px var(--hover-color), 0 0 40px var(--hover-color);
+  animation: mysteryFloat 2.5s ease-in-out infinite;
+}
+
+@keyframes mysteryFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+/* --- Audience & Effects --- */
+.audience-layer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: var(--audience-height);
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.audience-left, .audience-right {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.audience-left { animation: crossFadeLeft 1.5s ease-in-out infinite; }
+.audience-right { animation: crossFadeRight 1.5s ease-in-out infinite; }
+
+@keyframes crossFadeLeft { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes crossFadeRight { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+/* --- Footer Area --- */
+.modern-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+  padding: 1rem 0;
+  pointer-events: none;
+}
+
+/* --- Collective Mobile Logic --- */
+@media (max-width: 768px) {
+  :root {
+    --group-scale: 0.7;
+    --group-gap: 2vw;         /* Tighter gap for mobile */
+    --singer-base-height: 45vh;
+    --stage-floor-height: 10%;
+  }
+  
+  .singers-layer {
+    width: 95%;               /* Use more of the screen on mobile */
+  }
+
+  .logo-layer { top: 2%; gap: 35%; }
+}

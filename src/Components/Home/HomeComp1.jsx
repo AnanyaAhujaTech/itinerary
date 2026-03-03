@@ -1,227 +1,164 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+import { useEffect, useState, useRef } from 'react';
+import gsap from 'gsap';
+import './HomeComp1.css';
 import LightRays from './LightRays';
 import BlurText from './BlurText';
-import LaserFlow from './LaserFlow';
-import LogoLoop from './LogoLoop';
-import './HomeComp1.css';
+import ModernScene from './ModernScene'; // Fixed import name
 
-// --- Configuration Data ---
-const NAVRASAS = [
-  { name: 'Shringara', color: '#FF1493' }, 
-  { name: 'Hasya', color: '#FFFFFF' },     
-  { name: 'Raudra', color: '#FF0000' },    
-  { name: 'Karunya', color: '#808080' },   
-  { name: 'Bibhatsa', color: '#0000FF' },  
-  { name: 'Bhayanaka', color: '#4B0082' }, 
-  { name: 'Veera', color: '#FFA500' },     
-  { name: 'Adbhuta', color: '#FFFF00' },   
-  { name: 'Shantha', color: '#00FF00' },   
-];
+// Assets for Traditional Scene
+import curtainImg from './assets/traditional/curtain_half.png';
+import scene1 from './assets/traditional/scene_1.png';
+import scene2 from './assets/traditional/scene_2.png';
+import scene3 from './assets/traditional/scene_3.png';
+import scene4 from './assets/traditional/scene_4.png';
+import scene5 from './assets/traditional/scene_5.png';
+import scene6 from './assets/traditional/scene_6.png';
+import scene7 from './assets/traditional/scene_7.png';
+import scene8 from './assets/traditional/scene_8.png';
+import scene9 from './assets/traditional/scene_9.png';
 
-// Added laserOffset (0.0 to 1.0) to position the beam behind the specific hovered singer
-const PAST_SINGERS = [
-  { id: 1, name: 'Arijit Singh', year: '2022', color: '#FF3366', laserOffset: 0.15 },
-  { id: 2, name: 'Sunidhi Chauhan', year: '2023', color: '#33CCFF', laserOffset: 0.32 },
-  { id: 3, name: 'KK', year: '2024', color: '#33FF66', laserOffset: 0.50 },
-  { id: 4, name: 'Shreya Ghoshal', year: '2025', color: '#FFCC00', laserOffset: 0.68 },
-  { id: 5, name: '?', year: '2026', color: '#B026FF', isEasterEgg: true, laserOffset: 0.85 },
-];
+const SCENES = [scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, scene9];
+const NAVARASA = ['Shringara', 'Bhayanaka', 'Raudra', 'Karuna', 'Vira', 'Hasya', 'Bibhatsa', 'Adbhuta', 'Shanta'];
+const RASA_COLORS = ['#dc15cf', '#61028e', '#ff0000', '#34399b', '#00a2ff', '#ffc400', '#03ad00', '#00ddff', '#fff9e6'];
 
-const getAsset = (path) => `${import.meta.env.BASE_URL}${path}`;
+const CYCLE_MS = 2000;
+const TRANSITION_MS = 1000;
 
-// Placeholder for LogoLoop
-const SPONSOR_LOGOS = [
-  { src: getAsset('assets/sponsors/sponsor1.png'), alt: 'Sponsor 1' },
-  { src: getAsset('assets/sponsors/sponsor2.png'), alt: 'Sponsor 2' },
-  { src: getAsset('assets/sponsors/sponsor3.png'), alt: 'Sponsor 3' },
-  { src: getAsset('assets/sponsors/sponsor4.png'), alt: 'Sponsor 4' },
-  { src: getAsset('assets/sponsors/sponsor5.png'), alt: 'Sponsor 5' },
-];
+function TraditionalScene({ onEtherefy }) {
+  const [curtainOpen, setCurtainOpen] = useState(false);
+  const [sceneIndex, setSceneIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(null);
+  const [rasaVisible, setRasaVisible] = useState(false);
+  const startTimeRef = useRef(Date.now());
+
+  useEffect(() => {
+    const update = () => {
+      const elapsed = Date.now() - startTimeRef.current;
+      const currentIndex = Math.floor(elapsed / CYCLE_MS) % SCENES.length;
+      setSceneIndex((prev) => {
+        if (prev !== currentIndex) {
+          setPrevIndex(prev);
+          return currentIndex;
+        }
+        return prev;
+      });
+      requestAnimationFrame(update);
+    };
+    const frame = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    setCurtainOpen(true);
+    const t = setTimeout(() => setRasaVisible(true), 500);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div className="trad-scene-container">
+      <div className="homecomp1-scene-stack">
+        {SCENES.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt=""
+            className={`homecomp1-scene-layer ${i === sceneIndex ? 'active' : ''} ${i === prevIndex ? 'previous' : ''}`}
+            style={{
+              transitionDuration: `${TRANSITION_MS}ms`,
+              zIndex: i === sceneIndex ? 3 : (i === prevIndex ? 2 : 1)
+            }}
+          />
+        ))}
+      </div>
+      <LightRays color={RASA_COLORS[sceneIndex]} intensity={0.7} />
+      <div className="homecomp1-rasa-label">
+        {rasaVisible && (
+          <BlurText key={sceneIndex} text={NAVARASA[sceneIndex]} delay={500} animateBy="words" direction="bottom" />
+        )}
+      </div>
+      <div className="homecomp1-cta-wrap">
+        <button className="homecomp1-cta" type="button" onClick={onEtherefy}>Let's Etherefy!</button>
+      </div>
+      <div className={`homecomp1-curtains${curtainOpen ? ' opening' : ''}`}>
+        <div className="homecomp1-curtain-left"><img src={curtainImg} alt="" /></div>
+        <div className="homecomp1-curtain-right"><img src={curtainImg} alt="" /></div>
+      </div>
+    </div>
+  );
+}
+
+function ChromaGlitchFilter() {
+  return (
+    <svg style={{ position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
+      <defs>
+        <filter id="chroma-glitch">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="0" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" result="distorted" />
+          <feColorMatrix in="distorted" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="red"/>
+          <feColorMatrix in="distorted" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="green"/>
+          <feColorMatrix in="distorted" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="blue"/>
+          <feOffset in="red" dx="-5" dy="0" result="redShifted" />
+          <feOffset in="green" dx="0" dy="0" result="greenShifted" />
+          <feOffset in="blue" dx="5" dy="0" result="blueShifted" />
+          <feBlend in="redShifted" in2="blueShifted" mode="screen" result="rb"/>
+          <feBlend in="rb" in2="greenShifted" mode="screen" />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
 
 export default function HomeComp1() {
-  const [scene, setScene] = useState('traditional'); 
-  const [poseIndex, setPoseIndex] = useState(0);
-  const [swayIndex, setSwayIndex] = useState(0); 
-  const [hoveredSinger, setHoveredSinger] = useState(null);
+  const [currentScene, setCurrentScene] = useState('traditional');
+  const rootRef = useRef(null);
+  const glitchOverlayRef = useRef(null);
 
-  const curtainLeftRef = useRef(null);
-  const curtainRightRef = useRef(null);
-  const glitchContainerRef = useRef(null);
+  const startTransition = () => {
+    if (currentScene !== 'traditional') return;
 
-  // 1. Initial Curtain Opening
-  useEffect(() => {
-    if (scene === 'traditional') {
-      gsap.to(curtainLeftRef.current, { x: '-100%', duration: 2.5, ease: 'power3.inOut', delay: 0.5 });
-      gsap.to(curtainRightRef.current, { x: '100%', duration: 2.5, ease: 'power3.inOut', delay: 0.5 });
+    const tl = gsap.timeline({
+      onStart: () => rootRef.current.classList.add('glitching')
+    });
+
+    const displacementMap = document.querySelector('#chroma-glitch feDisplacementMap');
+    const offsets = document.querySelectorAll('#chroma-glitch feOffset');
+
+    // Snappy Glitch Start
+    tl.to(glitchOverlayRef.current, { opacity: 1, duration: 0.1 });
+
+    // Faster fluctuations (0.4s total)
+    for (let i = 0; i < 8; i++) {
+      const time = i * 0.05;
+      tl.to(displacementMap, { attr: { scale: gsap.utils.random(80, 220) }, duration: 0.03 }, time);
+      tl.to(offsets[0], { attr: { dx: gsap.utils.random(-50, 50) }, duration: 0.03 }, time);
+      tl.to(offsets[2], { attr: { dx: gsap.utils.random(-50, 50) }, duration: 0.03 }, time);
     }
-  }, [scene]);
 
-  // 2. Dancer Pose Loop (2 seconds)
-  useEffect(() => {
-    if (scene === 'traditional') {
-      const interval = setInterval(() => {
-        setPoseIndex((prev) => (prev + 1) % NAVRASAS.length);
-      }, 2000); 
-      return () => clearInterval(interval);
-    }
-  }, [scene]);
+    // Peak Transition
+    tl.add(() => {
+      setCurrentScene('modern');
+    }, 0.4);
 
-  // 3. Modern Audience Sway Loop (1 second)
-  useEffect(() => {
-    if (scene === 'modern') {
-      const swayInterval = setInterval(() => {
-        setSwayIndex((prev) => (prev === 0 ? 1 : 0));
-      }, 1000); 
-      return () => clearInterval(swayInterval);
-    }
-  }, [scene]);
+    // Quick Recovery
+    tl.to(glitchOverlayRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0.5);
+    tl.to(displacementMap, { attr: { scale: 0 }, duration: 0.4, ease: "back.out(2)" }, 0.5);
+    tl.to(offsets[0], { attr: { dx: -5 }, duration: 0.4 }, 0.5);
+    tl.to(offsets[2], { attr: { dx: 5 }, duration: 0.4 }, 0.5);
 
-  const handleTransition = () => {
-    setScene('glitch');
-    setTimeout(() => {
-      setScene('modern');
-    }, 800); 
+    tl.set(rootRef.current, { className: "homecomp1-root" }, 0.9);
   };
 
   return (
-    <div className={`home-comp-1 ${scene === 'glitch' ? 'is-glitching' : ''}`} ref={glitchContainerRef}>
-      
-      {/* =========================================
-          SCENE 1: TRADITIONAL NAVRASA
-      ========================================= */}
-      {(scene === 'traditional' || scene === 'glitch') && (
-        <div className="scene-container traditional-scene">
-          
-          <img src={getAsset('assets/traditional/stage.png')} className="layer-img bg-stage" alt="Stage" />
-
-          <div className="spotlight-wrapper">
-            <LightRays
-              raysOrigin="top-center"
-              raysColor={NAVRASAS[poseIndex].color}
-              raysSpeed={1.6}
-              lightSpread={1.8}
-              rayLength={2.7}
-              followMouse={false}
-              className="custom-rays"
-            />
-          </div>
-
-          <div className="dancer-container">
-            {NAVRASAS.map((nav, idx) => (
-              <img
-                key={nav.name}
-                src={getAsset(`assets/traditional/dancer_pose_${idx + 1}.png`)}
-                className={`layer-img dancer-pose ${poseIndex === idx ? 'active' : ''}`}
-                alt={`${nav.name} Mudra`}
-              />
-            ))}
-          </div>
-
-          <div className="navrasa-text-container">
-            <BlurText
-              key={poseIndex} 
-              text={NAVRASAS[poseIndex].name}
-              delay={50}
-              animateBy="letters"
-              direction="top"
-              className="navrasa-title"
-            />
-          </div>
-
-          <img src={getAsset('assets/traditional/audience.png')} className="layer-img fg-audience" alt="Audience" />
-          <img src={getAsset('assets/traditional/heading.png')} className="layer-img overlay-heading" alt="Taarangana Presents" />
-
-          <button className="transition-btn" onClick={handleTransition}>
-            Unveil the Future
-          </button>
-
-          <div className="curtain left" ref={curtainLeftRef}>
-             <img src={getAsset('assets/traditional/curtain_half.png')} alt="Curtain Left" />
-          </div>
-          <div className="curtain right" ref={curtainRightRef}>
-             <img src={getAsset('assets/traditional/curtain_half.png')} style={{transform: "scaleX(-1)"}} alt="Curtain Right" />
-          </div>
-
-        </div>
-      )}
-
-      {/* =========================================
-          SCENE 2: MODERN CONCERT
-      ========================================= */}
-      {scene === 'modern' && (
-        <div className="scene-container modern-scene">
-          
-          <img src={getAsset('assets/modern/stage_modern.png')} className="layer-img bg-stage" alt="Modern Stage" />
-
-          {/* LaserFlow now tracks the specific singer's X coordinate */}
-          {hoveredSinger && (
-            <div className="laser-wrapper">
-              <LaserFlow 
-                color={hoveredSinger.color} 
-                horizontalBeamOffset={hoveredSinger.laserOffset}
-                wispDensity={1.5} 
-                flowSpeed={0.5} 
-              />
-            </div>
-          )}
-
-          <img src={getAsset('assets/modern/etherea_heading.png')} className="layer-img overlay-heading modern-heading" alt="Etherea" />
-
-          <div className="singers-container">
-            {PAST_SINGERS.map((singer, idx) => (
-              <div 
-                key={singer.id}
-                className={`singer-hitbox ${hoveredSinger?.id === singer.id ? 'hovered' : ''}`}
-                onMouseEnter={() => setHoveredSinger(singer)}
-                onMouseLeave={() => setHoveredSinger(null)}
-              >
-                <img src={getAsset(`assets/modern/singer_${idx + 1}.png`)} alt="Singer Silhouette" className="singer-silhouette" />
-                
-                <div className="singer-info">
-                  {singer.isEasterEgg ? (
-                    <span className="easter-egg">?</span>
-                  ) : (
-                    <>
-                      <h3>{singer.name}</h3>
-                      <p>{singer.year}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="audience-sway-container">
-            {['left', 'right'].map((dir, idx) => (
-              <img 
-                key={dir}
-                src={getAsset(`assets/modern/audience_${dir}.png`)}
-                className={`layer-img fg-audience sway-pose ${swayIndex === idx ? 'active' : ''}`}
-                alt={`Audience ${dir}`}
-              />
-            ))}
-          </div>
-
-        </div>
-      )}
-
-      {/* =========================================
-          SPONSORS CAROUSEL
-      ========================================= */}
-      <div className="sponsors-wrapper">
-        <LogoLoop 
-          logos={SPONSOR_LOGOS} 
-          speed={60} 
-          direction="left" 
-          logoHeight={50} 
-          gap={60} 
-          fadeOut={true} 
-          fadeOutColor="transparent" 
-          scaleOnHover={true} 
-        />
+    <div className="homecomp1-root" ref={rootRef}>
+      <ChromaGlitchFilter />
+      <div className="chroma-glitch-overlay" ref={glitchOverlayRef} />
+      <div className="scene-main-content">
+        {currentScene === 'traditional' ? (
+          <TraditionalScene onEtherefy={startTransition} />
+        ) : (
+          <ModernScene />
+        )}
       </div>
-
     </div>
   );
 }
