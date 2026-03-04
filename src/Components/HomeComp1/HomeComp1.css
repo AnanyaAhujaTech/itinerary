@@ -14,6 +14,87 @@
   align-items: center;
 }
 
+.site-visit-counter {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 1. Traditional Counter (Dramatic & Golden) */
+.traditional-counter {
+  /* Warm, dark radial fade to make gold pop */
+  background: radial-gradient(
+    circle at center, 
+    rgba(26, 18, 5, 0.7) 0%, 
+    rgba(10, 6, 0, 0.3) 50%, 
+    transparent 85%
+  );
+}
+
+.traditional-counter .counter-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #f5d98b;
+  opacity: 0.9;
+  margin-bottom: 2px;
+}
+
+.traditional-counter .counter-number {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(to bottom, #fff6d5 0%, #f5d98b 50%, #b8860b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 15px rgba(212, 170, 84, 0.5));
+}
+
+/* 2. Modern Counter (Neon Purple & Tech) */
+.modern-counter {
+  /* Deep purple/black radial fade for neon contrast */
+  background: radial-gradient(
+    circle at center, 
+    rgba(15, 0, 31, 0.8) 0%, 
+    rgba(10, 0, 20, 0.4) 50%, 
+    transparent 85%
+  );
+}
+
+.modern-counter .counter-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.modern-counter .counter-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 15px #9333ea,
+    0 0 30px #9333ea;
+  animation: neonPulse 2s infinite alternate;
+}
+
+@keyframes neonPulse {
+  from { text-shadow: 0 0 5px #fff, 0 0 10px #9333ea, 0 0 20px #9333ea; }
+  to { text-shadow: 0 0 10px #fff, 0 0 25px #c084fc, 0 0 40px #9333ea; }
+}
+
 /* Container for all scene content - this gets glitched */
 .scene-main-content {
   position: absolute;

@@ -1,0 +1,198 @@
+/* =========================================
+   VIEWPORT & CENTERING
+   ========================================= */
+.homecomp3-viewport {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  position: relative;
+  z-index: 10;
+  overflow-x: hidden; /* Prevents horizontal scroll on smaller screens */
+  padding: 40px 20px;
+}
+
+.homecomp3-center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1600px; /* Expanded to match HomeComp4's wider layout */
+}
+
+.homecomp3-header {
+  margin-bottom: 50px;
+  z-index: 20;
+}
+
+.homecomp3-title-img {
+  width: 360px; /* Increased from 400px to match Comp4 */
+  height: auto;
+  filter: drop-shadow(0 0 200px rgba(255, 255, 255, 0.1));
+}
+
+/* =========================================
+   GRID (FORCE SINGLE LINE ON DESKTOP)
+   ========================================= */
+.homecomp3-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; /* Prevents wrapping into a second row on desktop */
+  justify-content: center;
+  align-items: center;
+  gap: 25px; 
+  perspective: 2000px;
+  width: 100%;
+}
+
+/* =========================================
+   CARD DIMENSIONS
+   ========================================= */
+.homecomp3-card-outer {
+  width: 320px;  /* Adjusted to fit 4-in-a-row comfortably */
+  height: 520px; 
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  flex-shrink: 0; /* Prevents cards from squishing when space is tight */
+}
+
+.homecomp3-card-outer.is-visible {
+  opacity: 1; /* Fixed from 0.6 to 1.0 */
+  transform: translateY(0);
+}
+
+.homecomp3-card-visual {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease-out, box-shadow 0.4s ease, border 0.4s ease;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Silver Glow Effect */
+.homecomp3-card-visual.is-hovered {
+  border: 1px solid rgba(192, 192, 192, 0.4);
+  box-shadow: 0 25px 60px rgba(192, 192, 192, 0.4), 
+              0 0 25px rgba(192, 192, 192, 0.2);
+}
+
+/* =========================================
+   INTERIOR LAYERS
+   ========================================= */
+.homecomp3-solid-bg {
+  position: absolute;
+  inset: 0;
+  background: #0f172a;
+  z-index: 0;
+}
+
+.homecomp3-embroidery-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.6; /* Matched to HomeComp4's subtler look */
+  pointer-events: none;
+}
+
+.homecomp3-assembly {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 20px;
+}
+
+/* =========================================
+   FRAME & PHOTO (SMOOTH ZOOM OPTIMIZED)
+   ========================================= */
+.homecomp3-frame-container {
+  position: relative;
+  height: 72%;
+  aspect-ratio: 1 / 1.35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(50px);
+}
+
+.homecomp3-photo-clip {
+  position: absolute;
+  top: 13%; 
+  left: 13%;
+  width: 74%;
+  height: 74%;
+  z-index: 2;
+  overflow: hidden;
+  clip-path: ellipse(50% 50% at 50% 50%);
+  -webkit-clip-path: ellipse(50% 50% at 50% 50%);
+}
+
+.homecomp3-member-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Updated to match HomeComp4 transition and hardware acceleration */
+  transition: transform 0.8s cubic-bezier(0.33, 1, 0.68, 1);
+  will-change: transform; 
+}
+
+.homecomp3-frame-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* =========================================
+   NAME PLATE
+   ========================================= */
+.homecomp3-plate-wrapper {
+  width: 90%;
+  transform: translateZ(70px);
+}
+
+.homecomp3-plate-img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.7));
+}
+
+/* =========================================
+   RESPONSIVE (TABLETS & MOBILE)
+   ========================================= */
+@media (max-width: 1350px) {
+  .homecomp3-grid {
+    flex-wrap: wrap; /* Allows wrapping on smaller laptops */
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .homecomp3-grid {
+    flex-direction: column; /* Vertical stack for mobile */
+  }
+  .homecomp3-card-outer {
+    width: 320px;
+    height: 480px; /* Reduced height for mobile view */
+  }
+  .homecomp3-title-img {
+    width: 320px;
+  }
+}

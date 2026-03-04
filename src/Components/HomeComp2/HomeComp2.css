@@ -1,0 +1,92 @@
+/* Import dramatic font for the heading */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&display=swap');
+
+.hc2-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  /* Circular gradient: Purple center, black outside */
+  background: radial-gradient(circle at center, #5b21b6 0%, #030005 70%, #000000 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hc2-navbar-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100; /* Ensures navbar stays above animations */
+}
+
+.hc2-animation-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Base style for the spinning wheel */
+.hc2-wheel {
+  position: absolute;
+  width: clamp(250px, 30vw, 400px);
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  z-index: 10;
+}
+
+/* Base style for both top and bottom splitting images */
+.hc2-split-image {
+  position: absolute;
+  width: clamp(300px, 50vw, 700px);
+  object-fit: contain;
+  pointer-events: none; /* Let users click/select the text underneath */
+  z-index: 5;
+}
+
+/* Text Container Styles */
+.hc2-text-content {
+  position: absolute;
+  z-index: 10;
+  text-align: center;
+  color: #ffffff;
+  max-width: 800px;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hc2-heading {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 20px rgba(168, 85, 247, 0.4); /* Subtle purple glow */
+}
+
+.hc2-description {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  line-height: 1.6;
+  color: #e2e8f0;
+  font-weight: 400;
+  margin: 0;
+  max-width: 650px;
+}
+
+.hc2-description strong {
+  color: #d8b4fe; /* Highlight Etherea in a lighter purple */
+}
+
+.hc2-description em {
+  font-style: italic;
+  color: #a855f7;
+}

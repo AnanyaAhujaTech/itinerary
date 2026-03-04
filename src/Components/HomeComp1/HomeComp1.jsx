@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import './HomeComp1.css';
 import LightRays from './LightRays';
 import BlurText from './BlurText';
-import ModernScene from './ModernScene'; // Fixed import name
+import ModernScene from './ModernScene';
 
 // Assets for Traditional Scene
 import curtainImg from './assets/traditional/curtain_half.png';
@@ -110,8 +110,17 @@ function ChromaGlitchFilter() {
 
 export default function HomeComp1() {
   const [currentScene, setCurrentScene] = useState('traditional');
+  const [visitCount, setVisitCount] = useState(0);
   const rootRef = useRef(null);
   const glitchOverlayRef = useRef(null);
+
+  // Persistence Logic: Handles visit counting
+  useEffect(() => {
+    const storedCount = localStorage.getItem('taarangana_visits');
+    const newCount = storedCount ? parseInt(storedCount, 10) + 1 : 1;
+    localStorage.setItem('taarangana_visits', newCount);
+    setVisitCount(newCount);
+  }, []);
 
   const startTransition = () => {
     if (currentScene !== 'traditional') return;
@@ -123,10 +132,8 @@ export default function HomeComp1() {
     const displacementMap = document.querySelector('#chroma-glitch feDisplacementMap');
     const offsets = document.querySelectorAll('#chroma-glitch feOffset');
 
-    // Snappy Glitch Start
     tl.to(glitchOverlayRef.current, { opacity: 1, duration: 0.1 });
 
-    // Faster fluctuations (0.4s total)
     for (let i = 0; i < 8; i++) {
       const time = i * 0.05;
       tl.to(displacementMap, { attr: { scale: gsap.utils.random(80, 220) }, duration: 0.03 }, time);
@@ -134,12 +141,10 @@ export default function HomeComp1() {
       tl.to(offsets[2], { attr: { dx: gsap.utils.random(-50, 50) }, duration: 0.03 }, time);
     }
 
-    // Peak Transition
     tl.add(() => {
       setCurrentScene('modern');
     }, 0.4);
 
-    // Quick Recovery
     tl.to(glitchOverlayRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0.5);
     tl.to(displacementMap, { attr: { scale: 0 }, duration: 0.4, ease: "back.out(2)" }, 0.5);
     tl.to(offsets[0], { attr: { dx: -5 }, duration: 0.4 }, 0.5);
@@ -149,9 +154,16 @@ export default function HomeComp1() {
   };
 
   return (
-    <div className="homecomp1-root" ref={rootRef}>
+    <div className={`homecomp1-root scene-${currentScene}`} ref={rootRef}>
       <ChromaGlitchFilter />
       <div className="chroma-glitch-overlay" ref={glitchOverlayRef} />
+
+      {/* Persistent Styled Counter */}
+      <div className={`site-visit-counter ${currentScene}-counter`}>
+        <span className="counter-label">Visits</span>
+        <span className="counter-number">{visitCount.toLocaleString()}</span>
+      </div>
+
       <div className="scene-main-content">
         {currentScene === 'traditional' ? (
           <TraditionalScene onEtherefy={startTransition} />
