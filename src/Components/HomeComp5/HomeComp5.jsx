@@ -8,7 +8,7 @@ import backgroundImage from '../../assets/wheel5.png';
 /** * DYNAMIC LOADER: Grabs every image in src/assets/photos automatically.
  * This works natively with Vite (default for React apps today).
  */
-const imageModules = import.meta.glob('../../assets/photos/*.{png,jpg,jpeg,svg,webp}', { eager: true });
+const imageModules = import.meta.glob('../../assets/photos/*.{png,jpg,jpeg,svg,webp,JPG}', { eager: true });
 const importedImages = Object.values(imageModules).map((mod) => mod.default);
 
 const GLOW_COLORS = [

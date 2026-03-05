@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./HomeComp4.css";
 
 // Assets
-import imgBack from "../../assets/back.png"; // Added background asset
+import imgBack from "../../assets/back2.png"; // Added background asset
 import imgEmbroidery from "../../assets/embroidery2.png";
 import imgPatronsHeading from "../../assets/faculty.png"; 
 import imgFrame from "../../assets/frame2.png";

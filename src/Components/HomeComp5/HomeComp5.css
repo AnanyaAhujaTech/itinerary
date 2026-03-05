@@ -7,6 +7,28 @@
   background-color: #000 !important; /* Forces black even if the page is white */
 }
 
+.hc5-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background:
+    radial-gradient(
+      ellipse at bottom,
+      rgba(70, 30, 120, 0.35) 0%,
+      rgba(35, 10, 83, 0.832) 35%,
+      rgba(0, 0, 0, 0.95) 70%
+    ),
+    radial-gradient(
+      ellipse at top,
+      rgba(120, 40, 160, 0.18),
+      transparent 60%
+    );
+
+  pointer-events: none;
+}
+
 /* Base Fix Layer */
 .hc5-black-fix {
   position: absolute;
@@ -18,15 +40,44 @@
 /* Background Image Layer (wheel5.png) */
 .hc5-background-img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: auto 100%; /* Height 100%, width scales naturally */
+
+  bottom: -560px;   /* pushes wheel below cards */
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 850px;
+  height: 850px;
+
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  z-index: 1;
-  opacity: 0.9; /* Balanced so stars show up well */
+
+  z-index: 2;
+
+  opacity: 0.88;
+
+  animation: hc5-wheel-rotate 70s linear infinite;
+}
+
+@keyframes hc5-wheel-rotate {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to   { transform: translateX(-50%) rotate(360deg); }
+}
+
+.hc5-background-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    circle,
+    rgba(255,255,255,0.15),
+    transparent 70%
+  );
+
+  filter: blur(40px);
+  opacity: 0.5;
 }
 
 /* Reactive Glow Layer */
@@ -49,15 +100,19 @@
   position: relative;
   z-index: 10;
   height: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
+  justify-content: flex-start;
+
+  padding-top: 80px;   /* pushes content slightly up */
 }
 
 .hc5-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .hc5-logo {
@@ -70,7 +125,7 @@
   font-family: 'Inter', sans-serif;
   letter-spacing: 0.8rem;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: #c0a7ff;
   margin-top: 1.2rem;
   text-transform: uppercase;
 }

@@ -1,231 +1,413 @@
-/* Container Lock & Purple Textured Background */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Syne:wght@400;600;800&display=swap');
+
+/* --- Viewport & Base --- */
 .homecomp6-viewport {
   width: 100%;
   height: 100vh;
   position: relative;
   overflow: hidden;
-  /* Dark Purple Gradient with a subtle "noise" texture effect */
-  background: radial-gradient(circle at center, #2e1065 0%, #0f0720 100%);
-  background-attachment: fixed;
+  background: radial-gradient(circle at center, #291a50 0%, #050505 100%);
+  font-family: 'Inter', sans-serif;
 }
 
-/* Internal Scroll Wrapper (Hidden Scrollbar) */
 .homecomp6-scroll-container {
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
 }
 
-.homecomp6-scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+.homecomp6-scroll-container::-webkit-scrollbar { display: none; }
+
+/* ---------------- Wheels intro & reveal sequence (replace previous "Decorative Wheels") ---------------- */
+
+/* rotating gear motion */
+@keyframes wheelRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-/* FAQ Internal Section Layout */
+/* keep visible for a hold period, then fade + hide so it doesn't block pointer events */
+@keyframes wheelFadeOut {
+  from { opacity: 1; }
+  to   { 
+    opacity: 0; 
+    visibility: hidden;
+  }
+}
+
+/* wheel base — all wheels same responsive size, rotate forever, fade out once (delayed) */
+.wheel-decor {
+  position: absolute;
+  z-index: 60;
+  pointer-events: none;
+  width: clamp(200px, 18vw, 320px);
+  height: auto;
+  transform-origin: center center;
+
+  /* initially hidden before viewport trigger */
+  opacity: 0;
+  filter:
+  drop-shadow(0 0 25px rgba(255,200,120,0.35))
+  drop-shadow(0 0 40px rgba(120,160,255,0.25));
+}
+
+@keyframes wheelAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+    filter: blur(10px) brightness(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px) brightness(1);
+  }
+}
+
+.start-animation .wheel-decor {
+  opacity: 1;
+
+  animation:
+    wheelAppear 0.45s ease forwards,
+    wheelRotate 8s linear infinite,
+    wheelFadeOut 0.45s ease 1.5s forwards;
+
+  animation-fill-mode: forwards;
+}
+
+/* POSITIONING: tuned to match the layout in screenshots (wheels aligned across header)
+   Adjust left/top percentages if you'd like them nudged.
+*/
+.wheel-top-left {
+  top: 25vh;
+  left: 21vw;
+}
+
+.wheel-mid-right {
+  top: 42vh;
+  left: 35vw;
+}
+
+.wheel-bottom-left {
+  top: 25vh;
+  left: 49vw;
+}
+
+.wheel-bottom-right {
+  top: 42vh;
+  left: 63vw;
+}
+
+/* ---------------- Reveal FAQ heading & cards after wheels fade ---------------- */
+
+/* small reveal for the entire FAQ block (starts slightly after wheels finish) */
+@keyframes faqReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* individual card entrance */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.faq-progress-bar {
+  position: absolute;
+  z-index: 3;
+}
+
+/* ensure the FAQ wrapper is initially hidden and then revealed after wheels */
+.faq-internal-section {
+  min-height: 100vh;
+  position: relative;
+  z-index: 5;
+}
+
+.start-animation .faq-internal-section {
+  animation: faqReveal 0.8s cubic-bezier(.2,.9,.2,1) 1.6s forwards;
+}
+/* cards: start invisible; animate in one-by-one using nth-child delays */
+.homecomp6-item {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.start-animation .homecomp6-item {
+  animation: cardIn 0.45s cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+/* sequential delays (you have 9 items — increase if you later add more) */
+.homecomp6-list .homecomp6-item:nth-child(1) { animation-delay: 2.2s; }
+.homecomp6-list .homecomp6-item:nth-child(2) { animation-delay: 2.28s; }
+.homecomp6-list .homecomp6-item:nth-child(3) { animation-delay: 2.36s; }
+.homecomp6-list .homecomp6-item:nth-child(4) { animation-delay: 2.44s; }
+.homecomp6-list .homecomp6-item:nth-child(5) { animation-delay: 2.52s; }
+.homecomp6-list .homecomp6-item:nth-child(6) { animation-delay: 2.60s; }
+.homecomp6-list .homecomp6-item:nth-child(7) { animation-delay: 2.68s; }
+.homecomp6-list .homecomp6-item:nth-child(8) { animation-delay: 2.76s; }
+.homecomp6-list .homecomp6-item:nth-child(9) { animation-delay: 2.84s; }
+/* when a user opens an item (active) we keep the behaviour already defined in your CSS */
+.homecomp6-item.active .homecomp6-chevron { transform: rotate(225deg); }
+
+/* ----- Accessibility: respect reduced motion preference ----- */
+@media (prefers-reduced-motion: reduce) {
+  .wheel-decor,
+  .faq-internal-section,
+  .homecomp6-item {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    filter:
+      drop-shadow(0 0 25px rgba(255,200,120,0.35))
+      drop-shadow(0 0 40px rgba(120,160,255,0.25));
+  }
+}
+
+/* --- FAQ Section --- */
 .faq-internal-section {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
+  z-index: 5;
   position: relative;
-  z-index: 2;
-}
-
-/* Pulse Animation */
-@keyframes wheelPulse {
-  0% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.15); opacity: 0.9; }
-  100% { transform: scale(1); opacity: 0.6; }
-}
-
-.wheel-decor {
-  position: absolute;
-  z-index: 1;
-  pointer-events: none;
-  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
-  animation: wheelPulse 6s ease-in-out infinite;
-}
-
-.wheel-top-left { top: 5%; left: -5%; width: 300px; }
-.wheel-mid-right { top: 40%; right: -8%; width: 250px; animation-delay: 1s; }
-.wheel-bottom-left { bottom: 10%; left: 5%; width: 180px; animation-delay: 2s; }
-
-.homecomp6-header {
-  text-align: center;
-  margin-bottom: 3vh;
-  z-index: 10;
-  flex-shrink: 0;
 }
 
 .homecomp6-heading-img {
-  display: block;
-  max-width: 80vw;
-  width: 580px;
-  height: auto;
-  margin: 0 auto 0.5rem auto;
+  width: 500px;
+  max-width: 90vw;
+  margin-bottom: 20px;
 }
 
 .homecomp6-text {
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 0.7rem;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.4);
-  margin-top: 1.2rem;
-  font-weight: 400;
+  letter-spacing: 0.5rem;
+  font-size: 0.75rem;
+  color: #c0a7ff;
+  font-weight: bold;
+  opacity: 0.6;
   text-transform: uppercase;
+  margin-bottom: 40px;
 }
 
-/* --- FAQ LIST WITH INTERNAL SCROLL --- */
 .homecomp6-list {
   width: 100%;
-  max-width: 850px;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  z-index: 5;
-  max-height: 70vh; 
-  overflow-y: auto;
-  padding: 10px;
-  /* Hidden scrollbar but functional */
-  scrollbar-width: none; 
-}
-
-.homecomp6-list::-webkit-scrollbar {
-  display: none;
+  gap: 15px;
 }
 
 .homecomp6-item {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px; /* Premium rounded corners */
-  background: rgba(10, 15, 30, 0.85);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(167, 211, 255, 0.1);
+  border-radius: 12px;
   cursor: pointer;
-  transition: border-color 0.4s ease, transform 0.3s ease;
-  flex-shrink: 0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+
+  /* creates clean stacking context for overlay/text */
+  z-index: 0;
 }
 
 .homecomp6-item:hover {
-  border-color: rgba(167, 211, 255, 0.5);
-  transform: translateY(-2px);
-}
-
-/* --- THE WIPE ANIMATION (Left & Right to Center) --- */
-.homecomp6-bar-overlay {
-  position: absolute;
-  inset: 0;
-  background-image: url('../../assets/bar.png'); 
-  background-size: cover;
-  background-position: center;
-  z-index: 1;
-  pointer-events: none;
-  
-  /* Create two mask "doors" that meet in the middle */
-  -webkit-mask-image: 
-    linear-gradient(to right, black, black), 
-    linear-gradient(to left, black, black);
-  -webkit-mask-repeat: no-repeat;
-  
-  /* Start with 0 width at the far left and far right */
-  -webkit-mask-size: 0% 100%, 0% 100%;
-  -webkit-mask-position: left center, right center;
-  
-  /* Transition the mask size instead of opacity */
-  transition: -webkit-mask-size 0.6s cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.homecomp6-item:hover .homecomp6-bar-overlay {
-  /* Both curtains meet at 50% */
-  -webkit-mask-size: 50.5% 100%, 50.5% 100%; 
+  background: rgba(167, 211, 255, 0.06);
+  border-color: rgba(167, 211, 255, 0.3);
 }
 
 .homecomp6-question {
-  position: relative;
-  z-index: 2;
-  padding: 22px 30px;
+  padding: 20px 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
   font-weight: 500;
-  color: #f1f5f9;
+  color: #ffffff;
+  font-size: 1rem;
 }
 
-.homecomp6-chevron {
-  width: 10px;
-  height: 10px;
-  border-right: 2px solid #a7d3ff;
-  border-bottom: 2px solid #a7d3ff;
-  transform: rotate(45deg);
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
+.homecomp6-question,
 .homecomp6-answer {
   position: relative;
   z-index: 2;
+}
+
+.homecomp6-chevron {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #c0a7ff;
+  border-bottom: 2px solid #c0a7ff;
+  transform: rotate(45deg);
+  transition: 0.3s;
+}
+
+.homecomp6-item.active .homecomp6-chevron { transform: rotate(225deg); }
+
+.homecomp6-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  transition: 0.4s ease;
+  padding: 0 25px;
   opacity: 0;
 }
 
 .homecomp6-answer.open {
+  max-height: 200px;
+  padding-bottom: 25px;
   opacity: 1;
-  max-height: 350px;
 }
 
-.homecomp6-answer p {
-  padding: 0 30px 22px 30px;
-  margin: 0;
-  color: #94a3b8;
-  font-family: 'Inter', sans-serif;
-  line-height: 1.7;
-  font-size: 0.98rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 15px;
-}
+.homecomp6-answer p { color: #c0a7ff; font-size: 0.9rem; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
 
-.homecomp6-item.active .homecomp6-chevron {
-  transform: rotate(225deg);
-}
-
-/* Footer Styling */
+/* --- FOOTER OVERHAUL --- */
 .homecomp6-footer {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 80px 40px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  text-align: center;
-  color: white;
+  background: #000;
+  padding: 100px 5% 40px 5%;
+  border-top: 1px solid rgba(255,255,255,0.05);
 }
 
-.footer-content h3 {
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 1rem;
-  margin-bottom: 20px;
-  opacity: 0.8;
+.footer-main-content {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.footer-links {
+/* Centered Brand Container */
+.footer-brand-container {
   display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 20px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  opacity: 0.5;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 80px;
 }
 
-/* Mobile Tweaks */
-@media (max-width: 768px) {
-  .wheel-top-left { width: 150px; }
-  .wheel-mid-right { width: 120px; }
-  .homecomp6-heading-img { width: 300px; }
+.footer-brand-logo { width: 100px; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(167, 211, 255, 0.3)); }
+
+.footer-brand-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  margin: 0;
+  background: linear-gradient(90deg, #fff, #c0a7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer-brand-subtitle {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 2px;
+  margin-top: 10px;
+}
+
+.hl-code { color: #fff; font-weight: 600; }
+.hl-circuit { color: #c0a7ff; font-weight: 600; }
+
+/* Grid Layout for details */
+.footer-links-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.footer-grid-col h4 {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: #c0a7ff;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.coord-entry { margin-bottom: 25px; }
+.coord-entry h4 { font-size: 0.95rem; color: #c0a7ff; text-transform: none; letter-spacing: 0; margin-bottom: 5px; }
+.coord-entry p { font-size: 0.8rem; color: #ffffff; margin: 2px 0; }
+
+/* RESTORED: Bar Wipe Animation */
+.homecomp6-bar-overlay {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, black, black), linear-gradient(to left, black, black);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 0% 100%, 0% 100%;
+  -webkit-mask-position: left center, right center;
+  transition: -webkit-mask-size 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  opacity: 50%;
+}
+
+.homecomp6-item:hover .homecomp6-bar-overlay {
+  -webkit-mask-size: 51% 100%, 51% 100%;
+}
+
+/* Floating Pin & Location */
+.col-center { display: flex; flex-direction: column; align-items: center; }
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.location-link {
+  text-decoration: none;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  transition: 0.3s;
+}
+
+.location-link:hover { color: #c0a7ff; }
+
+.floating-pin { animation: floating 3s ease-in-out infinite; }
+
+.location-link span { font-size: 0.9rem; font-weight: 500; }
+
+/* Socials & Contact */
+.social-set { margin-bottom: 30px; }
+.social-row { display: flex; gap: 15px; }
+.social-row img { 
+  width: 20px; 
+  height: 20px; 
+  filter: brightness(0) invert(1); 
+  opacity: 0.6; 
+  transition: 0.3s; 
+}
+.social-row img:hover { opacity: 1; transform: scale(1.1); }
+
+.contact-links { display: flex; flex-direction: column; gap: 12px; }
+.contact-links a { color: #d1beff; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
+.contact-links a:hover { color: #fff; }
+
+/* Bottom Bar */
+.footer-bottom-legal {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 30px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.633);
+}
+
+.credits { margin-top: 10px; }
+.credits a { color: #c0a7ff; text-decoration: none; font-weight: 500; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .footer-links-grid { grid-template-columns: 1fr 1fr; gap: 60px; }
+  .footer-brand-heading { font-size: 2.5rem; }
+}
+
+@media (max-width: 650px) {
+  .footer-links-grid { grid-template-columns: 1fr; text-align: center; }
+  .col-center, .footer-grid-col { align-items: center; }
+  .social-row { justify-content: center; }
 }
