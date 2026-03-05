@@ -24,4 +24,5 @@
   scroll-snap-stop: always;
   position: relative;
   overflow: hidden; /* Prevents parallax bleed */
+  background: transparent;
 }

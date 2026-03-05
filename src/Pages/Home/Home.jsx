@@ -6,71 +6,79 @@ import HomeComp3 from '../../Components/HomeComp3/HomeComp3';
 import HomeComp4 from '../../Components/HomeComp4/HomeComp4';
 import HomeComp5 from '../../Components/HomeComp5/HomeComp5';
 import HomeComp6 from '../../Components/HomeComp6/HomeComp6';
+import { Vortex } from '../../Components/Vortex/Vortex';
 import './Home.css'; 
 
 export default function HomePage() {
-  // State to track if Navbar should be seen
   const [showNavbar, setShowNavbar] = useState(false);
+  const [showVortex, setShowVortex] = useState(false); // Specific state for Vortex
   
-  // Create a reference to the first component
   const homeComp1Ref = useRef(null);
+  const homeComp2Ref = useRef(null); // Ref for the second section
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // If entry.isIntersecting is TRUE, we are looking at HomeComp1.
-        // So we set showNavbar to FALSE.
-        setShowNavbar(!entry.isIntersecting);
-      },
-      { 
-        // 0.1 means trigger as soon as 10% of the section leaves the screen
-        threshold: 0.1 
-      } 
+    // Observer for Navbar (HomeComp1)
+    const navObserver = new IntersectionObserver(
+      ([entry]) => setShowNavbar(!entry.isIntersecting),
+      { threshold: 0.1 }
     );
 
-    // Start watching HomeComp1
-    if (homeComp1Ref.current) {
-      observer.observe(homeComp1Ref.current);
-    }
+    // Observer for Vortex (HomeComp2)
+    const vortexObserver = new IntersectionObserver(
+      ([entry]) => setShowVortex(entry.isIntersecting),
+      { threshold: 0.3 } // Triggers when 30% of HomeComp2 is visible
+    );
 
-    // Clean up the observer when the user leaves the page
+    if (homeComp1Ref.current) navObserver.observe(homeComp1Ref.current);
+    if (homeComp2Ref.current) vortexObserver.observe(homeComp2Ref.current);
+
     return () => {
-      if (homeComp1Ref.current) observer.unobserve(homeComp1Ref.current);
+      if (homeComp1Ref.current) navObserver.unobserve(homeComp1Ref.current);
+      if (homeComp2Ref.current) vortexObserver.unobserve(homeComp2Ref.current);
     };
   }, []);
 
   return (
     <div className="home-page-wrapper">
-      {/* IMPORTANT FIX: We pass 'showNavbar' as a prop. 
-          The Navbar component uses this to switch between 
-          'nav-visible' and 'nav-hidden' CSS classes.
-      */}
       <Navbar isVisible={showNavbar} />
 
-      {/* We attach the ref here so the observer knows what to watch */}
-      <section className="snap-section" ref={homeComp1Ref}>
-        <HomeComp1 />
-      </section>
+      {/* Vortex Background: Now only renders/shows for HomeComp2 */}
+      <div style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100vw', 
+        height: '100vh', 
+        zIndex: 0, 
+        pointerEvents: 'none',
+        opacity: showVortex ? 1 : 0, 
+        transition: 'opacity 0.8s ease-in-out' // Smooth fade in/out
+      }}>
+        {/* We keep it mounted or conditionally render for performance */}
+        {showVortex && (
+          <Vortex 
+            particleCount={350} 
+            baseHue={250} 
+            rangeHue={60} 
+          />
+        )}
+      </div>
 
-      <section className="snap-section">
-        <HomeComp2 />
-      </section>
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <section className="snap-section" ref={homeComp1Ref}>
+          <HomeComp1 />
+        </section>
 
-      <section className="snap-section">
-        <HomeComp3 />
-      </section>
+        {/* Attach the ref here */}
+        <section className="snap-section" ref={homeComp2Ref}>
+          <HomeComp2 />
+        </section>
 
-      <section className="snap-section">
-        <HomeComp4 />
-      </section>
-
-      <section className="snap-section">
-        <HomeComp5 />
-      </section>
-
-      <section className="snap-section">
-        <HomeComp6 />
-      </section>
+        <section className="snap-section"><HomeComp3 /></section>
+        <section className="snap-section"><HomeComp4 /></section>
+        <section className="snap-section"><HomeComp5 /></section>
+        <section className="snap-section"><HomeComp6 /></section>
+      </div>
     </div>
   );
 }

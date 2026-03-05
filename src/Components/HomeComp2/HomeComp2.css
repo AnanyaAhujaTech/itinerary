@@ -5,7 +5,7 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: transparent !important;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -25,8 +25,10 @@
 .hc2-parallax-bg {
   position: absolute;
   inset: -10%;
-  background: radial-gradient(circle at center, #3e2287 0%, #030005 70%, #000000 100%);
+  /* Using rgba for the center to let some vortex particles through */
+  background: radial-gradient(circle at center, rgba(82, 44, 178, 0.323) 0%, rgba(3, 0, 5, 0.8) 70%, transparent 100%);
   z-index: 1;
+
 }
 
 .hc2-navbar-container {
