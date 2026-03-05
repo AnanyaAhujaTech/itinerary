@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './Pages/Home/Home';
 import ItineraryPage from './Pages/Itinerary/Itinerary';
 import TeamPage from './Pages/Team/Team';
+import Events from './Pages/Events/Events';
+import Sponsi from './Pages/Sponsi/Sponsi';
+
 // Global CSS for reset and viewport
 import './index.css';
 
@@ -16,8 +19,12 @@ function App() {
           <Route path="/" element={<HomePage />} />
           
           {/* Changed from /itinerary to /schedule to prevent base URL collisions */}
+          <Route path="/events" element={<Events />} />
+
           <Route path="/schedule" element={<ItineraryPage />} />
-          
+
+          <Route path = "/sponsi" element={<Sponsi />} />
+
           <Route path="/team" element={<TeamPage />} />
 
           {/* 🟢 SAFETY CATCH-ALL: If a broken link is clicked, force redirect to Home */}

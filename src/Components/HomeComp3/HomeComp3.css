@@ -1,69 +1,24 @@
-/* =========================================
-   VIEWPORT & CENTERING
-   ========================================= */
-.homecomp3-viewport {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: transparent;
-  position: relative;
-  z-index: 10;
-  overflow-x: hidden; /* Prevents horizontal scroll on smaller screens */
-  padding: 40px 20px;
-}
-
-.homecomp3-center-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 1600px; /* Expanded to match HomeComp4's wider layout */
-}
-
-.homecomp3-header {
-  margin-bottom: 50px;
-  z-index: 20;
-}
-
-.homecomp3-title-img {
-  width: 360px; /* Increased from 400px to match Comp4 */
-  height: auto;
-  filter: drop-shadow(0 0 200px rgba(255, 255, 255, 0.1));
-}
-
-/* =========================================
-   GRID (FORCE SINGLE LINE ON DESKTOP)
-   ========================================= */
 .homecomp3-grid {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap; /* Prevents wrapping into a second row on desktop */
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-  gap: 25px; 
+  gap: 40px; 
   perspective: 2000px;
-  width: 100%;
 }
 
-/* =========================================
-   CARD DIMENSIONS
-   ========================================= */
 .homecomp3-card-outer {
-  width: 320px;  /* Adjusted to fit 4-in-a-row comfortably */
-  height: 520px; 
+  width: 330px;
+  height: 530px;
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-              transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  flex-shrink: 0; /* Prevents cards from squishing when space is tight */
+  transform: scale(0.9) translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
 }
 
 .homecomp3-card-outer.is-visible {
-  opacity: 1; /* Fixed from 0.6 to 1.0 */
-  transform: translateY(0);
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
 .homecomp3-card-visual {
@@ -195,4 +150,104 @@
   .homecomp3-title-img {
     width: 320px;
   }
+}
+
+/* =========================================
+   VIEWPORT & BACKGROUND
+   ========================================= */
+.homecomp3-viewport {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Replaced radial gradient with your custom image */
+  background: url("../../assets/back.png") no-repeat center center;
+  background-size: cover;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+  padding: 80px 20px;
+}
+
+/* =========================================
+   SPOTLIGHT & WHEELS
+   ========================================= */
+.homecomp3-spotlight-layer {
+  position: absolute; /* Changed from fixed to stay within section */
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.spotlight-wheel {
+  position: absolute;
+  width: 650px;
+  height: auto;
+  top: 20%;
+  opacity: 0.8;
+  transform: translateY(-50%);
+  animation: slow-spin 35s linear infinite;
+}
+
+.wheel-left { left: -5%; }
+.wheel-right { right: -5%; }
+
+@keyframes slow-spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* =========================================
+   GLITTER TRAIL
+   ========================================= */
+.glitter-particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1000;
+  animation: glitter-burst 1.9s ease-out forwards;
+}
+
+@keyframes glitter-burst {
+  0% { transform: scale(0) translateY(0); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: scale(1.4) translateY(50px); opacity: 0; }
+}
+
+/* =========================================
+   EXISTING STYLES (REFINED)
+   ========================================= */
+.homecomp3-center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1600px;
+  z-index: 20;
+}
+
+.homecomp3-header {
+  margin-bottom: 50px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.8s ease-out;
+}
+
+.homecomp3-header.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homecomp3-title-img {
+  width: 360px;
+  height: auto;
+  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .homecomp3-grid { flex-wrap: wrap; }
+  .decor-side { display: none; } /* Hide entry decor on mobile for performance */
 }

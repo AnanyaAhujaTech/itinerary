@@ -156,7 +156,7 @@ export default function TeamPage({ navHeight }) {
   return (
     <div className="team-page-wrapper">
       <Background imagePath={getAsset('background.png')} />
-      <Navbar />
+      <Navbar isVisible={true} />
 
       <div className="team-heading-container">
         <img 

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import './HomeComp6.css';
 import questionsHeadingImg from '../../assets/faq.png'; 
+import wheel6 from '../../assets/wheel6.png';
+import wheel7 from '../../assets/wheel7.png';
+import wheel8 from '../../assets/wheel8.png';
 
 const questions = [
   {
     q: "Where and when is the Etherea lore dropping?",
-    a: "We’re taking over the IGDTUW campus on Feb 26-27, 2025. Doors open at 11 AM—vibe with us until 8:30 PM. Don't be late or you'll miss the main character energy.",
+    a: "We’re taking over the IGDTUW campus on March 18-19, 2026. Doors open at 11 AM—vibe with us until 8:30 PM. Don't be late or you'll miss the main character energy.",
   },
   {
     q: "How do I secure my spot in the comps?",
@@ -37,40 +40,59 @@ export default function HomeComp6() {
   };
 
   return (
-    <section className="homecomp6-section">
-      <div className="homecomp6-header">
-        <img 
-          src={questionsHeadingImg} 
-          alt="Curiosity and Clarity" 
-          className="homecomp6-heading-img"
-        />
-        <p className="homecomp6-text">The tea on everything Etherea</p>
-      </div>
+    <section className="homecomp6-viewport">
+      {/* Pulse Decorative Wheels */}
+      <img src={wheel6} alt="" className="wheel-decor wheel-top-left" />
+      <img src={wheel7} alt="" className="wheel-decor wheel-mid-right" />
+      <img src={wheel8} alt="" className="wheel-decor wheel-bottom-left" />
 
-      <div className="homecomp6-list">
-        {questions.map((item, index) => {
-          const isActive = activeQuestion === index;
+      <div className="homecomp6-scroll-container">
+        {/* Section 1: FAQ */}
+        <div className="faq-internal-section">
+          <div className="homecomp6-header">
+            <img 
+              src={questionsHeadingImg} 
+              alt="Curiosity and Clarity" 
+              className="homecomp6-heading-img"
+            />
+            <p className="homecomp6-text">The tea on everything Etherea</p>
+          </div>
 
-          return (
-            <div 
-              key={index} 
-              className={`homecomp6-item ${isActive ? 'active' : ''}`}
-              onClick={() => toggleQuestion(index)}
-            >
-              {/* Wipe-in Overlay */}
-              <div className="homecomp6-bar-overlay" />
+          <div className="homecomp6-list">
+            {questions.map((item, index) => {
+              const isActive = activeQuestion === index;
+              return (
+                <div 
+                  key={index} 
+                  className={`homecomp6-item ${isActive ? 'active' : ''}`}
+                  onClick={() => toggleQuestion(index)}
+                >
+                  <div className="homecomp6-bar-overlay" />
+                  <div className="homecomp6-question">
+                    <span>{item.q}</span>
+                    <div className="homecomp6-chevron"></div>
+                  </div>
+                  <div className={`homecomp6-answer ${isActive ? 'open' : ''}`}>
+                    <p>{item.a}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-              <div className="homecomp6-question">
-                <span>{item.q}</span>
-                <div className="homecomp6-chevron"></div>
-              </div>
-              
-              <div className={`homecomp6-answer ${isActive ? 'open' : ''}`}>
-                <p>{item.a}</p>
-              </div>
+        {/* Section 2: Footer */}
+        <footer className="homecomp6-footer">
+          <div className="footer-content">
+            <h3>TAARANGANA '25</h3>
+            <p>© 2025 Etherea Lore. All rights reserved.</p>
+            <div className="footer-links">
+              <span>Instagram</span>
+              <span>LinkedIn</span>
+              <span>Unstop</span>
             </div>
-          );
-        })}
+          </div>
+        </footer>
       </div>
     </section>
   );

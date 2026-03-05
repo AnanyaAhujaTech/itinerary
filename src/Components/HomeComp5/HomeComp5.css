@@ -1,133 +1,142 @@
-.homecomp5-section {
+/* The Root Container */
+.hc5-root {
   width: 100%;
-  height: 100vh; /* Lock to full viewport height */
-  display: flex;
-  align-items: center; /* Vertical Center */
-  justify-content: center; /* Horizontal Center */
+  height: 100vh;
   position: relative;
   overflow: hidden;
-  background: transparent; /* Allows parent background to show */
+  background-color: #000 !important; /* Forces black even if the page is white */
 }
 
-/* Background Reactive Lighting */
-.homecomp5-dynamic-bg {
+/* Base Fix Layer */
+.hc5-black-fix {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: 0;
+}
+
+/* Background Image Layer (wheel5.png) */
+.hc5-background-img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background-size: auto 100%; /* Height 100%, width scales naturally */
+  background-position: center;
+  background-repeat: no-repeat;
   z-index: 1;
+  opacity: 0.9; /* Balanced so stars show up well */
+}
+
+/* Reactive Glow Layer */
+.hc5-dynamic-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.8s ease, background 0.8s ease;
   filter: blur(80px);
 }
 
-.homecomp5-dynamic-bg.visible {
-  opacity: 0.55;
+.hc5-dynamic-glow.visible {
+  opacity: 0.5;
 }
 
-/* Layout Wrapper */
-.homecomp5-viewport-center {
-  width: 100%;
+/* Foreground UI Layer */
+.hc5-content-layer {
+  position: relative;
+  z-index: 10;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 10;
+  justify-content: center;
 }
 
-/* Header Styling */
-.homecomp5-header {
+.hc5-header {
   text-align: center;
-  margin-top: 3.5rem;
-  margin-bottom: 3.5rem;
+  margin-bottom: 4rem;
 }
 
-.homecomp5-logo {
+.hc5-logo {
   width: 280px;
-  max-width: 90vw;
-  display: block;
-  margin: 0 auto;
-  filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
+  max-width: 85vw;
+  filter: drop-shadow(0 0 15px rgba(255,255,255,0.15));
 }
 
-.homecomp5-subtitle {
+.hc5-tagline {
   font-family: 'Inter', sans-serif;
-  letter-spacing: 0.7rem;
-  font-size: 0.8rem;
+  letter-spacing: 0.8rem;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.4);
   margin-top: 1.2rem;
-  font-weight: 400;
   text-transform: uppercase;
 }
 
-/* Carousel Mechanics - Removed all vignette/shadow overlays */
-.homecomp5-carousel-container {
+/* Carousel Mechanics */
+.hc5-carousel-viewport {
   width: 100%;
-  position: relative;
   display: flex;
   align-items: center;
 }
 
-.homecomp5-carousel-track {
+.hc5-carousel-track {
   display: flex;
   gap: 40px; 
-  padding: 20px 0;
-  will-change: transform;
+  padding: 30px 0;
+  will-change: transform; /* Boosts performance */
 }
 
-.homecomp5-card {
+.hc5-card {
   flex: 0 0 300px;
   height: 420px;
   position: relative;
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   cursor: pointer;
+  background: #111;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* Images: Full vibrancy at all times */
-.card-image {
+.hc5-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.7s ease;
 }
 
-/* Hover Interaction: Scale Up Only */
-.homecomp5-card:hover {
-  transform: scale(1.1) translateY(-10px);
+.hc5-card:hover {
+  transform: scale(1.08) translateY(-15px);
   z-index: 50;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.8);
 }
 
-.homecomp5-card:hover .card-image {
-  transform: scale(1.08);
+.hc5-card:hover .hc5-card-img {
+  transform: scale(1.1);
 }
 
-/* Subtle Badge */
-.card-number-tag {
+.hc5-card-id {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 18px;
+  left: 18px;
   z-index: 10;
   font-family: monospace;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: white;
-  padding: 5px 12px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-  border-radius: 6px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 5px;
 }
 
-/* Mobile Responsiveness */
+/* Mobile Scaling */
 @media (max-width: 768px) {
-  .homecomp5-card {
+  .hc5-card {
     flex: 0 0 240px;
     height: 340px;
-  }
-  .homecomp5-logo {
-    width: 300px;
   }
 }

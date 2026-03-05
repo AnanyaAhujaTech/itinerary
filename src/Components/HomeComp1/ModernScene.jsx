@@ -105,6 +105,18 @@ export default function ModernScene() {
         <img src={audienceRight} alt="" className="audience-right" />
       </div>
 
+      {/* --- Scroll Explorer Component --- */}
+      {/* --- Floating Scroll to Explore (Wide Arrow, No Line) --- */}
+
+      <div className="homecomp2-scroll-explorer">
+        <div className="explorer-overlay"></div>
+        <span className="explorer-text">SCROLL TO EXPLORE</span>
+        <div className="explorer-arrow">
+          <svg width="45" height="15" viewBox="0 0 45 15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 2L22.5 12L43 2" />
+          </svg>
+        </div>
+      </div>
       <div className="modern-footer">
         <LogoLoop 
           logos={SPONSORS} 

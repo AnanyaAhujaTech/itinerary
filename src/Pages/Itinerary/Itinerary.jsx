@@ -26,7 +26,7 @@ export default function ItineraryPage() {
         fallbackImage={fallbackBgImage} 
       />
 
-      <Navbar />
+      <Navbar isVisible={true} />
 
       <div className={`view-wrapper ${currentView === 'clock' ? 'view-visible' : 'view-hidden'}`}>
         <CountdownClock />

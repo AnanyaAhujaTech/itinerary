@@ -248,6 +248,81 @@
 @keyframes crossFadeLeft { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes crossFadeRight { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
 
+/* --- Floating Scroll Explorer Styling --- */
+.homecomp2-scroll-explorer {
+  position: absolute;
+  /* Positioned above the logo loop footer */
+  bottom: 13vh; 
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px; /* Tight gap between text and wide arrow */
+  z-index: 40;
+  pointer-events: none;
+  
+  /* Applying the float to the entire group */
+  animation: floatExplore 2.5s ease-in-out infinite;
+}
+
+.explorer-text {
+  font-family: 'Monteserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: bolder;
+  letter-spacing: 0.6em; /* Extra spacing for high-end look */
+  color: #ffffff;
+  opacity: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.explorer-arrow {
+  color: #ffffff;
+  opacity: 1;
+  /* Subtle glow to match the neon vibe */
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+}
+
+.explorer-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 10%,
+    rgb(0, 0, 0) 30%,
+    rgb(0, 0, 0) 70%,
+    transparent 10%
+  );
+  filter: blur(15px); /* Softens the rectangular edges */
+  z-index: 39;
+}
+
+/* Smooth Floating Animation for the collective element */
+@keyframes floatExplore {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 15px);
+  }
+}
+
+/* Ensuring it sits well on mobile */
+@media (max-width: 768px) {
+  .homecomp2-scroll-explorer {
+    bottom: 11vh;
+  }
+  .explorer-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+  }
+  .explorer-arrow svg {
+    width: 35px;
+    height: 12px;
+  }
+}
+
 /* --- Footer Area --- */
 .modern-footer {
   position: absolute;

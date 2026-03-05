@@ -1,17 +1,57 @@
-/* Centering & Viewport Lock */
-.homecomp6-section {
+/* Container Lock & Purple Textured Background */
+.homecomp6-viewport {
   width: 100%;
-  height: 180vh;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  /* Dark Purple Gradient with a subtle "noise" texture effect */
+  background: radial-gradient(circle at center, #2e1065 0%, #0f0720 100%);
+  background-attachment: fixed;
+}
+
+/* Internal Scroll Wrapper (Hidden Scrollbar) */
+.homecomp6-scroll-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.homecomp6-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* FAQ Internal Section Layout */
+.faq-internal-section {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 60px 20px;
   position: relative;
-  padding: 2vh 40px;
-  box-sizing: border-box;
-  color: white;
-  overflow: hidden;
+  z-index: 2;
 }
+
+/* Pulse Animation */
+@keyframes wheelPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+.wheel-decor {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
+  animation: wheelPulse 6s ease-in-out infinite;
+}
+
+.wheel-top-left { top: 5%; left: -5%; width: 300px; }
+.wheel-mid-right { top: 40%; right: -8%; width: 250px; animation-delay: 1s; }
+.wheel-bottom-left { bottom: 10%; left: 5%; width: 180px; animation-delay: 2s; }
 
 .homecomp6-header {
   text-align: center;
@@ -155,8 +195,37 @@
   transform: rotate(225deg);
 }
 
+/* Footer Styling */
+.homecomp6-footer {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 80px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+  color: white;
+}
+
+.footer-content h3 {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1rem;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.5;
+}
+
+/* Mobile Tweaks */
 @media (max-width: 768px) {
-  .homecomp6-heading-img { width: 320px; }
-  .homecomp6-list { max-height: 65vh; }
-  .homecomp6-question { padding: 18px 20px; font-size: 0.95rem; }
+  .wheel-top-left { width: 150px; }
+  .wheel-mid-right { width: 120px; }
+  .homecomp6-heading-img { width: 300px; }
 }
