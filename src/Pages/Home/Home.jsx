@@ -6,27 +6,33 @@ import HomeComp3 from '../../Components/HomeComp3/HomeComp3';
 import HomeComp4 from '../../Components/HomeComp4/HomeComp4';
 import HomeComp5 from '../../Components/HomeComp5/HomeComp5';
 import HomeComp6 from '../../Components/HomeComp6/HomeComp6';
+import HomeComp7 from '../../Components/HomeComp7/HomeComp7';
 import { Vortex } from '../../Components/Vortex/Vortex';
 import './Home.css'; 
 
 export default function HomePage() {
   const [showNavbar, setShowNavbar] = useState(false);
-  const [showVortex, setShowVortex] = useState(false); // Specific state for Vortex
+  const [showVortex, setShowVortex] = useState(false); 
   
   const homeComp1Ref = useRef(null);
-  const homeComp2Ref = useRef(null); // Ref for the second section
+  const homeComp2Ref = useRef(null);
 
   useEffect(() => {
-    // Observer for Navbar (HomeComp1)
+    // Observer for Navbar: 
+    // We set threshold to 0.05 so the Navbar only appears 
+    // once HomeComp1 is almost entirely scrolled away.
     const navObserver = new IntersectionObserver(
-      ([entry]) => setShowNavbar(!entry.isIntersecting),
-      { threshold: 0.1 }
+      ([entry]) => {
+        // If HomeComp1 is intersecting (visible), showNavbar should be false.
+        setShowNavbar(!entry.isIntersecting);
+      },
+      { threshold: 0.05 } 
     );
 
     // Observer for Vortex (HomeComp2)
     const vortexObserver = new IntersectionObserver(
       ([entry]) => setShowVortex(entry.isIntersecting),
-      { threshold: 0.3 } // Triggers when 30% of HomeComp2 is visible
+      { threshold: 0.3 } 
     );
 
     if (homeComp1Ref.current) navObserver.observe(homeComp1Ref.current);
@@ -40,9 +46,12 @@ export default function HomePage() {
 
   return (
     <div className="home-page-wrapper">
+      {/* Ensure your Navbar component handles 'isVisible={false}' 
+          by returning null or setting 'display: none'. 
+      */}
       <Navbar isVisible={showNavbar} />
 
-      {/* Vortex Background: Now only renders/shows for HomeComp2 */}
+      {/* Vortex Background */}
       <div style={{ 
         position: 'fixed', 
         top: 0, 
@@ -52,9 +61,8 @@ export default function HomePage() {
         zIndex: 0, 
         pointerEvents: 'none',
         opacity: showVortex ? 1 : 0, 
-        transition: 'opacity 0.8s ease-in-out' // Smooth fade in/out
+        transition: 'opacity 0.8s ease-in-out' 
       }}>
-        {/* We keep it mounted or conditionally render for performance */}
         {showVortex && (
           <Vortex 
             particleCount={350} 
@@ -69,7 +77,6 @@ export default function HomePage() {
           <HomeComp1 />
         </section>
 
-        {/* Attach the ref here */}
         <section className="snap-section" ref={homeComp2Ref}>
           <HomeComp2 />
         </section>
@@ -78,6 +85,7 @@ export default function HomePage() {
         <section className="snap-section"><HomeComp4 /></section>
         <section className="snap-section"><HomeComp5 /></section>
         <section className="snap-section"><HomeComp6 /></section>
+        <section className="snap-section"><HomeComp7 /></section>
       </div>
     </div>
   );

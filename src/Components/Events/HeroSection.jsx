@@ -14,20 +14,18 @@ import vid9 from "../../assets/Untitled design (13).mp4";
 const videos = [vid1, vid2, vid3, vid4, vid5, vid6, vid7, vid8, vid9];
 
 export default function HeroSection() {
-  // --- CHANGE HEXAGON POSITIONS HERE ---
-  // "left" is the horizontal position (vw: viewport width). Use negative values to move left, positive to move right.
-  // "top" is the vertical position (vh: viewport height). Use negative values to move up, positive to move down.
-  // "vid" specifies which video from the `videos` array to play.
+  // Re-calculated positions to form a mathematically perfect ellipse that 
+  // scales securely within viewport bounds using vmin instead of raw vw/vh.
   const honeycombPositions = [
-    { id: 1, type: "video", vid: 0, left: 0, top: -36 },         // Top Center
-    { id: 2, type: "video", vid: 1, left: 20.57, top: -27.58 },  // Top Right
-    { id: 3, type: "video", vid: 2, left: 31.51, top: -6.25 },   // Right Top
-    { id: 4, type: "video", vid: 3, left: 27.71, top: 18.00 },   // Right Bottom
-    { id: 5, type: "video", vid: 4, left: 10.95, top: 33.83 },   // Bottom Right
-    { id: 6, type: "video", vid: 5, left: -10.95, top: 33.83 },  // Bottom Left
-    { id: 7, type: "video", vid: 6, left: -27.71, top: 18.00 },  // Left Bottom
-    { id: 8, type: "video", vid: 7, left: -31.51, top: -6.25 },  // Left Top
-    { id: 9, type: "video", vid: 8, left: -20.57, top: -27.58 }, // Top Left
+    { id: 1, type: "video", vid: 0, left: 0, top: -26 },         // Top Center
+    { id: 2, type: "video", vid: 1, left: 20, top: -20 },        // Top Right
+    { id: 3, type: "video", vid: 2, left: 31, top: -5 },         // Right Top
+    { id: 4, type: "video", vid: 3, left: 27, top: 13 },         // Right Bottom
+    { id: 5, type: "video", vid: 4, left: 11, top: 24 },         // Bottom Right
+    { id: 6, type: "video", vid: 5, left: -11, top: 24 },        // Bottom Left
+    { id: 7, type: "video", vid: 6, left: -27, top: 13 },        // Left Bottom
+    { id: 8, type: "video", vid: 7, left: -31, top: -5 },        // Left Top
+    { id: 9, type: "video", vid: 8, left: -20, top: -20 },       // Top Left
   ];
 
   return (
@@ -43,9 +41,8 @@ export default function HeroSection() {
               key={hex.id}
               className={`hexagon-wrapper ${hex.type}`}
               style={{
-                // Calculate dynamic positioning based on viewport offset from center
-                '--hex-left': `${hex.left}vw`,
-                '--hex-top': `${hex.top}vh`,
+                '--hex-left': hex.left,
+                '--hex-top': hex.top,
               }}
             >
               <div className="hexagon-border"></div>

@@ -5,9 +5,6 @@ import './HomeComp5.css';
 import smaranHeadingImg from '../../assets/smaran.png';
 import backgroundImage from '../../assets/wheel5.png';
 
-/** * DYNAMIC LOADER: Grabs every image in src/assets/photos automatically.
- * This works natively with Vite (default for React apps today).
- */
 const imageModules = import.meta.glob('../../assets/photos/*.{png,jpg,jpeg,svg,webp,JPG}', { eager: true });
 const importedImages = Object.values(imageModules).map((mod) => mod.default);
 
@@ -22,10 +19,20 @@ const GLOW_COLORS = [
 export default function HomeComp5() {
   const [offset, setOffset] = useState(0);
   const [activeGlow, setActiveGlow] = useState(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const requestRef = useRef();
+  
+  // Mobile specific states
+  const [isMobile, setIsMobile] = useState(false);
+  const [hasTouched, setHasTouched] = useState(false);
+  const [mobileCenterIndex, setMobileCenterIndex] = useState(null);
 
-  // Create card objects based on folder contents
+  // Refs
+  const requestRef = useRef();
+  const isVisibleRef = useRef(false);
+  const isPausedRef = useRef(false);
+  const rootRef = useRef(null);
+  const trackRef = useRef(null);
+  const cardRefs = useRef([]);
+
   const smaranCards = useMemo(() => {
     return importedImages.map((img, index) => ({
       id: (index + 1).toString().padStart(2, '0'),
@@ -34,14 +41,36 @@ export default function HomeComp5() {
     }));
   }, []);
 
-  // Triple the cards for seamless infinite looping
   const displayCards = useMemo(() => [...smaranCards, ...smaranCards, ...smaranCards], [smaranCards]);
   
-  const cardWidth = 340; // Card (300) + Gap (40)
+  const cardWidth = 340; 
   const totalWidth = smaranCards.length * cardWidth;
 
+  // 1. Preloader & Mobile Detector
+  useEffect(() => {
+    const wheelImg = new Image();
+    wheelImg.src = backgroundImage;
+    importedImages.forEach((src) => { const img = new Image(); img.src = src; });
+
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile(); // Check immediately
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // 2. Main Section Visibility Observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+      { threshold: 0.05 }
+    );
+    if (rootRef.current) observer.observe(rootRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // 3. Desktop Animation Loop
   const animate = () => {
-    if (!isPaused && totalWidth > 0) {
+    if (!isMobile && !isPausedRef.current && isVisibleRef.current && totalWidth > 0) {
       setOffset((prev) => (prev + 0.8) % totalWidth);
     }
     requestRef.current = requestAnimationFrame(animate);
@@ -50,28 +79,55 @@ export default function HomeComp5() {
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
-  }, [isPaused, totalWidth]);
+  }, [isMobile, totalWidth]);
+
+  // 4. Mobile: Center Card Observer (Applies Glow & Scale)
+  useEffect(() => {
+    if (!isMobile || !trackRef.current) return;
+
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const index = Number(entry.target.dataset.index);
+          setActiveGlow(displayCards[index].glow);
+          setMobileCenterIndex(index);
+        }
+      });
+    }, {
+      root: trackRef.current,
+      threshold: 0.6 // Card must be 60% in view to become the "active" center card
+    });
+
+    cardRefs.current.forEach(card => {
+      if (card) cardObserver.observe(card);
+    });
+
+    return () => cardObserver.disconnect();
+  }, [isMobile, displayCards]);
+
+  // 5. Mobile: Auto-Pan Interval (Clears on Touch)
+  useEffect(() => {
+    if (!isMobile || hasTouched) return;
+    
+    // Slowly advance the native scroll container
+    const autoScroll = setInterval(() => {
+      if (trackRef.current && isVisibleRef.current) {
+        trackRef.current.scrollLeft += 1; 
+      }
+    }, 15);
+
+    return () => clearInterval(autoScroll);
+  }, [isMobile, hasTouched]);
 
   return (
-    <div className="hc5-root">
-      {/* LAYER 0: Solid Black base to kill white glitches */}
+    <div className="hc5-root" ref={rootRef}>
       <div className="hc5-black-fix" />
-
-      {/* LAYER 1: Background Image (wheel5.png) */}
-      <div 
-        className="hc5-background-img" 
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      />
-
-      {/* LAYER 3: Hover Glow Effect */}
+      <div className="hc5-background-img" style={{ backgroundImage: `url(${backgroundImage})` }} />
       <div 
         className={`hc5-dynamic-glow ${activeGlow ? 'visible' : ''}`}
-        style={{ 
-            background: activeGlow ? `radial-gradient(circle at center, ${activeGlow} 0%, transparent 70%)` : 'transparent'
-        }}
+        style={{ background: activeGlow ? `radial-gradient(circle at center, ${activeGlow} 0%, transparent 70%)` : 'transparent' }}
       />
 
-      {/* LAYER 4: Foreground Content */}
       <section className="hc5-content-layer">
         <header className="hc5-header">
           <img src={smaranHeadingImg} alt="Smaran" className="hc5-logo" />
@@ -79,27 +135,35 @@ export default function HomeComp5() {
         </header>
 
         <div className="hc5-carousel-viewport">
+          <div className="hc5-carousel-blur" />
+
           <div 
-            className="hc5-carousel-track"
-            style={{ transform: `translate3d(${-offset}px, 0, 0)` }}
+            ref={trackRef}
+            // Add native scrolling classes for mobile, and determine if snapping should be active
+            className={`hc5-carousel-track ${isMobile ? 'is-mobile' : ''} ${isMobile && hasTouched ? 'snap-enabled' : ''}`}
+            style={{ transform: isMobile ? 'none' : `translate3d(${-offset}px, 0, 0)` }}
+            onTouchStart={() => setHasTouched(true)} // Regain manual control permanently
           >
-            {displayCards.map((card, index) => (
-              <div 
-                key={`${card.id}-${index}`} 
-                className="hc5-card"
-                onMouseEnter={() => {
-                  setActiveGlow(card.glow);
-                  setIsPaused(true);
-                }}
-                onMouseLeave={() => {
-                  setActiveGlow(null);
-                  setIsPaused(false);
-                }}
-              >
-                <img src={card.image} alt="Gallery" className="hc5-card-img" />
-                <div className="hc5-card-id">{card.id}</div>
-              </div>
-            ))}
+            {displayCards.map((card, index) => {
+              const isActiveMobile = isMobile && mobileCenterIndex === index;
+              return (
+                <div 
+                  key={`${card.id}-${index}`} 
+                  data-index={index}
+                  ref={(el) => (cardRefs.current[index] = el)}
+                  className={`hc5-card ${isActiveMobile ? 'active-mobile' : ''}`}
+                  onMouseEnter={() => {
+                    if (!isMobile) { setActiveGlow(card.glow); isPausedRef.current = true; }
+                  }}
+                  onMouseLeave={() => {
+                    if (!isMobile) { setActiveGlow(null); isPausedRef.current = false; }
+                  }}
+                >
+                  <img src={card.image} alt="Gallery" className="hc5-card-img" />
+                  <div className="hc5-card-id">{card.id}</div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

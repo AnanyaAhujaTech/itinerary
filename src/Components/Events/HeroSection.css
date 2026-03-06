@@ -1,18 +1,22 @@
 .hero {
   position: relative;
-  height: 100vh;
   width: 100%;
+  height: 100vh;
+  padding-top: 80px; /* Accounts for fixed navbar */
+  box-sizing: border-box;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   overflow: hidden;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Center horizontally and vertically */
   background: transparent;
 }
 
-/* Central Heading */
+/* Centers exactly in the space remaining below the navbar */
 .hero-center-content {
   position: absolute;
+  top: calc(50% + 40px);
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 10;
   display: flex;
   justify-content: center;
@@ -22,104 +26,44 @@
 
 .events-heading {
   width: auto;
-  max-width: 500px;
-  max-height: 350px;
+  max-width: clamp(250px, 40vw, 550px);
+  max-height: clamp(150px, 30vh, 350px);
   object-fit: contain;
   filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
 }
 
-@media (max-width: 900px) {
-  .events-heading {
-    max-width: 350px;
-  }
-}
-
-@media (max-width: 600px) {
-  .events-heading {
-    max-width: 250px;
-  }
-}
-
-/* Hexagons Container */
 .hexagon-container {
   position: absolute;
-  top: 50%;
+  top: calc(50% + 40px);
   left: 50%;
   width: 0;
   height: 0;
   z-index: 5;
 }
 
-/* Hexagon Wrappers */
 .hexagon-wrapper {
   position: absolute;
-  --rx: 432px;
-  /* 540 * 0.8 */
-  /* Horizontal radius */
-  --ry: 192px;
-  /* 240 * 0.8 */
-  /* Vertical radius */
-  width: 168px;
-  /* 210 * 0.8 */
-  height: 194.4px;
-  /* 243 * 0.8 */
-  /* Transform origin is center of container (0,0). Translate out by elliptical path */
-  transform: translate(-50%, -50%) translate(var(--hex-left), var(--hex-top));
+  /* Width is now noticeably larger than the height, giving the stretched look */
+  width: clamp(90px, 14vmin, 180px); 
+  height: clamp(70px, 11vmin, 140px);
+  transform: translate(-50%, -50%) translate(calc(var(--hex-left) * 1vmin), calc(var(--hex-top) * 1vmin));
   filter: drop-shadow(0 0 8px rgba(218, 165, 32, 0.7));
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease;
   z-index: 10;
   cursor: pointer;
+  will-change: transform;
 }
 
 .hexagon-wrapper:hover {
-  transform: translate(-50%, -50%) translate(var(--hex-left), var(--hex-top)) scale(1.15);
+  transform: translate(-50%, -50%) translate(calc(var(--hex-left) * 1vmin), calc(var(--hex-top) * 1vmin)) scale(1.15);
   filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1));
   z-index: 20;
 }
 
-@media (max-width: 1200px) {
-  .hexagon-wrapper {
-    --rx: 336px;
-    /* 420 * 0.8 */
-    --ry: 156px;
-    /* 195 * 0.8 */
-    width: 132px;
-    /* 165 * 0.8 */
-    height: 152.4px;
-    /* 190.5 * 0.8 */
-  }
-}
-
-@media (max-width: 900px) {
-  .hexagon-wrapper {
-    --rx: 264px;
-    /* 330 * 0.8 */
-    --ry: 132px;
-    /* 165 * 0.8 */
-    width: 103.2px;
-    /* 129 * 0.8 */
-    height: 120px;
-    /* 150 * 0.8 */
-  }
-}
-
-@media (max-width: 600px) {
-  .hexagon-wrapper {
-    --rx: 168px;
-    /* 210 * 0.8 */
-    --ry: 96px;
-    /* 120 * 0.8 */
-    width: 81.6px;
-    /* 102 * 0.8 */
-    height: 93.6px;
-    /* 117 * 0.8 */
-  }
-}
-
-/* The Gold Border */
 .hexagon-border {
   width: 100%;
   height: 100%;
+  /* Reverted to your original pointy-topped shape */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: linear-gradient(145deg, #FFF8DC, #FFD700, #DAA520, #B8860B);
   position: absolute;
@@ -127,40 +71,27 @@
   left: 0;
 }
 
-/* The Inner Content Area */
 .hexagon-inner {
   position: absolute;
-  top: 4px;
-  /* Border thickness */
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
+  top: clamp(2px, 0.4vmin, 4px);
+  left: clamp(2px, 0.4vmin, 4px);
+  right: clamp(2px, 0.4vmin, 4px);
+  bottom: clamp(2px, 0.4vmin, 4px);
+  /* Reverted to your original pointy-topped shape */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background-color: #1a0b2e;
-  /* Base dark background */
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
 
-@media (max-width: 900px) {
-  .hexagon-inner {
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-  }
-}
-
-/* Video specific styles */
 .hexagon-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Plain hexagon background */
 .plain-bg {
   width: 100%;
   height: 100%;
@@ -171,7 +102,6 @@
   align-items: center;
 }
 
-/* Aesthetic dots for plain hexagons */
 .plain-dot {
   position: absolute;
   width: 4px;
@@ -181,10 +111,5 @@
   box-shadow: 0 0 5px #FFD700;
 }
 
-.top-dot {
-  top: 15%;
-}
-
-.bottom-dot {
-  bottom: 15%;
-}
+.top-dot { top: 15%; }
+.bottom-dot { bottom: 15%; }

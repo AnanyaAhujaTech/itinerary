@@ -1,4 +1,6 @@
-/* Hide scrollbar for all browsers */
+/* --- Global Scroll Reset --- */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
 .home-page-wrapper::-webkit-scrollbar {
   display: none;
 }
@@ -9,20 +11,66 @@
   background-color: #050505;
   overflow-y: scroll;
   overflow-x: hidden;
+  /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none; 
   scrollbar-width: none;  
 
-  /* Standard Snap Scroll */
+  /* Standard Snap Scroll Configuration */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
 }
 
+/* --- Section Container --- */
 .snap-section {
   width: 100vw;
   height: 100vh;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   position: relative;
-  overflow: hidden; /* Prevents parallax bleed */
+  overflow: hidden; /* Prevents parallax bleed and stray elements */
   background: transparent;
+}
+
+/* --- Navbar Transition Logic --- */
+
+/**
+ * These classes should be applied to your Navbar component 
+ * based on the 'isVisible' prop.
+ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5000; /* Ensure it stays above the Vortex and all sections */
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.6s;
+  will-change: opacity, transform;
+}
+
+/* Hidden State (When in HomeComp1) */
+.navbar-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  /* Subtle upward shift for a more elegant reveal when it returns */
+  transform: translateY(-10px); 
+}
+
+/* Visible State (When scrolling through other sections) */
+.navbar-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* --- Mobile Specific Tweaks --- */
+@media (max-width: 768px) {
+  .home-page-wrapper {
+    /* Optional: Slightly loosen snap on mobile if it feels too rigid */
+    scroll-snap-type: y proximity; 
+  }
 }

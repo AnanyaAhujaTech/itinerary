@@ -8,48 +8,47 @@
   overflow: hidden;
   background: radial-gradient(circle at center, #291a50 0%, #050505 100%);
   font-family: 'Inter', sans-serif;
+  padding-top: 20px;
 }
 
-.homecomp6-scroll-container {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: none;
+/* ---------------- Centered & Responsive Wheels ---------------- */
+
+/* Position the wrappers exactly by their center points */
+.wheel-wrapper {
+  position: absolute;
+  z-index: 60;
+  pointer-events: none;
+  transform: translate(-50%, -50%); /* Ensures perfectly centered coordinates */
 }
 
-.homecomp6-scroll-container::-webkit-scrollbar { display: none; }
+/* Calculated to be perfectly centered. 
+  Vertical gaps are mapped to 'vw' so the constellation shape 
+  never stretches or distorts on narrow/tall mobile screens.
+*/
+.wheel-top-left     { top: calc(50vh - 5vw); left: 29vw; }
+.wheel-mid-right    { top: calc(50vh + 5vw); left: 43vw; }
+.wheel-bottom-left  { top: calc(50vh - 5vw); left: 57vw; }
+.wheel-bottom-right { top: calc(50vh + 5vw); left: 71vw; }
 
-/* ---------------- Wheels intro & reveal sequence (replace previous "Decorative Wheels") ---------------- */
+.wheel-decor {
+  /* Lowered minimum bounds so it scales gracefully down to mobile screens */
+  width: clamp(60px, 18vw, 320px); 
+  height: auto;
+  transform-origin: center center;
+  opacity: 0;
+  filter:
+    drop-shadow(0 0 25px rgba(255,200,120,0.35))
+    drop-shadow(0 0 40px rgba(120,160,255,0.25));
+}
 
-/* rotating gear motion */
 @keyframes wheelRotate {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
 
-/* keep visible for a hold period, then fade + hide so it doesn't block pointer events */
 @keyframes wheelFadeOut {
   from { opacity: 1; }
-  to   { 
-    opacity: 0; 
-    visibility: hidden;
-  }
-}
-
-/* wheel base — all wheels same responsive size, rotate forever, fade out once (delayed) */
-.wheel-decor {
-  position: absolute;
-  z-index: 60;
-  pointer-events: none;
-  width: clamp(200px, 18vw, 320px);
-  height: auto;
-  transform-origin: center center;
-
-  /* initially hidden before viewport trigger */
-  opacity: 0;
-  filter:
-  drop-shadow(0 0 25px rgba(255,200,120,0.35))
-  drop-shadow(0 0 40px rgba(120,160,255,0.25));
+  to   { opacity: 0; visibility: hidden; }
 }
 
 @keyframes wheelAppear {
@@ -67,116 +66,46 @@
 
 .start-animation .wheel-decor {
   opacity: 1;
-
   animation:
     wheelAppear 0.45s ease forwards,
     wheelRotate 8s linear infinite,
     wheelFadeOut 0.45s ease 1.5s forwards;
-
   animation-fill-mode: forwards;
 }
 
-/* POSITIONING: tuned to match the layout in screenshots (wheels aligned across header)
-   Adjust left/top percentages if you'd like them nudged.
-*/
-.wheel-top-left {
-  top: 25vh;
-  left: 21vw;
-}
+/* ---------------- Reveal FAQ heading & cards ---------------- */
 
-.wheel-mid-right {
-  top: 42vh;
-  left: 35vw;
-}
-
-.wheel-bottom-left {
-  top: 25vh;
-  left: 49vw;
-}
-
-.wheel-bottom-right {
-  top: 42vh;
-  left: 63vw;
-}
-
-/* ---------------- Reveal FAQ heading & cards after wheels fade ---------------- */
-
-/* small reveal for the entire FAQ block (starts slightly after wheels finish) */
 @keyframes faqReveal {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* individual card entrance */
 @keyframes cardIn {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.faq-progress-bar {
-  position: absolute;
-  z-index: 3;
-}
-
-/* ensure the FAQ wrapper is initially hidden and then revealed after wheels */
+/* FAQ Layout */
 .faq-internal-section {
-  min-height: 100vh;
-  position: relative;
-  z-index: 5;
-}
-
-.start-animation .faq-internal-section {
-  animation: faqReveal 0.8s cubic-bezier(.2,.9,.2,1) 1.6s forwards;
-}
-/* cards: start invisible; animate in one-by-one using nth-child delays */
-.homecomp6-item {
-  opacity: 0;
-  transform: translateY(18px);
-}
-
-.start-animation .homecomp6-item {
-  animation: cardIn 0.45s cubic-bezier(.2,.9,.2,1) forwards;
-}
-
-/* sequential delays (you have 9 items — increase if you later add more) */
-.homecomp6-list .homecomp6-item:nth-child(1) { animation-delay: 2.2s; }
-.homecomp6-list .homecomp6-item:nth-child(2) { animation-delay: 2.28s; }
-.homecomp6-list .homecomp6-item:nth-child(3) { animation-delay: 2.36s; }
-.homecomp6-list .homecomp6-item:nth-child(4) { animation-delay: 2.44s; }
-.homecomp6-list .homecomp6-item:nth-child(5) { animation-delay: 2.52s; }
-.homecomp6-list .homecomp6-item:nth-child(6) { animation-delay: 2.60s; }
-.homecomp6-list .homecomp6-item:nth-child(7) { animation-delay: 2.68s; }
-.homecomp6-list .homecomp6-item:nth-child(8) { animation-delay: 2.76s; }
-.homecomp6-list .homecomp6-item:nth-child(9) { animation-delay: 2.84s; }
-/* when a user opens an item (active) we keep the behaviour already defined in your CSS */
-.homecomp6-item.active .homecomp6-chevron { transform: rotate(225deg); }
-
-/* ----- Accessibility: respect reduced motion preference ----- */
-@media (prefers-reduced-motion: reduce) {
-  .wheel-decor,
-  .faq-internal-section,
-  .homecomp6-item {
-    animation: none !important;
-    transition: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-    visibility: visible !important;
-    filter:
-      drop-shadow(0 0 25px rgba(255,200,120,0.35))
-      drop-shadow(0 0 40px rgba(120,160,255,0.25));
-  }
-}
-
-/* --- FAQ Section --- */
-.faq-internal-section {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
+  padding: 8vh 20px 4vh 20px;
   z-index: 5;
   position: relative;
+  box-sizing: border-box;
+  opacity: 0; /* BUG FIX: Ensures the heading/subtitle are invisible before the delay finishes */
+}
+
+.start-animation .faq-internal-section {
+  /* BUG FIX: Changed 'forwards' to 'both' to enforce the 0% keyframe opacity during the 1.6s delay */
+  animation: faqReveal 0.8s cubic-bezier(.2,.9,.2,1) 1.6s both;
+}
+
+.homecomp6-header {
+  text-align: center;
+  flex-shrink: 0; /* Keeps header from squishing */
 }
 
 .homecomp6-heading-img {
@@ -192,18 +121,31 @@
   font-weight: bold;
   opacity: 0.6;
   text-transform: uppercase;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
+
+/* Custom Scroll Container applied ONLY to the list */
+.homecomp6-scroll-container {
+  width: 100%;
+  max-width: 800px;
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-bottom: 40px; /* Bottom padding for scroll breathing room */
+}
+
+.homecomp6-scroll-container::-webkit-scrollbar { display: none; }
 
 .homecomp6-list {
   width: 100%;
-  max-width: 800px;
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
 .homecomp6-item {
+  opacity: 0;
+  transform: translateY(18px);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(167, 211, 255, 0.1);
   border-radius: 12px;
@@ -211,10 +153,24 @@
   transition: all 0.3s ease;
   overflow: hidden;
   position: relative;
-
-  /* creates clean stacking context for overlay/text */
   z-index: 0;
 }
+
+.start-animation .homecomp6-item {
+  /* Added 'both' here as well for consistency */
+  animation: cardIn 0.45s cubic-bezier(.2,.9,.2,1) both;
+}
+
+/* Staggered load */
+.homecomp6-list .homecomp6-item:nth-child(1) { animation-delay: 2.2s; }
+.homecomp6-list .homecomp6-item:nth-child(2) { animation-delay: 2.28s; }
+.homecomp6-list .homecomp6-item:nth-child(3) { animation-delay: 2.36s; }
+.homecomp6-list .homecomp6-item:nth-child(4) { animation-delay: 2.44s; }
+.homecomp6-list .homecomp6-item:nth-child(5) { animation-delay: 2.52s; }
+.homecomp6-list .homecomp6-item:nth-child(6) { animation-delay: 2.60s; }
+.homecomp6-list .homecomp6-item:nth-child(7) { animation-delay: 2.68s; }
+.homecomp6-list .homecomp6-item:nth-child(8) { animation-delay: 2.76s; }
+.homecomp6-list .homecomp6-item:nth-child(9) { animation-delay: 2.84s; }
 
 .homecomp6-item:hover {
   background: rgba(167, 211, 255, 0.06);
@@ -229,10 +185,6 @@
   font-weight: 500;
   color: #ffffff;
   font-size: 1rem;
-}
-
-.homecomp6-question,
-.homecomp6-answer {
   position: relative;
   z-index: 2;
 }
@@ -254,6 +206,8 @@
   transition: 0.4s ease;
   padding: 0 25px;
   opacity: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .homecomp6-answer.open {
@@ -262,74 +216,15 @@
   opacity: 1;
 }
 
-.homecomp6-answer p { color: #c0a7ff; font-size: 0.9rem; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
-
-/* --- FOOTER OVERHAUL --- */
-.homecomp6-footer {
-  background: #000;
-  padding: 100px 5% 40px 5%;
-  border-top: 1px solid rgba(255,255,255,0.05);
+.homecomp6-answer p { 
+  color: #c0a7ff; 
+  font-size: 0.9rem; 
+  line-height: 1.6; 
+  border-top: 1px solid rgba(255,255,255,0.05); 
+  padding-top: 15px; 
 }
 
-.footer-main-content {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* Centered Brand Container */
-.footer-brand-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 80px;
-}
-
-.footer-brand-logo { width: 100px; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(167, 211, 255, 0.3)); }
-
-.footer-brand-heading {
-  font-family: 'Syne', sans-serif;
-  font-size: 3.5rem;
-  font-weight: 800;
-  letter-spacing: 4px;
-  margin: 0;
-  background: linear-gradient(90deg, #fff, #c0a7ff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.footer-brand-subtitle {
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.6);
-  letter-spacing: 2px;
-  margin-top: 10px;
-}
-
-.hl-code { color: #fff; font-weight: 600; }
-.hl-circuit { color: #c0a7ff; font-weight: 600; }
-
-/* Grid Layout for details */
-.footer-links-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
-  gap: 40px;
-  margin-bottom: 60px;
-}
-
-.footer-grid-col h4 {
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  color: #c0a7ff;
-  margin-bottom: 25px;
-  font-weight: 700;
-}
-
-.coord-entry { margin-bottom: 25px; }
-.coord-entry h4 { font-size: 0.95rem; color: #c0a7ff; text-transform: none; letter-spacing: 0; margin-bottom: 5px; }
-.coord-entry p { font-size: 0.8rem; color: #ffffff; margin: 2px 0; }
-
-/* RESTORED: Bar Wipe Animation */
+/* Bar Wipe Animation */
 .homecomp6-bar-overlay {
   position: absolute;
   inset: 0;
@@ -349,71 +244,81 @@
   opacity: 50%;
 }
 
-.homecomp6-item:hover .homecomp6-bar-overlay {
-  mask-size: 51% 100%, 51% 100%;
-  -webkit-mask-size: 51% 100%, 51% 100%;
+/* ---------------- 1. Hover Fix (Desktop/Pointer devices only) ---------------- */
+@media (hover: hover) {
+  .homecomp6-item:hover {
+    background: rgba(167, 211, 255, 0.06);
+    border-color: rgba(167, 211, 255, 0.3);
+  }
+
+  .homecomp6-item:hover .homecomp6-bar-overlay {
+    mask-size: 51% 100%, 51% 100%;
+    -webkit-mask-size: 51% 100%, 51% 100%;
+  }
 }
 
-/* Floating Pin & Location */
-.col-center { display: flex; flex-direction: column; align-items: center; }
+/* ---------------- 2. Mobile Optimizations ---------------- */
+@media (max-width: 768px) {
+  /* Scale down heading image slightly for mobile */
+  .homecomp6-heading-img {
+    width: 320px; 
+  }
 
-@keyframes floating {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  /* Reduce padding on mobile to maximize card space */
+  .faq-internal-section {
+    padding: 6vh 15px 2vh 15px;
+  }
 }
 
-.location-link {
-  text-decoration: none;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  transition: 0.3s;
+/* Targeting the wheels specifically when JS detects mobile.
+   Rotates the interlocking "zigzag" chain 90 degrees to flow vertically.
+*/
+.is-mobile .wheel-decor {
+  /* Size scaled to vw so they perfectly interlock on any mobile screen width */
+  width: clamp(140px, 42vw, 180px); 
 }
 
-.location-link:hover { color: #c0a7ff; }
+/* Vertical Interlocking Chain:
+  X oscillates between 35vw (left) and 65vw (right).
+  Y steps down by exactly 24vw each time to maintain the precise overlapping ratio of the desktop view.
+*/
 
-.floating-pin { animation: floating 3s ease-in-out infinite; }
-
-.location-link span { font-size: 0.9rem; font-weight: 500; }
-
-/* Socials & Contact */
-.social-set { margin-bottom: 30px; }
-.social-row { display: flex; gap: 15px; }
-.social-row img { 
-  width: 20px; 
-  height: 20px; 
-  filter: brightness(0) invert(1); 
-  opacity: 0.6; 
-  transition: 0.3s; 
-}
-.social-row img:hover { opacity: 1; transform: scale(1.1); }
-
-.contact-links { display: flex; flex-direction: column; gap: 12px; }
-.contact-links a { color: #d1beff; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
-.contact-links a:hover { color: #fff; }
-
-/* Bottom Bar */
-.footer-bottom-legal {
-  border-top: 1px solid rgba(255,255,255,0.05);
-  padding-top: 30px;
-  text-align: center;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.633);
+/* Top Point (Spider) */
+.is-mobile .wheel-top-left { 
+  top: 38vh; /* Pushed down safely below the subtitle */
+  left: 35vw; 
 }
 
-.credits { margin-top: 10px; }
-.credits a { color: #c0a7ff; text-decoration: none; font-weight: 500; }
-
-/* --- RESPONSIVE --- */
-@media (max-width: 1024px) {
-  .footer-links-grid { grid-template-columns: 1fr 1fr; gap: 60px; }
-  .footer-brand-heading { font-size: 2.5rem; }
+/* Second Point (Leaf) */
+.is-mobile .wheel-mid-right { 
+  top: calc(38vh + 24vw); 
+  left: 65vw; 
 }
 
-@media (max-width: 650px) {
-  .footer-links-grid { grid-template-columns: 1fr; text-align: center; }
-  .col-center, .footer-grid-col { align-items: center; }
-  .social-row { justify-content: center; }
+/* Third Point (Peacock) */
+.is-mobile .wheel-bottom-left { 
+  top: calc(38vh + 48vw); 
+  left: 35vw; 
+}
+
+/* Bottom Point (Sword) */
+.is-mobile .wheel-bottom-right { 
+  top: calc(38vh + 72vw); 
+  left: 65vw; 
+}
+
+/* ----- Accessibility ----- */
+@media (prefers-reduced-motion: reduce) {
+  .wheel-decor,
+  .faq-internal-section,
+  .homecomp6-item {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    filter:
+      drop-shadow(0 0 25px rgba(255,200,120,0.35))
+      drop-shadow(0 0 40px rgba(120,160,255,0.25));
+  }
 }

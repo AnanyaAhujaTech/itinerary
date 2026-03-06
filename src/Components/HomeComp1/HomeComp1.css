@@ -234,3 +234,67 @@
 @keyframes curtainLeft { 100% { transform: translateX(-105%); } }
 @keyframes curtainRight { 100% { transform: translateX(105%); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 768px) {
+  /* 1. CTA Button Position */
+  .homecomp1-cta-wrap {
+    bottom: 18vh !important;
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+  }
+
+  .homecomp1-cta {
+    padding: 1.8vh 10vw;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+  }
+
+  /* 2. Optimized Rasa Label (Placement & Visibility) */
+  .homecomp1-rasa-label {
+    top: 32vh; /* Positioned above the dancer's head */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    
+    /* Soft dark radial overlay to make gold text readable over bright stage lights */
+    background: radial-gradient(
+      circle, 
+      rgba(0, 0, 0, 0.6) 0%, 
+      rgba(0, 0, 0, 0.3) 50%, 
+      transparent 80%
+    );
+    padding: 2vh 0;
+  }
+
+  .homecomp1-rasa-label p {
+    font-size: 1.4rem; /* Slightly smaller for mobile elegance */
+    letter-spacing: 0.2em;
+    text-align: center;
+    /* Extra glow for premium feel */
+    text-shadow: 0 0 15px rgba(245, 217, 139, 0.6);
+  }
+
+  /* 3. Site Visit Counter Adjustment */
+  .site-visit-counter {
+    top: 15px;
+    right: 15px;
+    transform: scale(0.85); /* Slightly smaller to give more room for heading */
+    transform-origin: top right;
+  }
+
+  /* 4. Heading/Presenter text tweak for mobile */
+  /* If you have a separate div for "Taarangana Presents" in TraditionalScene */
+  .trad-scene-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 25vh;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    z-index: 5;
+    pointer-events: none;
+  }
+}

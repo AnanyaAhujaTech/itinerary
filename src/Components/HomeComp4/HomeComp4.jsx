@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./HomeComp4.css";
 
 // Assets
-import imgBack from "../../assets/back2.png"; // Added background asset
+import imgBack from "../../assets/back2.png"; 
 import imgEmbroidery from "../../assets/embroidery2.png";
 import imgPatronsHeading from "../../assets/faculty.png"; 
 import imgFrame from "../../assets/frame2.png";
@@ -40,12 +40,22 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
 
-  const handleMouseMove = (e) => {
+  const handleInteractionMove = (e) => {
     if (!cardRef.current) return;
+    
+    // Determine if it's a touch or mouse event and get coordinates
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
     const { left, top, width, height } = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - left - width / 2) / 25;
-    const y = -(e.clientY - top - height / 2) / 25;
+    const x = (clientX - left - width / 2) / 25;
+    const y = -(clientY - top - height / 2) / 25;
     setRotate({ x: y, y: x });
+  };
+
+  const handleInteractionEnd = () => {
+    setIsHovered(false);
+    setRotate({ x: 0, y: 0 });
   };
 
   return (
@@ -53,12 +63,13 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
       ref={cardRef}
       className={`homecomp4-card-outer ${isParentVisible ? "is-visible" : ""}`}
       style={{ transitionDelay: `${delay}s` }}
-      onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setRotate({ x: 0, y: 0 });
-      }}
+      onMouseMove={handleInteractionMove}
+      onMouseLeave={handleInteractionEnd}
+      // Touch Equivalents for Mobile
+      onTouchStart={() => setIsHovered(true)}
+      onTouchMove={handleInteractionMove}
+      onTouchEnd={handleInteractionEnd}
     >
       <div
         className={`homecomp4-card-visual ${isHovered ? "is-hovered" : ""}`}
@@ -94,7 +105,8 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
 
 export default function HomeComp4() {
   const [isVisible, setIsVisible] = useState(false);
-  const [maskPos, setMaskPos] = useState({ x: 0, y: 0 });
+  const [isMouseInside, setIsMouseInside] = useState(false);
+  const [maskPos, setMaskPos] = useState({ x: -1000, y: -9999 }); // Updated to be far off-screen
   const [glitter, setGlitter] = useState([]);
   const sectionRef = useRef(null);
 
@@ -116,19 +128,23 @@ export default function HomeComp4() {
     return () => observer.disconnect();
   }, []);
 
-  const handleMouseMove = useCallback((e) => {
+  const handleInteractionMove = useCallback((e) => {
     if (!sectionRef.current) return;
     
+    // Determine if it's a touch or mouse event and get coordinates
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
     const rect = sectionRef.current.getBoundingClientRect();
-    const relX = e.clientX - rect.left;
-    const relY = e.clientY - rect.top;
+    const relX = clientX - rect.left;
+    const relY = clientY - rect.top;
     setMaskPos({ x: relX, y: relY });
 
     const colors = ["#ffffff", "#ffd700", "#e0e0e0", "#b794f4"];
     const newParticles = Array.from({ length: 5 }).map(() => ({
       id: Math.random(),
-      x: e.clientX + (Math.random() * 30 - 15),
-      y: e.clientY + (Math.random() * 30 - 15),
+      x: clientX + (Math.random() * 30 - 15),
+      y: clientY + (Math.random() * 30 - 15),
       size: Math.random() * 4 + 2,
       color: colors[Math.floor(Math.random() * colors.length)],
       delay: Math.random() * 0.1
@@ -141,12 +157,21 @@ export default function HomeComp4() {
     <section 
       ref={sectionRef} 
       className="homecomp4-viewport"
-      onMouseMove={handleMouseMove}
-      style={{ backgroundImage: `url(${imgBack})` }} // Applied background image
+      onMouseEnter={() => setIsMouseInside(true)}
+      onMouseMove={handleInteractionMove}
+      onMouseLeave={() => setIsMouseInside(false)}
+      // Touch Equivalents for Mobile
+      onTouchStart={(e) => {
+        setIsMouseInside(true);
+        handleInteractionMove(e); // Trigger immediately on touch
+      }}
+      onTouchMove={handleInteractionMove}
+      onTouchEnd={() => setIsMouseInside(false)}
+      style={{ backgroundImage: `url(${imgBack})` }} 
     >
       {/* Spotlight revealed wheels - 4 Corners */}
       <div 
-        className="homecomp4-spotlight-layer"
+        className={`homecomp4-spotlight-layer ${isMouseInside ? 'is-active' : ''}`}
         style={{
           maskImage: `radial-gradient(circle 300px at ${maskPos.x}px ${maskPos.y}px, black 0%, transparent 85%)`,
           WebkitMaskImage: `radial-gradient(circle 300px at ${maskPos.x}px ${maskPos.y}px, black 0%, transparent 85%)`

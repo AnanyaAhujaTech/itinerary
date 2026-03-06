@@ -77,7 +77,17 @@ function TraditionalScene({ onEtherefy }) {
         )}
       </div>
       <div className="homecomp1-cta-wrap">
-        <button className="homecomp1-cta" type="button" onClick={onEtherefy}>Let's Etherefy!</button>
+        <button 
+          className="homecomp1-cta" 
+          type="button" 
+          onClick={onEtherefy}
+          onTouchEnd={(e) => {
+            e.preventDefault(); 
+            onEtherefy();
+          }}
+        >
+          Let's Etherefy!
+        </button>
       </div>
       <div className={`homecomp1-curtains${curtainOpen ? ' opening' : ''}`}>
         <div className="homecomp1-curtain-left"><img src={curtainImg} alt="" /></div>
@@ -114,7 +124,6 @@ export default function HomeComp1() {
   const rootRef = useRef(null);
   const glitchOverlayRef = useRef(null);
 
-  // Persistence Logic: Handles visit counting
   useEffect(() => {
     const storedCount = localStorage.getItem('taarangana_visits');
     const newCount = storedCount ? parseInt(storedCount, 10) + 1 : 1;
@@ -125,6 +134,10 @@ export default function HomeComp1() {
   const startTransition = () => {
     if (currentScene !== 'traditional') return;
 
+    // Detect if we are on mobile to reduce iterations
+    const isMobile = window.innerWidth <= 768;
+    const glitchIterations = isMobile ? 4 : 8;
+
     const tl = gsap.timeline({
       onStart: () => rootRef.current.classList.add('glitching')
     });
@@ -134,23 +147,27 @@ export default function HomeComp1() {
 
     tl.to(glitchOverlayRef.current, { opacity: 1, duration: 0.1 });
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < glitchIterations; i++) {
       const time = i * 0.05;
       tl.to(displacementMap, { attr: { scale: gsap.utils.random(80, 220) }, duration: 0.03 }, time);
       tl.to(offsets[0], { attr: { dx: gsap.utils.random(-50, 50) }, duration: 0.03 }, time);
       tl.to(offsets[2], { attr: { dx: gsap.utils.random(-50, 50) }, duration: 0.03 }, time);
     }
 
+    // Adjust timing slightly to match the reduced iterations on mobile
+    const transitionTime = isMobile ? 0.25 : 0.4;
+    const cleanupTime = isMobile ? 0.35 : 0.5;
+
     tl.add(() => {
       setCurrentScene('modern');
-    }, 0.4);
+    }, transitionTime);
 
-    tl.to(glitchOverlayRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0.5);
-    tl.to(displacementMap, { attr: { scale: 0 }, duration: 0.4, ease: "back.out(2)" }, 0.5);
-    tl.to(offsets[0], { attr: { dx: -5 }, duration: 0.4 }, 0.5);
-    tl.to(offsets[2], { attr: { dx: 5 }, duration: 0.4 }, 0.5);
+    tl.to(glitchOverlayRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" }, cleanupTime);
+    tl.to(displacementMap, { attr: { scale: 0 }, duration: 0.4, ease: "back.out(2)" }, cleanupTime);
+    tl.to(offsets[0], { attr: { dx: -5 }, duration: 0.4 }, cleanupTime);
+    tl.to(offsets[2], { attr: { dx: 5 }, duration: 0.4 }, cleanupTime);
 
-    tl.set(rootRef.current, { className: "homecomp1-root" }, 0.9);
+    tl.set(rootRef.current, { className: "homecomp1-root" }, cleanupTime + 0.4);
   };
 
   return (
@@ -158,7 +175,6 @@ export default function HomeComp1() {
       <ChromaGlitchFilter />
       <div className="chroma-glitch-overlay" ref={glitchOverlayRef} />
 
-      {/* Persistent Styled Counter */}
       <div className={`site-visit-counter ${currentScene}-counter`}>
         <span className="counter-label">Visits</span>
         <span className="counter-number">{visitCount.toLocaleString()}</span>

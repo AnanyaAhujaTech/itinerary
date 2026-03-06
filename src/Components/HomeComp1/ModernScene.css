@@ -335,17 +335,139 @@
 }
 
 /* --- Collective Mobile Logic --- */
+/* --- Collective Mobile Logic (3D Carousel Queue - Final Polish) --- */
 @media (max-width: 768px) {
   :root {
-    --group-scale: 0.7;
-    --group-gap: 2vw;         /* Tighter gap for mobile */
-    --singer-base-height: 45vh;
-    --stage-floor-height: 10%;
+    /* Lowered the carousel to ground them closer to the audience */
+    --stage-floor-height: 12%; 
+    /* Scaled down the entire carousel slightly */
+    --singer-base-height: 48vh; 
+    
+    /* Explicitly override desktop scales to make their base dimensions 100% equal */
+    --s1-scale: 1; 
+    --s2-scale: 1; 
+    --s3-scale: 1; 
+    --s4-scale: 1; 
+    --s5-scale: 1;
+    --s-nudge-y: 0; 
   }
   
+  .text-layer { padding-top: 10vh; }
+  .taarangana-heading { width: 85%; }
+  .etherea-heading { width: 80%; margin-top: 5px; }
+  .fest-subtitle { font-size: 0.75rem; margin-top: 5px; }
+
+  .logo-layer { top: 3%; justify-content: space-between; padding: 0 6vw; gap: 0; }
+  .taarangana-logo, .igdtuw-logo { height: 6vh; }
+
+  /* OVERLAPPING CLUSTER LOGIC */
   .singers-layer {
-    width: 95%;               /* Use more of the screen on mobile */
+    display: block; 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: var(--stage-floor-height);
+    width: 100vw; 
+    max-width: 500px;
+    height: var(--singer-base-height);
+    perspective: 1000px; 
   }
 
-  .logo-layer { top: 2%; gap: 35%; }
+  .singer-wrapper {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    width: auto;
+    transform-origin: bottom center;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: none !important; 
+  }
+
+  .singer-image { 
+    height: 100%; 
+    width: auto; 
+    object-fit: contain; 
+    position: relative;
+    z-index: 1; /* Ensures image stays behind the text */
+  }
+
+  /* --- THE CAROUSEL POSITIONS --- */
+
+  .pos-center { 
+    left: 50%; 
+    transform: translateX(-50%) scale(1) !important; 
+    z-index: 10; 
+    filter: brightness(1) drop-shadow(0 0 25px var(--hover-color));
+    opacity: 1;
+  }
+  
+  .pos-right-1 { 
+    left: 72%; 
+    transform: translateX(-50%) scale(0.8) !important; 
+    z-index: 5; 
+    filter: brightness(0.4) grayscale(0.5); 
+    opacity: 0.9;
+  }
+
+  .pos-left-1 { 
+    left: 28%; 
+    transform: translateX(-50%) scale(0.8) !important; 
+    z-index: 5; 
+    filter: brightness(0.4) grayscale(0.5); 
+    opacity: 0.9;
+  }
+
+  .pos-right-2 { 
+    left: 88%; 
+    transform: translateX(-50%) scale(0.65) !important; 
+    z-index: 1; 
+    filter: brightness(0.15) grayscale(0.9); 
+    opacity: 0.6;
+  }
+
+  .pos-left-2 { 
+    left: 12%; 
+    transform: translateX(-50%) scale(0.65) !important; 
+    z-index: 1; 
+    filter: brightness(0.15) grayscale(0.9); 
+    opacity: 0.6;
+  }
+
+  /* --- TEXT CENTERED IN FRONT --- */
+  .singer-info {
+    top: 50%; /* Drops the text to the vertical middle of the wrapper */
+    bottom: auto; /* Clears the old desktop 'bottom' rule */
+    left: 50%;
+    z-index: 20; /* Forces the text to hover in front of the singer */
+    width: max-content;
+    opacity: 0;
+    
+    /* Soft dark glow to ensure readability over the bright lasers */
+    background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, transparent 65%);
+    padding: 1rem 2rem;
+    
+    /* Start slightly lower for a smooth float-up effect */
+    transform: translate(-50%, -30%);
+    transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+  }
+  
+  .pos-center .singer-info {
+    opacity: 1;
+    /* Centers it perfectly in the middle of their chest/torso */
+    transform: translate(-50%, -50%);
+  }
+
+  .singer-info-name { 
+    font-size: 1.3rem; /* Slightly larger for center focus */
+    text-shadow: 0 0 15px var(--hover-color), 0 0 30px #000; 
+  }
+  
+  .singer-info-year { 
+    font-size: 1.1rem; 
+    text-shadow: 0 0 10px #000;
+  }
+
+  /* UI Layout fixes */
+  .audience-layer { height: 28%; bottom: 0; pointer-events: none; }
+  .homecomp2-scroll-explorer { bottom: 12vh; }
 }

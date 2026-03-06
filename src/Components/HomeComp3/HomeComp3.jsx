@@ -35,12 +35,22 @@ const PatronCard = ({ photo, plate, name, delay, isVisible }) => {
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
 
-  const handleMouseMove = (e) => {
+  const handleInteractionMove = (e) => {
     if (!cardRef.current) return;
+    
+    // Determine if it's a touch or mouse event
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
     const { left, top, width, height } = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - left - width / 2) / 20;
-    const y = -(e.clientY - top - height / 2) / 20;
+    const x = (clientX - left - width / 2) / 20;
+    const y = -(clientY - top - height / 2) / 20;
     setRotate({ x: y, y: x });
+  };
+
+  const handleInteractionEnd = () => {
+    setIsHovered(false);
+    setRotate({ x: 0, y: 0 });
   };
 
   return (
@@ -48,12 +58,13 @@ const PatronCard = ({ photo, plate, name, delay, isVisible }) => {
       ref={cardRef}
       className={`homecomp3-card-outer ${isVisible ? "is-visible" : ""}`}
       style={{ transitionDelay: `${delay}s` }}
-      onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setRotate({ x: 0, y: 0 });
-      }}
+      onMouseMove={handleInteractionMove}
+      onMouseLeave={handleInteractionEnd}
+      // Touch Equivalents for Mobile
+      onTouchStart={() => setIsHovered(true)}
+      onTouchMove={handleInteractionMove}
+      onTouchEnd={handleInteractionEnd}
     >
       <div
         className={`homecomp3-card-visual ${isHovered ? "is-hovered" : ""}`}
@@ -89,7 +100,9 @@ const PatronCard = ({ photo, plate, name, delay, isVisible }) => {
 
 export default function HomeComp3() {
   const [isVisible, setIsVisible] = useState(false);
-  const [maskPos, setMaskPos] = useState({ x: 0, y: 0 });
+  // Initialize far off-screen to prevent flash on load
+  const [maskPos, setMaskPos] = useState({ x: -1000, y: -9999 });
+  const [isMouseInside, setIsMouseInside] = useState(false);
   const [glitter, setGlitter] = useState([]);
   const sectionRef = useRef(null);
 
@@ -104,20 +117,24 @@ export default function HomeComp3() {
     return () => observer.disconnect();
   }, []);
 
-  const handleMouseMove = useCallback((e) => {
+  const handleInteractionMove = useCallback((e) => {
     if (!sectionRef.current) return;
     
+    // Determine if it's a touch or mouse event
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
     const rect = sectionRef.current.getBoundingClientRect();
-    const relX = e.clientX - rect.left;
-    const relY = e.clientY - rect.top;
+    const relX = clientX - rect.left;
+    const relY = clientY - rect.top;
     setMaskPos({ x: relX, y: relY });
 
     // Voluminous Glitter Generator
     const colors = ["#ffffff", "#ffd700", "#e0e0e0", "#b794f4"];
     const newParticles = Array.from({ length: 6 }).map(() => ({
       id: Math.random(),
-      x: e.clientX + (Math.random() * 30 - 15),
-      y: e.clientY + (Math.random() * 30 - 15),
+      x: clientX + (Math.random() * 30 - 15),
+      y: clientY + (Math.random() * 30 - 15),
       size: Math.random() * 5 + 2,
       color: colors[Math.floor(Math.random() * colors.length)],
       delay: Math.random() * 0.1
@@ -130,12 +147,23 @@ export default function HomeComp3() {
     <section 
       ref={sectionRef} 
       className="homecomp3-viewport"
-      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsMouseInside(true)}
+      onMouseMove={handleInteractionMove}
+      onMouseLeave={() => setIsMouseInside(false)}
+      // Touch Equivalents for Mobile
+      onTouchStart={(e) => {
+        setIsMouseInside(true);
+        handleInteractionMove(e);
+      }}
+      onTouchMove={handleInteractionMove}
+      onTouchEnd={() => setIsMouseInside(false)}
     >
       {/* Spotlight revealed wheels */}
       <div 
         className="homecomp3-spotlight-layer"
         style={{
+          opacity: isMouseInside ? 1 : 0,
+          transition: "opacity 0.3s ease",
           maskImage: `radial-gradient(circle 300px at ${maskPos.x}px ${maskPos.y}px, black 0%, transparent 85%)`,
           WebkitMaskImage: `radial-gradient(circle 300px at ${maskPos.x}px ${maskPos.y}px, black 0%, transparent 85%)`
         }}

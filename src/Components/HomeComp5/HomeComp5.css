@@ -4,7 +4,7 @@
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background-color: #000 !important; /* Forces black even if the page is white */
+  background-color: #000 !important;
 }
 
 .hc5-root::before {
@@ -40,23 +40,16 @@
 /* Background Image Layer (wheel5.png) */
 .hc5-background-img {
   position: absolute;
-
-  bottom: -560px;   /* pushes wheel below cards */
+  bottom: -560px;
   left: 50%;
-
   transform: translateX(-50%);
-
   width: 850px;
   height: 850px;
-
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-
   z-index: 2;
-
   opacity: 0.88;
-
   animation: hc5-wheel-rotate 70s linear infinite;
 }
 
@@ -65,20 +58,7 @@
   to   { transform: translateX(-50%) rotate(360deg); }
 }
 
-.hc5-background-img::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background: radial-gradient(
-    circle,
-    rgba(255,255,255,0.15),
-    transparent 70%
-  );
-
-  filter: blur(40px);
-  opacity: 0.5;
-}
+/* REMOVED: .hc5-background-img::after (which caused the blur over the wheel) */
 
 /* Reactive Glow Layer */
 .hc5-dynamic-glow {
@@ -100,14 +80,11 @@
   position: relative;
   z-index: 10;
   height: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   justify-content: flex-start;
-
-  padding-top: 80px;   /* pushes content slightly up */
+  padding-top: 80px;
 }
 
 .hc5-header {
@@ -135,13 +112,30 @@
   width: 100%;
   display: flex;
   align-items: center;
+  position: relative; /* Anchor for the dedicated blur layer */
+}
+
+/* Dedicated blur layer strictly behind the carousel */
+.hc5-carousel-blur {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 380px;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, transparent 60%);
+  filter: blur(45px);
+  z-index: 1; /* Sits directly behind the track layer */
+  pointer-events: none;
 }
 
 .hc5-carousel-track {
   display: flex;
   gap: 40px; 
   padding: 30px 0;
-  will-change: transform; /* Boosts performance */
+  will-change: transform;
+  z-index: 2; /* Ensures cards sit over the dedicated blur */
+  position: relative;
 }
 
 .hc5-card {
@@ -189,9 +183,54 @@
 }
 
 /* Mobile Scaling */
+/* Mobile Scaling & Native Swipe Handling */
 @media (max-width: 768px) {
+  /* Push background image down, reduce size, keep opacity */
+  .hc5-background-img {
+    bottom: -300px;
+    width: 450px;
+    height: 450px;
+    opacity: 0.88; /* Keeping opacity identical */
+  }
+
+  /* Override the track to use native horizontal scrolling */
+  .hc5-carousel-track.is-mobile {
+    width: 100vw;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    gap: 20px; /* Reduced gap so the next card obviously peeks */
+    padding: 30px 20px; /* Add padding to the sides so the first card isn't glued to the edge */
+    scroll-behavior: auto; /* Keeps the JS interval smooth */
+    
+    /* Hide the scrollbar for a clean look */
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+  }
+  
+  .hc5-carousel-track.is-mobile::-webkit-scrollbar { 
+    display: none; 
+  }
+
+  /* Only enable strict snapping AFTER the user touches the screen */
+  .hc5-carousel-track.is-mobile.snap-enabled {
+    scroll-snap-type: x mandatory;
+  }
+
+  /* Card setup for native mobile scrolling */
   .hc5-card {
     flex: 0 0 240px;
     height: 340px;
+    scroll-snap-align: center; /* Snaps the card perfectly to the middle */
+    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out;
+  }
+
+  /* Hover doesn't exist on mobile; instead, the IntersectionObserver adds this class */
+  .hc5-card.active-mobile {
+    transform: scale(1.08) translateY(-10px);
+    z-index: 50;
+  }
+
+  .hc5-card.active-mobile .hc5-card-img {
+    transform: scale(1.1);
   }
 }
