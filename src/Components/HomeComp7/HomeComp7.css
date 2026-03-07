@@ -141,7 +141,8 @@
   /* --- INTERNAL SCROLLING FIX --- */
   .homecomp7-footer {
     padding: 80px 5% 40px 5%; /* Adjusted top padding to account for header space */
-    height: 100vh; /* Lock height to screen size */
+    height: 100vh;
+    height: 100dvh;
     overflow-y: auto; /* Enable internal scroll */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
