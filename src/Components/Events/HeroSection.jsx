@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import "./HeroSection.css";
 import heading from "../../assets/EventsHeading.png";
 
@@ -14,19 +15,50 @@ import vid9 from "../../assets/Untitled design (13).mp4";
 const videos = [vid1, vid2, vid3, vid4, vid5, vid6, vid7, vid8, vid9];
 
 export default function HeroSection() {
-  // Re-calculated positions to form a mathematically perfect ellipse that 
-  // scales securely within viewport bounds using vmin instead of raw vw/vh.
-  const honeycombPositions = [
-    { id: 1, type: "video", vid: 0, left: 0, top: -26 },         // Top Center
-    { id: 2, type: "video", vid: 1, left: 20, top: -20 },        // Top Right
-    { id: 3, type: "video", vid: 2, left: 31, top: -5 },         // Right Top
-    { id: 4, type: "video", vid: 3, left: 27, top: 13 },         // Right Bottom
-    { id: 5, type: "video", vid: 4, left: 11, top: 24 },         // Bottom Right
-    { id: 6, type: "video", vid: 5, left: -11, top: 24 },        // Bottom Left
-    { id: 7, type: "video", vid: 6, left: -27, top: 13 },        // Left Bottom
-    { id: 8, type: "video", vid: 7, left: -31, top: -5 },        // Left Top
-    { id: 9, type: "video", vid: 8, left: -20, top: -20 },       // Top Left
-  ];
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Switch to honeycomb at 768px and below
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    handleResize(); 
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const START_ANGLE = -Math.PI / 2;
+
+  const honeycombPositions = videos.map((video, index) => {
+    let x, y;
+
+    if (isMobile) {
+      // MOBILE: 1-2-3-2-1 Diamond Grid Base Coordinates
+      const mobileGrid = [
+        { x: 0, y: -2 },                            // Row 1
+        { x: -1, y: -1 }, { x: 1, y: -1 },          // Row 2
+        { x: -2, y: 0 }, { x: 0, y: 0 }, { x: 2, y: 0 }, // Row 3
+        { x: -1, y: 1 }, { x: 1, y: 1 },            // Row 4
+        { x: 0, y: 2 }                              // Row 5
+      ];
+      x = mobileGrid[index].x;
+      y = mobileGrid[index].y;
+    } else {
+      // DESKTOP & TABLET: Normalized Elliptical Coordinates (-1 to 1)
+      const angle = START_ANGLE + (index / videos.length) * (2 * Math.PI);
+      x = Math.cos(angle);
+      y = Math.sin(angle);
+    }
+    
+    return {
+      id: index + 1,
+      type: "video",
+      videoSrc: video,
+      x: x,
+      y: y,
+    };
+  });
 
   return (
     <section className="hero">
@@ -41,15 +73,15 @@ export default function HeroSection() {
               key={hex.id}
               className={`hexagon-wrapper ${hex.type}`}
               style={{
-                '--hex-left': hex.left,
-                '--hex-top': hex.top,
+                "--hex-x": hex.x,
+                "--hex-y": hex.y,
               }}
             >
               <div className="hexagon-border"></div>
               <div className="hexagon-inner">
-                {hex.type === 'video' ? (
+                {hex.type === "video" ? (
                   <video
-                    src={videos[hex.vid]}
+                    src={hex.videoSrc}
                     autoPlay
                     loop
                     muted

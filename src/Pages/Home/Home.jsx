@@ -18,18 +18,13 @@ export default function HomePage() {
   const homeComp2Ref = useRef(null);
 
   useEffect(() => {
-    // Observer for Navbar: 
-    // We set threshold to 0.05 so the Navbar only appears 
-    // once HomeComp1 is almost entirely scrolled away.
     const navObserver = new IntersectionObserver(
       ([entry]) => {
-        // If HomeComp1 is intersecting (visible), showNavbar should be false.
         setShowNavbar(!entry.isIntersecting);
       },
       { threshold: 0.05 } 
     );
 
-    // Observer for Vortex (HomeComp2)
     const vortexObserver = new IntersectionObserver(
       ([entry]) => setShowVortex(entry.isIntersecting),
       { threshold: 0.3 } 
@@ -46,9 +41,6 @@ export default function HomePage() {
 
   return (
     <div className="home-page-wrapper">
-      {/* Ensure your Navbar component handles 'isVisible={false}' 
-          by returning null or setting 'display: none'. 
-      */}
       <Navbar isVisible={showNavbar} />
 
       {/* Vortex Background */}
@@ -57,7 +49,7 @@ export default function HomePage() {
         top: 0, 
         left: 0, 
         width: '100vw', 
-        height: '100vh', 
+        height: '100dvh', /* Switched to dvh here too */
         zIndex: 0, 
         pointerEvents: 'none',
         opacity: showVortex ? 1 : 0, 
@@ -72,21 +64,20 @@ export default function HomePage() {
         )}
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <section className="snap-section" ref={homeComp1Ref}>
-          <HomeComp1 />
-        </section>
+      {/* REMOVED the intermediate div. Sections are now direct children of the wrapper */}
+      <section className="snap-section" ref={homeComp1Ref}>
+        <HomeComp1 />
+      </section>
 
-        <section className="snap-section" ref={homeComp2Ref}>
-          <HomeComp2 />
-        </section>
+      <section className="snap-section" ref={homeComp2Ref}>
+        <HomeComp2 />
+      </section>
 
-        <section className="snap-section"><HomeComp3 /></section>
-        <section className="snap-section"><HomeComp4 /></section>
-        <section className="snap-section"><HomeComp5 /></section>
-        <section className="snap-section"><HomeComp6 /></section>
-        <section className="snap-section"><HomeComp7 /></section>
-      </div>
+      <section className="snap-section"><HomeComp3 /></section>
+      <section className="snap-section"><HomeComp4 /></section>
+      <section className="snap-section"><HomeComp5 /></section>
+      <section className="snap-section"><HomeComp6 /></section>
+      <section className="snap-section"><HomeComp7 /></section>
     </div>
   );
 }

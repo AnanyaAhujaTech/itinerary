@@ -43,14 +43,17 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
   const handleInteractionMove = (e) => {
     if (!cardRef.current) return;
     
-    // Determine if it's a touch or mouse event and get coordinates
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
     const { left, top, width, height } = cardRef.current.getBoundingClientRect();
     const x = (clientX - left - width / 2) / 25;
     const y = -(clientY - top - height / 2) / 25;
-    setRotate({ x: y, y: x });
+    
+    // Disable heavy 3D rotation when in carousel mode to prevent swipe jitter
+    if (window.innerWidth > 1400) {
+      setRotate({ x: y, y: x });
+    }
   };
 
   const handleInteractionEnd = () => {
@@ -66,10 +69,10 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseMove={handleInteractionMove}
       onMouseLeave={handleInteractionEnd}
-      // Touch Equivalents for Mobile
       onTouchStart={() => setIsHovered(true)}
       onTouchMove={handleInteractionMove}
       onTouchEnd={handleInteractionEnd}
+      onTouchCancel={handleInteractionEnd}
     >
       <div
         className={`homecomp4-card-visual ${isHovered ? "is-hovered" : ""}`}
@@ -106,7 +109,7 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
 export default function HomeComp4() {
   const [isVisible, setIsVisible] = useState(false);
   const [isMouseInside, setIsMouseInside] = useState(false);
-  const [maskPos, setMaskPos] = useState({ x: -1000, y: -9999 }); // Updated to be far off-screen
+  const [maskPos, setMaskPos] = useState({ x: -1000, y: -9999 }); 
   const [glitter, setGlitter] = useState([]);
   const sectionRef = useRef(null);
 
@@ -131,7 +134,6 @@ export default function HomeComp4() {
   const handleInteractionMove = useCallback((e) => {
     if (!sectionRef.current) return;
     
-    // Determine if it's a touch or mouse event and get coordinates
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -140,17 +142,19 @@ export default function HomeComp4() {
     const relY = clientY - rect.top;
     setMaskPos({ x: relX, y: relY });
 
-    const colors = ["#ffffff", "#ffd700", "#e0e0e0", "#b794f4"];
-    const newParticles = Array.from({ length: 5 }).map(() => ({
-      id: Math.random(),
-      x: clientX + (Math.random() * 30 - 15),
-      y: clientY + (Math.random() * 30 - 15),
-      size: Math.random() * 4 + 2,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      delay: Math.random() * 0.1
-    }));
+    if (window.innerWidth > 1400 || Math.random() > 0.5) {
+      const colors = ["#ffffff", "#ffd700", "#e0e0e0", "#b794f4"];
+      const newParticles = Array.from({ length: window.innerWidth > 1400 ? 5 : 2 }).map(() => ({
+        id: Math.random(),
+        x: clientX + (Math.random() * 30 - 15),
+        y: clientY + (Math.random() * 30 - 15),
+        size: Math.random() * 4 + 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        delay: Math.random() * 0.1
+      }));
 
-    setGlitter((prev) => [...prev.slice(-60), ...newParticles]);
+      setGlitter((prev) => [...prev.slice(-60), ...newParticles]);
+    }
   }, []);
 
   return (
@@ -160,16 +164,14 @@ export default function HomeComp4() {
       onMouseEnter={() => setIsMouseInside(true)}
       onMouseMove={handleInteractionMove}
       onMouseLeave={() => setIsMouseInside(false)}
-      // Touch Equivalents for Mobile
       onTouchStart={(e) => {
         setIsMouseInside(true);
-        handleInteractionMove(e); // Trigger immediately on touch
+        handleInteractionMove(e);
       }}
       onTouchMove={handleInteractionMove}
       onTouchEnd={() => setIsMouseInside(false)}
       style={{ backgroundImage: `url(${imgBack})` }} 
     >
-      {/* Spotlight revealed wheels - 4 Corners */}
       <div 
         className={`homecomp4-spotlight-layer ${isMouseInside ? 'is-active' : ''}`}
         style={{

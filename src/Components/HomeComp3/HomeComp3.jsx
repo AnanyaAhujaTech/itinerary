@@ -38,14 +38,16 @@ const PatronCard = ({ photo, plate, name, delay, isVisible }) => {
   const handleInteractionMove = (e) => {
     if (!cardRef.current) return;
     
-    // Determine if it's a touch or mouse event
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
     const { left, top, width, height } = cardRef.current.getBoundingClientRect();
     const x = (clientX - left - width / 2) / 20;
     const y = -(clientY - top - height / 2) / 20;
-    setRotate({ x: y, y: x });
+    
+    if (window.innerWidth > 800) {
+      setRotate({ x: y, y: x });
+    }
   };
 
   const handleInteractionEnd = () => {
@@ -61,10 +63,10 @@ const PatronCard = ({ photo, plate, name, delay, isVisible }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseMove={handleInteractionMove}
       onMouseLeave={handleInteractionEnd}
-      // Touch Equivalents for Mobile
       onTouchStart={() => setIsHovered(true)}
       onTouchMove={handleInteractionMove}
       onTouchEnd={handleInteractionEnd}
+      onTouchCancel={handleInteractionEnd}
     >
       <div
         className={`homecomp3-card-visual ${isHovered ? "is-hovered" : ""}`}
@@ -100,7 +102,6 @@ const PatronCard = ({ photo, plate, name, delay, isVisible }) => {
 
 export default function HomeComp3() {
   const [isVisible, setIsVisible] = useState(false);
-  // Initialize far off-screen to prevent flash on load
   const [maskPos, setMaskPos] = useState({ x: -1000, y: -9999 });
   const [isMouseInside, setIsMouseInside] = useState(false);
   const [glitter, setGlitter] = useState([]);
@@ -120,7 +121,6 @@ export default function HomeComp3() {
   const handleInteractionMove = useCallback((e) => {
     if (!sectionRef.current) return;
     
-    // Determine if it's a touch or mouse event
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     
@@ -129,18 +129,19 @@ export default function HomeComp3() {
     const relY = clientY - rect.top;
     setMaskPos({ x: relX, y: relY });
 
-    // Voluminous Glitter Generator
-    const colors = ["#ffffff", "#ffd700", "#e0e0e0", "#b794f4"];
-    const newParticles = Array.from({ length: 6 }).map(() => ({
-      id: Math.random(),
-      x: clientX + (Math.random() * 30 - 15),
-      y: clientY + (Math.random() * 30 - 15),
-      size: Math.random() * 5 + 2,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      delay: Math.random() * 0.1
-    }));
+    if (window.innerWidth > 800 || Math.random() > 0.5) {
+      const colors = ["#ffffff", "#ffd700", "#e0e0e0", "#b794f4"];
+      const newParticles = Array.from({ length: window.innerWidth > 800 ? 6 : 2 }).map(() => ({
+        id: Math.random(),
+        x: clientX + (Math.random() * 30 - 15),
+        y: clientY + (Math.random() * 30 - 15),
+        size: Math.random() * 5 + 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        delay: Math.random() * 0.1
+      }));
 
-    setGlitter((prev) => [...prev.slice(-80), ...newParticles]);
+      setGlitter((prev) => [...prev.slice(-60), ...newParticles]);
+    }
   }, []);
 
   return (
@@ -150,7 +151,6 @@ export default function HomeComp3() {
       onMouseEnter={() => setIsMouseInside(true)}
       onMouseMove={handleInteractionMove}
       onMouseLeave={() => setIsMouseInside(false)}
-      // Touch Equivalents for Mobile
       onTouchStart={(e) => {
         setIsMouseInside(true);
         handleInteractionMove(e);
@@ -158,7 +158,6 @@ export default function HomeComp3() {
       onTouchMove={handleInteractionMove}
       onTouchEnd={() => setIsMouseInside(false)}
     >
-      {/* Spotlight revealed wheels */}
       <div 
         className="homecomp3-spotlight-layer"
         style={{
