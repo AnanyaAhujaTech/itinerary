@@ -111,7 +111,7 @@ export default function HomeComp7() {
       <div className="footer-bottom-legal">
         <p>© 2026 TAARANGANA — IGDTUW. All rights reserved.</p>
         <p className="credits">
-          Curated and Executed by <a href="https://www.linkedin.com/in/ananya-ahuja01/">Ananya Ahuja</a> and <a href="https://www.linkedin.com/in/shreya-pandey-46346327b/">Shreya Pandey</a> under the guidance of Prof. Manoj Soni.
+          Curated and Crafted by <a href="https://www.linkedin.com/in/ananya-ahuja01/">Ananya Ahuja</a> and <a href="https://www.linkedin.com/in/shreya-pandey-46346327b/">Shreya Pandey</a> under the guidance of Prof. Manoj Soni.
         </p>
       </div>
     </footer>
