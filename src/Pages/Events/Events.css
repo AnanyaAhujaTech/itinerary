@@ -1,10 +1,10 @@
 .events-wrapper {
   position: relative;
   width: 100%;
-  height: 100vh; /* Dedicated scroll container */
+  height: 100vh;
   overflow-x: hidden;
-  overflow-y: scroll; /* Required for snap */
-  scroll-snap-type: y mandatory; /* Enables snap scroll */
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
 }
 
@@ -32,6 +32,14 @@
   pointer-events: none;
 }
 
+/* NEW: Dedicated layer for the Splash Cursor */
+.splash-cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2; /* Sits directly above the galaxy (1) but below content */
+  pointer-events: none; /* Crucial: allows clicks to pass through to the page */
+}
+
 .navbar-fixed {
   position: fixed;
   top: 0;
@@ -43,6 +51,6 @@
 
 .content-layer {
   position: relative;
-  z-index: 2;
+  z-index: 10; /* Elevated z-index to sit comfortably over the cursor */
   color: white;
 }

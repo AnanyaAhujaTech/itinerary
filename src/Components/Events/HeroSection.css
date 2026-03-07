@@ -15,7 +15,7 @@
   /* 2. Heading Sizing */
   --heading-width: clamp(250px, 35vw, 550px);
   --heading-height: clamp(150px, 30vh, 350px);
-  --heading-shadow: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
+  --heading-shadow: drop-shadow(0 0 15px #e6daada4);
 
   /* 3. Hexagon Base Sizing (Responsive across all screens) */
   --hex-width: clamp(100px, 15vw, 220px);
@@ -23,7 +23,7 @@
   
   /* 4. Layout Spread / Gap Control (Dynamically pulls elements closer on smaller screens) */
   --spread-x: clamp(200px, 33vw, 450px); 
-  --spread-y: clamp(120px, 20vw, 280px);
+  --spread-y: clamp(120px, 18vw, 280px);
 
   /* 5. Hexagon Borders & Shapes */
   --hex-border-thickness: clamp(2px, 0.4vmin, 4px);
@@ -32,15 +32,15 @@
   /* 6. Animations & Shadows */
   --hex-transition-speed: 0.4s;
   --hex-hover-scale: scale(1.15);
-  --hex-shadow-normal: drop-shadow(0 0 8px rgba(218, 165, 32, 0.7));
-  --hex-shadow-hover: drop-shadow(0 0 20px rgba(255, 215, 0, 1));
-  --hex-border-gradient: linear-gradient(145deg, #FFF8DC, #FFD700, #DAA520, #B8860B);
+  --hex-shadow-normal: drop-shadow(0 0 8px #e6daad6e);
+  --hex-shadow-hover: drop-shadow(0 0 20px #e6daad);
+  --hex-border-gradient: linear-gradient(145deg, #e6daad, #c8b675, #ddbd4b, #514b37);
   --hex-inner-bg: #1a0b2e;
 
   /* 7. Background & Ornaments */
   --plain-bg-gradient: radial-gradient(circle at center, #3c1053, #150529);
   --dot-size: 4px;
-  --dot-color: #FFD700;
+  --dot-color: #e6daad;
   --dot-shadow: 0 0 5px var(--dot-color);
   --dot-offset: 15%; 
 

@@ -3,18 +3,23 @@
    ========================================= */
 .homecomp3-viewport {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh; 
   display: flex;
   flex-direction: column;
-  /* Removed justify-content: center here to prevent top-clipping on short screens */
   background: url("../../assets/back.png") no-repeat center center;
   background-size: cover;
   position: relative;
   z-index: 10;
-  /* Hide horizontal overflow from wheels, but allow vertical scroll if screen is too short */
-  overflow-x: hidden; 
-  overflow-y: auto;
-  padding: 60px 0; 
+  overflow: hidden; 
+  
+  /* UPDATED PADDING: 
+     Top padding is increased significantly to always clear the fixed navbar. 
+     Bottom padding remains flexible. */
+  padding-top: clamp(100px, 12vh, 140px); 
+  padding-bottom: clamp(20px, 4vh, 80px);
+  padding-left: 0;
+  padding-right: 0;
+  
   box-sizing: border-box;
 }
 
@@ -22,10 +27,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; 
   width: 100%;
+  height: 100%;
   max-width: 1600px;
   z-index: 20;
-  /* This margin: auto creates a "safe" center that won't clip the top if it overflows */
   margin: auto; 
 }
 
@@ -61,7 +67,7 @@
    HEADER & GRID
    ========================================= */
 .homecomp3-header {
-  margin-bottom: clamp(20px, 4vw, 40px);
+  margin-bottom: clamp(15px, 3vh, 40px); 
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.8s ease-out;
@@ -86,8 +92,8 @@
   gap: clamp(20px, 3vw, 40px); 
   perspective: 2000px;
   width: 100%;
-  /* Just enough padding to let the 60px shadow breathe, without blowing up the layout */
-  padding: 50px 20px; 
+  padding: clamp(20px, 4vh, 50px) 20px; 
+  box-sizing: border-box;
 }
 
 /* =========================================
@@ -95,6 +101,7 @@
    ========================================= */
 .homecomp3-card-outer {
   width: min(100%, 340px);
+  max-height: 70vh; 
   aspect-ratio: 33 / 53;
   opacity: 0;
   transform: scale(0.9) translateY(30px);
@@ -226,14 +233,9 @@
 }
 
 /* =========================================
-   RESPONSIVE (INCREASED BREAKPOINT)
+   RESPONSIVE (MOBILE ONLY)
    ========================================= */
-/* Triggering at 1024px to protect mid-sized windows (tablets or open devtools) */
-@media (max-width: 1024px) {
-  .homecomp3-viewport {
-    padding: 80px 0; 
-  }
-
+@media (max-width: 768px) {
   .homecomp3-header {
     text-align: center;
   }
@@ -243,12 +245,11 @@
     gap: 20px;
     width: 100vw;
     overflow-x: auto;
-    overflow-y: visible;
+    overflow-y: hidden; 
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     
-    /* 50px top/bottom gives shadow room, calc centers the cards dynamically */
-    padding: 50px calc(50vw - (min(80vw, 320px) / 2)); 
+    padding: clamp(20px, 4vh, 50px) calc(50vw - (min(80vw, 320px) / 2)); 
     perspective: none; 
   }
 
@@ -262,12 +263,13 @@
 
   .homecomp3-card-outer {
     width: min(80vw, 320px); 
+    max-height: 65vh; 
     scroll-snap-align: center; 
     scroll-snap-stop: always;  
   }
 
   .homecomp3-card-outer:last-child {
-    margin-right: 50px; /* Protects the right shadow on the final card */
+    margin-right: 50px; 
   }
 
   .spotlight-wheel {

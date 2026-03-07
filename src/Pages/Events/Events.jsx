@@ -3,6 +3,7 @@ import HeroSection from "../../components/Events/HeroSection";
 import RasaSection from "../../components/Events/RasaSection";
 import Galaxy from "../../components/Events/Galaxy";
 import bg from "../../assets/Background_Events.jpg";
+import SplashCursor from "../../components/SplashCursor/SplashCursor"; // Adjust path if needed
 import "./Events.css";
 import Navbar from '../../Components/Navbar/Navbar';
 
@@ -43,6 +44,11 @@ export default function Events() {
           twinkleIntensity={0.3} rotationSpeed={0.1} starSpeed={0.5}
           speed={1} transparent={true}
         />
+      </div>
+
+      {/* NEW: Splash Cursor Layer */}
+      <div className="splash-cursor-layer">
+        <SplashCursor />
       </div>
 
       <div className="navbar-fixed">

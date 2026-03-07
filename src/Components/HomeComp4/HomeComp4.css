@@ -3,7 +3,7 @@
    ========================================= */
 .homecomp4-viewport {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh; 
   display: flex;
   flex-direction: column;
   background-repeat: no-repeat;
@@ -11,9 +11,14 @@
   background-size: cover;
   position: relative;
   z-index: 10;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 60px 0;
+  overflow: hidden; 
+  
+  /* Buffer to permanently clear the fixed navbar */
+  padding-top: clamp(100px, 12vh, 140px); 
+  padding-bottom: clamp(20px, 4vh, 80px);
+  padding-left: 0;
+  padding-right: 0;
+  
   box-sizing: border-box;
 }
 
@@ -21,10 +26,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; 
   width: 100%;
+  height: 100%;
   max-width: 1600px; 
   z-index: 20;
-  margin: auto; /* Prevents top clipping */
+  margin: auto; 
 }
 
 /* =========================================
@@ -65,7 +72,7 @@
    HEADER & GRID
    ========================================= */
 .homecomp4-header {
-  margin-bottom: clamp(20px, 4vw, 40px);
+  margin-bottom: clamp(15px, 3vh, 40px);
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.8s ease-out;
@@ -77,27 +84,29 @@
 }
 
 .homecomp4-title-img {
-  width: clamp(300px, 45vw, 480px);
+  width: clamp(200px, 35vw, 400px);
   height: auto;
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 }
 
 .homecomp4-grid {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap; 
   justify-content: center;
   align-items: center;
-  gap: clamp(15px, 2vw, 25px); 
+  gap: clamp(10px, 2vw, 25px); 
   perspective: 2000px;
   width: 100%;
-  padding: 50px 20px; /* Space for box shadows */
+  padding: clamp(20px, 3vh, 50px) 20px; 
+  box-sizing: border-box;
 }
 
 /* =========================================
    CARD STYLES (FLUID)
    ========================================= */
 .homecomp4-card-outer {
-  width: min(100%, 320px);
+  width: min(100%, 320px); 
+  max-height: 70vh; 
   aspect-ratio: 32 / 52;
   opacity: 0;
   transform: translateY(40px);
@@ -116,10 +125,10 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: clamp(16px, 3vw, 28px);
+  border-radius: clamp(12px, 2vw, 28px);
   background: #0f172a;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); 
   transition: transform 0.15s ease-out, box-shadow 0.4s ease, border 0.4s ease;
   overflow: hidden;
   transform-style: preserve-3d;
@@ -219,29 +228,25 @@
 }
 
 /* =========================================
-   RESPONSIVE (EXACT BREAKPOINT)
+   RESPONSIVE (HORIZONTAL SCROLL < 1400px)
    ========================================= */
 
-/* Triggers exactly when 4 cards (320px * 4 = 1280) + gaps (25px * 3 = 75) + padding run out of space */
+/* Triggering at 1400px because 4 cards require much more horizontal space */
 @media (max-width: 1400px) {
-  .homecomp4-viewport {
-    padding: 80px 0; 
-  }
-
   .homecomp4-header {
     text-align: center;
   }
 
   .homecomp4-grid { 
+    flex-wrap: nowrap; /* Forces a single horizontal row for snap scrolling */
     justify-content: flex-start;
     width: 100vw;
     overflow-x: auto;
-    overflow-y: visible;
+    overflow-y: hidden; 
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     
-    /* Perfect dynamic centering for horizontal scroll */
-    padding: 50px calc(50vw - (min(80vw, 320px) / 2)); 
+    padding: clamp(20px, 4vh, 50px) calc(50vw - (min(80vw, 320px) / 2)); 
     perspective: none; 
   }
 
@@ -253,13 +258,13 @@
     scrollbar-width: none;
   }
 
-  .homecomp4-card-outer { 
+  .homecomp4-card-outer {
     width: min(80vw, 320px); 
+    max-height: 65vh; 
     scroll-snap-align: center; 
     scroll-snap-stop: always;  
   }
 
-  /* Protects the massive box-shadow on the final card from being clipped by the scroll container */
   .homecomp4-card-outer:last-child {
     margin-right: 50px; 
   }
