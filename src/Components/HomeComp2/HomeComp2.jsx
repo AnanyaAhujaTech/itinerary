@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import './HomeComp2.css';
 
-import wheelImg from '../../assets/wheel2.png';
-import upImg from '../../assets/up.png';
-import downImg from '../../assets/down.png';
+import wheelImg from '../../assets/wheel2.webp';
+import upImg from '../../assets/up.webp';
+import downImg from '../../assets/down.webp';
 
 const HomeComp2 = () => {
   const containerRef = useRef(null);

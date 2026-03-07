@@ -2,16 +2,16 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./HomeComp3.css";
 
 // Assets
-import imgEmbroidery from "../../assets/embroidery2.png";
-import imgPatronsHeading from "../../assets/patrons.png";
-import imgFrame from "../../assets/frame2.png";
-import imgWheel from "../../assets/wheel3.png";
+import imgEmbroidery from "../../assets/embroidery2.webp";
+import imgPatronsHeading from "../../assets/patrons.webp";
+import imgFrame from "../../assets/frame2.webp";
+import imgWheel from "../../assets/wheel3.webp";
 
 // Member Assets
-import imgVcPhoto from "../../assets/vc.jpg";
-import imgVcPlate from "../../assets/vc.png";
-import imgRegistrarPhoto from "../../assets/registrar.jpg";
-import imgRegistrarPlate from "../../assets/registrar.png";
+import imgVcPhoto from "../../assets/vc.webp";
+import imgVcPlate from "../../assets/vcp.webp";
+import imgRegistrarPhoto from "../../assets/registrar.webp";
+import imgRegistrarPlate from "../../assets/registrarp.webp";
 
 const GlitterParticle = ({ x, y, size, color, delay }) => {
   return (

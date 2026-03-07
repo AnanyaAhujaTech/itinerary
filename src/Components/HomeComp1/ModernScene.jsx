@@ -5,26 +5,26 @@ import LaserBeam from './LaserBeam';
 import LogoLoop from './LogoLoop';
 
 // Assets
-import stageModernBg from './assets/modern/stage_modern.png';
-import audienceLeft from './assets/modern/audience_left.png';
-import audienceRight from './assets/modern/audience_right.png';
-import taaranganaHeading from './assets/modern/taarangana_heading.png';
-import ethereaHeading from './assets/modern/etherea_heading.png';
-import taaranganaLogo from './assets/modern/taarangana_logo.png';
-import igdtuwLogo from './assets/modern/igdtuw_logo.png';
-import singer1 from './assets/modern/singer_1.png';
-import singer2 from './assets/modern/singer_2.png';
-import singer3 from './assets/modern/singer_3.png';
-import singer4 from './assets/modern/singer_4.png';
-import singer5 from './assets/modern/singer_5.png';
+import stageModernBg from './assets/modern/stage_modern.webp';
+import audienceLeft from './assets/modern/audience_left.webp';
+import audienceRight from './assets/modern/audience_right.webp';
+import taaranganaHeading from './assets/modern/taarangana_heading.webp';
+import ethereaHeading from './assets/modern/etherea_heading.webp';
+import taaranganaLogo from './assets/modern/taarangana_logo.webp';
+import igdtuwLogo from './assets/modern/igdtuw_logo.webp';
+import singer1 from './assets/modern/singer_1.webp';
+import singer2 from './assets/modern/singer_2.webp';
+import singer3 from './assets/modern/singer_3.webp';
+import singer4 from './assets/modern/singer_4.webp';
+import singer5 from './assets/modern/singer_5.webp';
 
-import logo1 from './assets/logo1.png';
-import logo2 from './assets/logo2.png';
-import logo3 from './assets/logo3.png';
-import logo4 from './assets/logo4.png';
-import logo5 from './assets/logo5.png';
-import logo6 from './assets/logo6.png';
-import logo7 from './assets/logo7.png';
+import logo1 from './assets/logo1.webp';
+import logo2 from './assets/logo2.webp';
+import logo3 from './assets/logo3.webp';
+import logo4 from './assets/logo4.webp';
+import logo5 from './assets/logo5.webp';
+import logo6 from './assets/logo6.webp';
+import logo7 from './assets/logo7.webp';
 
 const SINGER_DATA = [
   { img: singer1, className: 'singer-1', name: 'Darshan Raval', year: '2020', laser: '#ff0066' },

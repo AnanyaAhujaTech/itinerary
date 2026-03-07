@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import './HomeComp6.css';
 
 // Assets
-import questionsHeadingImg from '../../assets/faq.png'; 
-import barMaskImg from '../../assets/bar.png';
-import wheel6 from '../../assets/wheel6.png';
-import wheel7 from '../../assets/wheel7.png';
-import wheel8 from '../../assets/wheel8.png';
-import wheel9 from '../../assets/wheel9.png';
+import questionsHeadingImg from '../../assets/faq.webp'; 
+import barMaskImg from '../../assets/bar.webp';
+import wheel6 from '../../assets/wheel6.webp';
+import wheel7 from '../../assets/wheel7.webp';
+import wheel8 from '../../assets/wheel8.webp';
+import wheel9 from '../../assets/wheel9.webp';
 
 const questions = [
   {

@@ -30,7 +30,7 @@ const LEVEL_COLORS = {
   9: '0, 128, 0',      
 };
 
-const preloadedAssets = import.meta.glob('../../assets/*.{png,jpg,jpeg,svg}', { 
+const preloadedAssets = import.meta.glob('../../assets/*.{webp,jpg,jpeg,svg}', { 
   eager: true, 
   import: 'default' 
 });
@@ -71,11 +71,11 @@ const TEAMS = TEAM_STRUCTURE.map((team) => {
     return {
       id: memberId,
       level: levelNumber, 
-      embroidery: `embroidery${levelNumber}.png`, 
-      frame: `frame${levelNumber}.png`,
+      embroidery: `embroidery${levelNumber}.webp`, 
+      frame: `frame${levelNumber}.webp`,
       clipPath: team.clipPath, 
-      photo: `member${memberId}.jpg`, 
-      plate: `plate${memberId}.png`,
+      photo: `member${memberId}.webp`, 
+      plate: `plate${memberId}.webp`,
     };
   });
   return { ...team, levelNumber, members };
@@ -155,12 +155,12 @@ export default function TeamPage({ navHeight }) {
 
   return (
     <div className="team-page-wrapper">
-      <Background imagePath={getAsset('background.png')} />
+      <Background imagePath={getAsset('background.webp')} />
       <Navbar isVisible={true} />
 
       <div className="team-heading-container">
         <img 
-          src={getAsset('teamheading.png')} 
+          src={getAsset('teamheading.webp')} 
           alt="Team Heading" 
           className="team-heading-image" 
         />
@@ -225,7 +225,7 @@ export default function TeamPage({ navHeight }) {
         }}
       >
         <img 
-          src={getAsset('podium.png')} 
+          src={getAsset('podium.webp')} 
           alt="Menu" 
           className="team-podium-image"
           style={{ filter: isSidebarOpen ? 'brightness(1.2) drop-shadow(0 0 15px gold)' : 'none' }} 

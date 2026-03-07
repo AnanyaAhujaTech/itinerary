@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './HomeComp5.css';
 
 // Assets
-import smaranHeadingImg from '../../assets/smaran.png';
-import backgroundImage from '../../assets/wheel5.png';
+import smaranHeadingImg from '../../assets/smaran.webp';
+import backgroundImage from '../../assets/wheel5.webp';
 
 const imageModules = import.meta.glob('../../assets/photos/*.{png,jpg,jpeg,svg,webp,JPG}', { eager: true });
 const importedImages = Object.values(imageModules).map((mod) => mod.default);

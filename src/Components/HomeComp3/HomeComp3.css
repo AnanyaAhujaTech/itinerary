@@ -6,7 +6,7 @@
   height: 100vh; 
   display: flex;
   flex-direction: column;
-  background: url("../../assets/back.png") no-repeat center center;
+  background: url("../../assets/back.webp") no-repeat center center;
   background-size: cover;
   position: relative;
   z-index: 10;

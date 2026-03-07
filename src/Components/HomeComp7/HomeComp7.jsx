@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import './HomeComp7.css';
 
 // Assets
-import taaranganaLogoImg from '../../assets/taarangana_logo.png'; 
-import ytIcon from '../../assets/yt.png';
-import inIcon from '../../assets/in.png';
-import fbIcon from '../../assets/fb.png';
-import webIcon from '../../assets/web.png';
-import gramIcon from '../../assets/gram.png';
+import taaranganaLogoImg from '../../assets/taarangana_logo.webp'; 
+import ytIcon from '../../assets/yt.webp';
+import inIcon from '../../assets/in.webp';
+import fbIcon from '../../assets/fb.webp';
+import webIcon from '../../assets/web.webp';
+import gramIcon from '../../assets/gram.webp';
 
 export default function HomeComp7() {
   const [isMobile, setIsMobile] = useState(false);

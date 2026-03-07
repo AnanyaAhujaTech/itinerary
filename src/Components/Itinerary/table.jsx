@@ -2,18 +2,18 @@ import React, { useRef } from "react";
 import "./table.css";
 
 // Assets
-import headingImg from "../../assets/itinerary_heading.png";
+import headingImg from "../../assets/itinerary_heading.webp";
 
 // Import the 9 Navarasa row images
-import shringaraImg from "../../assets/shringararow.png";
-import hasyaImg from "../../assets/hasyarow.png";
-import veeraImg from "../../assets/veerarow.png";
-import karunaImg from "../../assets/karunarow.png";
-import raudraImg from "../../assets/raudrarow.png";
-import shantaImg from "../../assets/shantarow.png";
-import adbhutaImg from "../../assets/adbhutarow.png";
-import bhayanakaImg from "../../assets/bhayanakarow.png";
-import bibhatsaImg from "../../assets/bibhatsarow.png";
+import shringaraImg from "../../assets/shringararow.webp";
+import hasyaImg from "../../assets/hasyarow.webp";
+import veeraImg from "../../assets/veerarow.webp";
+import karunaImg from "../../assets/karunarow.webp";
+import raudraImg from "../../assets/raudrarow.webp";
+import shantaImg from "../../assets/shantarow.webp";
+import adbhutaImg from "../../assets/adbhutarow.webp";
+import bhayanakaImg from "../../assets/bhayanakarow.webp";
+import bibhatsaImg from "../../assets/bibhatsarow.webp";
 
 // Updated with the background images mapped to each event
 const scheduleData = [

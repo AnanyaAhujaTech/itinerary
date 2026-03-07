@@ -6,7 +6,7 @@ import './Itinerary.css';
 import Navbar from '../../Components/Navbar/Navbar';
 
 // MUST use JavaScript import for Vite to bundle the asset correctly in production
-import fallbackBgImage from '../../assets/velvet.png'; 
+import fallbackBgImage from '../../assets/velvet.webp'; 
 
 export default function ItineraryPage() {
   const [currentView, setCurrentView] = useState('clock');

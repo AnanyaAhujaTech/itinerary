@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sponsi.css';
 import Navbar from '../../Components/Navbar/Navbar';
-import bgImage from '../../assets/bgsponsi.png';
+import bgImage from '../../assets/bgsponsi.webp';
 
 export default function Sponsi() {
     return (

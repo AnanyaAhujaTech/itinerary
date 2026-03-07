@@ -2,21 +2,21 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./HomeComp4.css";
 
 // Assets
-import imgBack from "../../assets/back2.png"; 
-import imgEmbroidery from "../../assets/embroidery2.png";
-import imgPatronsHeading from "../../assets/faculty.png"; 
-import imgFrame from "../../assets/frame2.png";
-import imgWheel4 from "../../assets/wheel4.png";
+import imgBack from "../../assets/back2.webp"; 
+import imgEmbroidery from "../../assets/embroidery2.webp";
+import imgPatronsHeading from "../../assets/faculty.webp"; 
+import imgFrame from "../../assets/frame2.webp";
+import imgWheel4 from "../../assets/wheel4.webp";
 
 // Member Assets
-import imgDeanPhoto from "../../assets/dean.jpg";
-import imgDeanPlate from "../../assets/dean.png";
-import imgAdvisorPhoto from "../../assets/advisor.jpg";
-import imgAdvisorPlate from "../../assets/advisor.png";
-import imgAsdwPhoto from "../../assets/asdw.jpg";
-import imgAsdwPlate from "../../assets/asdw.png";
-import imgCoordinatorPhoto from "../../assets/coordinator.jpg";
-import imgCoordinatorPlate from "../../assets/coordinator.png";
+import imgDeanPhoto from "../../assets/dean.webp";
+import imgDeanPlate from "../../assets/deanp.webp";
+import imgAdvisorPhoto from "../../assets/advisor.webp";
+import imgAdvisorPlate from "../../assets/advisorp.webp";
+import imgAsdwPhoto from "../../assets/asdw.webp";
+import imgAsdwPlate from "../../assets/asdwp.webp";
+import imgCoordinatorPhoto from "../../assets/coordinator.webp";
+import imgCoordinatorPlate from "../../assets/coordinatorp.webp";
 
 const GlitterParticle = ({ x, y, size, color, delay }) => {
   return (

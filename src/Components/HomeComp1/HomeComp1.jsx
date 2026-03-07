@@ -6,16 +6,16 @@ import BlurText from './BlurText';
 import ModernScene from './ModernScene';
 
 // Assets for Traditional Scene
-import curtainImg from './assets/traditional/curtain_half.png';
-import scene1 from './assets/traditional/scene_1.png';
-import scene2 from './assets/traditional/scene_2.png';
-import scene3 from './assets/traditional/scene_3.png';
-import scene4 from './assets/traditional/scene_4.png';
-import scene5 from './assets/traditional/scene_5.png';
-import scene6 from './assets/traditional/scene_6.png';
-import scene7 from './assets/traditional/scene_7.png';
-import scene8 from './assets/traditional/scene_8.png';
-import scene9 from './assets/traditional/scene_9.png';
+import curtainImg from './assets/traditional/curtain_half.webp';
+import scene1 from './assets/traditional/scene_1.webp';
+import scene2 from './assets/traditional/scene_2.webp';
+import scene3 from './assets/traditional/scene_3.webp';
+import scene4 from './assets/traditional/scene_4.webp';
+import scene5 from './assets/traditional/scene_5.webp';
+import scene6 from './assets/traditional/scene_6.webp';
+import scene7 from './assets/traditional/scene_7.webp';
+import scene8 from './assets/traditional/scene_8.webp';
+import scene9 from './assets/traditional/scene_9.webp';
 
 const SCENES = [scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, scene9];
 const NAVARASA = ['Shringara', 'Bhayanaka', 'Raudra', 'Karuna', 'Vira', 'Hasya', 'Bibhatsa', 'Adbhuta', 'Shanta'];

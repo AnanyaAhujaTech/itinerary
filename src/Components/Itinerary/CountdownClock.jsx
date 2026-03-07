@@ -3,13 +3,13 @@ import gsap from "gsap";
 import "./CountdownClock.css";
 
 // Import Assets
-import logoImg from "../../assets/countdown.png";
-import segmentsImg from "../../assets/clock_segments.png";
-import ringImg from "../../assets/clock_ring.png";
-import frameImg from "../../assets/clock_frame.png";
-import handImg from "../../assets/clock_hand.png";
-import longHandImg from "../../assets/long_clock_hand.png";
-import gearsImg from "../../assets/clock_gears.png";
+import logoImg from "../../assets/countdown.webp";
+import segmentsImg from "../../assets/clock_segments.webp";
+import ringImg from "../../assets/clock_ring.webp";
+import frameImg from "../../assets/clock_frame.webp";
+import handImg from "../../assets/clock_hand.webp";
+import longHandImg from "../../assets/long_clock_hand.webp";
+import gearsImg from "../../assets/clock_gears.webp";
 
 import { 
   getClockRotation, 

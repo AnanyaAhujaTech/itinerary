@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./HeroSection.css";
-import heading from "../../assets/EventsHeading.png";
+import heading from "../../assets/EventsHeading.webp";
 
 import vid1 from "../../assets/Untitled design (5).mp4";
 import vid2 from "../../assets/Untitled design (6).mp4";
