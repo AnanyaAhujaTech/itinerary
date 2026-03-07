@@ -11,40 +11,36 @@ import wheel9 from '../../assets/wheel9.png';
 
 const questions = [
   {
-    q: "Where and when is the Etherea lore dropping?",
-    a: "We’re taking over the IGDTUW campus on Feb 26-27, 2025. Doors open at 11 AM—vibe with us until 8:30 PM. Don't be late or you'll miss the main character energy.",
+    q: "When and where is Etherea happening?",
+    a: "Etherea takes over the IGDTUW campus on Feb 26–27, 2025. Gates open at 11 AM and the fest runs till around 8:30 PM each day."
   },
   {
-    q: "How do I secure my spot in the comps?",
-    a: "Registration is live on Unstop. Head to the 'Events' tab on our site and lock it in. The portal's opening soon, so keep your tabs ready—it's gonna be a movie.",
+    q: "How do I register for competitions?",
+    a: "Competition registrations happen through Google Forms. You’ll find the links for each event in the 'Events' section of the website."
   },
   {
-    q: "Is entry free or do I need to sell a kidney?",
-    a: "No stress, general entry is free for all students with a valid college ID and pass. Just make sure you grab yours before the supply hits zero.",
+    q: "Do I need a pass to enter?",
+    a: " If you're from IGDTUW, your college ID card is all you need. Students from colleges other than IGDTUW will need a fest pass along with their college ID."
   },
   {
-    q: "Is there a specific dress code for Etherea?",
-    a: "No strict rules here—wear what makes you feel iconic! While we love seeing neon-noir or celestial-inspired outfits to match the vibe, your comfort is key. Just bring your best energy (and maybe some comfy shoes for the dance floor).",
+    q: "What’s the vibe for outfits?",
+    a: "Lean into the Etherea energy: colourful, celestial, dramatic, a little theatrical."
   },
   {
-    q: "What should I avoid bringing to the venue?",
-    a: "To keep the vibes safe and high, please leave behind any prohibited substances, sharp objects, or outside food/drinks. We’ll have security checks at the gate to ensure everyone has a smooth experience.",
+    q: "What am I allowed to bring inside?",
+    a: "Travel light. Only essentials like your phone and wallet are allowed. Bags, purses, and outside food or drinks (yes, even water bottles) won’t be permitted inside the venue."
   },
   {
-    q: "Will there be food and merch available?",
-    a: "Definitely. We’ve curated a lineup of food stalls to keep you fueled and exclusive Etherea merch drops so you can take a piece of the magic home with you. Keep your wallets (and stomachs) ready.",
+    q: "Can students from other colleges attend?",
+    a: "Absolutely. Taarangana is open to students from all colleges—just make sure you have your fest pass and college ID."
   },
   {
-    q: "Who's on the guest list? Any major reveals?",
-    a: "Total mystery. We're keeping the lineup gatekept for just a bit longer. Keep stalking our socials for the big reveal—it's gonna be iconic.",
+    q: "Will there be guest performances?",
+    a: "Yes—but we’re keeping the lineup under wraps for now. Watch our socials for the reveal."
   },
   {
-    q: "Can anyone pull up to Taarangana?",
-    a: "Absolutely. Whether you're from IGDTUW or any other uni, you're invited to the main stage. The more, the merrier—no gatekeeping allowed.",
-  },
-  {
-    q: "How do I avoid FOMO on Fest passes?",
-    a: "Passes are dropping on the site soon. Turn on post notifications so you're the first to know when the link goes live. Be fast or be sad."
+    q: "How do I stay updated about events and announcements?",
+    a: "Follow Taarangana on Instagram and keep an eye on the website. That’s where all the updates drop first."
   }
 ];
 
