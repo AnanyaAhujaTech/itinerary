@@ -12,7 +12,7 @@ import './index.css';
 function App() {
   return (
     // The basename ensures routing works perfectly with your Vite base config
-    <BrowserRouter basename="/itinerary">
+    <BrowserRouter>
       <div className="App">
         <Routes>
           {/* Home is the strict default landing page */}
